@@ -7,7 +7,7 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      <Rando />
+      <Rando maxNum={7} />
     </div>
   );
 }
