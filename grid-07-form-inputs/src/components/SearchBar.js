@@ -3,9 +3,11 @@ import React from "react";
 class SearchBar extends React.Component {
   state = { term: "" };
 
-  onFormSubmit(event) {
+  onFormSubmit = event => {
     event.preventDefault();
-  }
+    // 'This' below must be bound for it to work
+    console.log(this.state.term);
+  };
 
   render() {
     return (
