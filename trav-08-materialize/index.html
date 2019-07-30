@@ -6,6 +6,7 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <link href="./css/main.css" rel="stylesheet" />
     <!--Import materialize.css-->
     <link
       type="text/css"
@@ -19,7 +20,7 @@
     <title>Kiwi Tours</title>
   </head>
 
-  <body>
+  <body id="home" class="scrollspy">
     <!--     NAVBAR       -->
     <div class="navbar-fixed">
       <nav class="teal">
@@ -102,6 +103,31 @@
         </li>
       </ul>
     </section>
+
+    <section
+      id="search"
+      class="section section-search teal darken-1 
+    white-text center scrollspy"
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <h3>
+              Search Destinations
+            </h3>
+            <div class="input-field">
+              <input
+                type="text"
+                class="white grey-text autocomplete"
+                id="autocomplete-input"
+                placeholder="Name your place"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!--JavaScript at end of body for optimized loading-->
     <script
       type="text/javascript"
@@ -118,6 +144,16 @@
         height: 300,
         transition: 500,
         interval: 6000
+      });
+      // Autocomplete
+      const ac = document.querySelector(".autocomplete");
+      M.Autocomplete.init(ac, {
+        data: {
+          Melbourne: null,
+          Sydney: null,
+          Hobart: null,
+          Adelaide: null
+        }
       });
     </script>
   </body>
