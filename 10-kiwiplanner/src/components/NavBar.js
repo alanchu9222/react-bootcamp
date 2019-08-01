@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import M from "materialize-css";
-
 class NavBar extends Component {
   static defaultProps = {
     menuItems: [
@@ -46,6 +45,8 @@ class NavBar extends Component {
     document.addEventListener("DOMContentLoaded", function() {
       const elems = document.querySelectorAll(".modal");
       M.Modal.init(elems, {});
+      const sideNav = document.querySelector(".sidenav");
+      M.Sidenav.init(sideNav, {});
     });
     console.log(this.props.menuItems);
     console.log(this.props.menuItems[0].id);
@@ -54,7 +55,11 @@ class NavBar extends Component {
     return (
       <div>
         <nav className="z-depth-0 teal lighten-4">
-          <div className="nav-wrapper container">
+          <div className="nav-wrapper">
+            <span data-target="mobile-nav" className="sidenav-trigger">
+              <i className="material-icons">menu</i>
+            </span>
+
             <ul id="nav-mobile" className="right hide-on-med-and-down">
               {this.props.menuItems.map(menuItem => (
                 <li key={menuItem.list_id} className="{menuItem.show_when}">
@@ -77,6 +82,19 @@ class NavBar extends Component {
             </div>
           </div>
         ))}
+        <ul className="sidenav" id="mobile-nav">
+          {this.props.menuItems.map(menuItem => (
+            <li key={menuItem.list_id}>
+              <span
+                className="z-depth-0 white grey-text waves-effect waves-light btn modal-trigger"
+                data-target={menuItem.target}
+                id={menuItem.menu_id}
+              >
+                {menuItem.description}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
