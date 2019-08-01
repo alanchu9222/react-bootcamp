@@ -5,14 +5,16 @@ import TravelPlan from "./components/TravelPlan";
 
 import "./App.css";
 
-function App() {
-  return (
-    <div>
-      <NavBar />
-      <SlideMenu />
-      <TravelPlan />
-    </div>
-  );
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <NavBar />
+        <SlideMenu />
+        <TravelPlan />
+      </div>
+    );
+  }
 }
 
 export default App;
