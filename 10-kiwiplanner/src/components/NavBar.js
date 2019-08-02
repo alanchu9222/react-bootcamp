@@ -53,7 +53,7 @@ class NavBar extends Component {
     console.log(this.props.menuItems);
     console.log(this.props.menuItems[0].id);
   }
-  renderMenuItem = menuItem => {
+  showMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id} className="{menuItem.show_when}">
         <span
@@ -66,7 +66,7 @@ class NavBar extends Component {
       </li>
     );
   };
-  renderSideMenuItem = menuItem => {
+  showSideMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id}>
         <span
@@ -97,7 +97,7 @@ class NavBar extends Component {
             </span>
 
             <ul id="nav-mobile" className="right hide-on-med-and-down">
-              {this.currentMenuItems().map(this.renderMenuItem)}
+              {this.currentMenuItems().map(this.showMenuItem)}
             </ul>
           </div>
         </nav>
@@ -114,7 +114,7 @@ class NavBar extends Component {
         ))}
 
         <ul className="sidenav" id="mobile-nav">
-          {this.currentMenuItems().map(this.renderSideMenuItem)}
+          {this.currentMenuItems().map(this.showSideMenuItem)}
         </ul>
       </div>
     );

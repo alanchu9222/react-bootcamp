@@ -18,7 +18,7 @@ class App extends React.Component {
 
   state = {
     current_user: "",
-    isLoggedIn: true,
+    isLoggedIn: false,
     view_mode: 0,
     auth: null,
     db: null
