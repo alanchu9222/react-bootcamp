@@ -128,22 +128,6 @@ class NavBar extends Component {
           auth={this.props.auth}
         />
 
-        {/*
-        {this.props.menuItems.map(menuItem => (
-          <div
-            key={menuItem.list_id}
-            ref={this.getRef(menuItem)}
-            id={menuItem.target}
-            className="modal"
-          >
-            <div className="modal-content">
-              <h4>{menuItem.description}</h4>
-              {this.showModalContent(menuItem, this.getRef(menuItem))}
-            </div>
-          </div>
-        ))}
-        */}
-
         <ul className="sidenav" id="mobile-nav">
           {this.currentMenuItems().map(this.showSideMenuItem)}
         </ul>
