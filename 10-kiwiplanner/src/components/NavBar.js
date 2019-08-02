@@ -1,40 +1,52 @@
 import React, { Component } from "react";
-import Auth from "./Auth";
+import Login from "./U_login";
+import Logout from "./U_logout";
+import Create from "./U_create";
+import Mode from "./U_mode";
+import Signup from "./U_signup";
+
 import M from "materialize-css";
 class NavBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false
+    };
+  }
   static defaultProps = {
     auth: null,
     menuItems: [
       {
-        list_id: "0",
+        list_id: "mode",
         menu_id: "",
         target: "modal-view",
         description: "View Mode",
         show_when: "logged-in"
       },
       {
-        list_id: "1",
+        list_id: "logout",
         menu_id: "logout",
         target: "modal-logout",
         description: "Logout",
         show_when: "logged-in"
       },
       {
-        list_id: "2",
+        list_id: "create",
         menu_id: "",
         target: "modal-create",
         description: "Create Plan",
-        show_when: "logged-in"
+        show_when: "logged-in",
+        component: "Login"
       },
       {
-        list_id: "3",
+        list_id: "login",
         menu_id: "",
         target: "modal-login",
         description: "Login",
         show_when: "logged-out"
       },
       {
-        list_id: "4",
+        list_id: "signup",
         menu_id: "",
         target: "modal-signup",
         description: "Sign Up",
@@ -45,14 +57,17 @@ class NavBar extends Component {
 
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
-      const elems = document.querySelectorAll(".modal");
-      M.Modal.init(elems, {});
+      //      const elems = document.querySelectorAll(".modal");
+      //      M.Modal.init(elems, {});
       const sideNav = document.querySelector(".sidenav");
       M.Sidenav.init(sideNav, {});
     });
-    console.log(this.props.menuItems);
-    console.log(this.props.menuItems[0].id);
   }
+
+  setIsLoggedIn = isLoggedIn => {
+    this.setState({ isLoggedIn: isLoggedIn });
+    this.props.setIsLoggedIn(isLoggedIn);
+  };
   showMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id} className="{menuItem.show_when}">
@@ -102,16 +117,32 @@ class NavBar extends Component {
           </div>
         </nav>
 
+        <Login
+          setIsLoggedIn={this.setIsLoggedIn}
+          id="modal-login"
+          auth={this.props.auth}
+        />
+        <Logout
+          setIsLoggedIn={this.setIsLoggedIn}
+          id="modal-logout"
+          auth={this.props.auth}
+        />
+
+        {/*
         {this.props.menuItems.map(menuItem => (
-          <div key={menuItem.list_id} id={menuItem.target} className="modal">
-            {/* The auth component is mapped to a user event on the menus */}
-            {/* The "target" is used to determine what to render on the modal */}
+          <div
+            key={menuItem.list_id}
+            ref={this.getRef(menuItem)}
+            id={menuItem.target}
+            className="modal"
+          >
             <div className="modal-content">
               <h4>{menuItem.description}</h4>
-              <Auth target={menuItem.target} auth={this.props.auth} />
+              {this.showModalContent(menuItem, this.getRef(menuItem))}
             </div>
           </div>
         ))}
+        */}
 
         <ul className="sidenav" id="mobile-nav">
           {this.currentMenuItems().map(this.showSideMenuItem)}

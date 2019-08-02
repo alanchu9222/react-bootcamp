@@ -23,7 +23,11 @@ class App extends React.Component {
     auth: null,
     db: null
   };
-
+  setIsLoggedIn = isLoggedIn => {
+    console.log("statechange");
+    console.log(isLoggedIn);
+    this.setState({ isLoggedIn: isLoggedIn });
+  };
   //
   // This call back function gets the current state from the back end
   // when triggered by the user and is used to inform the rendering
@@ -41,6 +45,7 @@ class App extends React.Component {
         <NavBar
           setState={this.updateAuthState}
           isLoggedIn={this.state.isLoggedIn}
+          setIsLoggedIn={this.setIsLoggedIn}
           auth={this.auth}
         />
 
