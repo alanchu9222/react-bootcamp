@@ -125,6 +125,7 @@ class NavBar extends Component {
         <Create
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-create"
+          refresh={this.props.refresh}
           db={this.props.db}
         />
         <ul className="sidenav" id="mobile-nav">

@@ -29,7 +29,6 @@ class U_create extends Component {
     const content = this.state.content;
 
     // create new guide
-    const createForm = document.querySelector("#create-form");
 
     this.props.db
       .collection("guides")
@@ -41,6 +40,7 @@ class U_create extends Component {
         // close the create modal & reset form
         const modal = document.querySelector("#modal-create");
         M.Modal.getInstance(modal).close();
+        this.props.refresh();
         //this.createForm.reset();
       })
       .catch(err => {

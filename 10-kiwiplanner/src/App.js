@@ -21,15 +21,27 @@ class App extends React.Component {
     isLoggedIn: false,
     view_mode: "0",
     auth: null,
-    db: null
+    db: null,
+    refresh: false
   };
   setIsLoggedIn = isLoggedIn => {
     this.setState({ isLoggedIn: isLoggedIn });
   };
+  setRefresh = () => {
+    console.log("Refresh called");
+    this.setState({ refresh: true });
+  };
 
+  componentDidUpdate() {
+    if (this.state.refresh === true) {
+      this.setState({ refresh: false });
+    }
+  }
   render() {
     console.log("APP: isLoggedIn");
     console.log(this.state.isLoggedIn);
+
+    console.log("Refreshing the view");
 
     return (
       <div>
@@ -40,6 +52,7 @@ class App extends React.Component {
             setIsLoggedIn={this.setIsLoggedIn}
             auth={this.auth}
             db={this.db}
+            refresh={this.setRefresh}
           />
         }
 
