@@ -28,6 +28,9 @@ class App extends React.Component {
   };
 
   render() {
+    console.log("APP: isLoggedIn");
+    console.log(this.state.isLoggedIn);
+
     return (
       <div>
         {
@@ -36,6 +39,7 @@ class App extends React.Component {
             isLoggedIn={this.state.isLoggedIn}
             setIsLoggedIn={this.setIsLoggedIn}
             auth={this.auth}
+            db={this.db}
           />
         }
 
@@ -45,7 +49,7 @@ class App extends React.Component {
           <div />
         )}
 
-        {this.state.isLoggedIn && this.state.view_mode == "1" ? (
+        {this.state.isLoggedIn && this.state.view_mode === "1" ? (
           <TravelCards user={this.state.user} />
         ) : (
           <div />

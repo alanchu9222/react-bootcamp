@@ -21,7 +21,6 @@ class TravelPlan extends Component {
     // listen for auth status changes
     this.props.auth.onAuthStateChanged(user => {
       if (user) {
-        console.log("user logged in: ", user);
         this.props.db
           .collection("guides")
           .get()
@@ -32,7 +31,6 @@ class TravelPlan extends Component {
             err => console.log(err.message)
           );
       } else {
-        console.log("user logged out");
         this.setupGuides([]);
       }
     });
@@ -41,7 +39,6 @@ class TravelPlan extends Component {
   // setup guides
   setupGuides = data => {
     if (data.length) {
-      let html = "";
       data.forEach(doc => {
         const file = doc.data();
         const listItem = { title: file.title, content: file.content };
@@ -54,7 +51,6 @@ class TravelPlan extends Component {
   };
 
   listTravelPlan = listItem => {
-    console.log(listItem);
     return (
       <li key={listItem.title} ref="collapsible">
         <div className="collapsible-header grey lighten-4">

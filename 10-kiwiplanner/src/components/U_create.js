@@ -7,54 +7,76 @@ class U_create extends Component {
   };
   constructor(props) {
     super(props);
+    this.state = { title: "", content: "" };
   }
-
   componentDidMount() {
-    // login
-    const loginForm = document.querySelector("#login-form");
-    loginForm.addEventListener("submit", e => {
-      e.preventDefault();
-
-      // get user info
-      const email = loginForm["login-email"].value;
-      const password = loginForm["login-password"].value;
-
-      // log the user in
-      this.props.auth.signInWithEmailAndPassword(email, password).then(cred => {
-        // close the signup modal & reset form
-        const modal = document.querySelector("#modal-login");
-        M.Modal.getInstance(modal).close();
-        loginForm.reset();
-      });
+    document.addEventListener("DOMContentLoaded", function() {
+      const elems = document.querySelectorAll(".modal");
+      M.Modal.init(elems, {});
     });
   }
 
+  handleChangeTitle = e => {
+    this.setState({ title: e.target.value });
+  };
+  handleChangeContnet = e => {
+    this.setState({ content: e.target.value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const title = this.state.title;
+    const content = this.state.content;
+
+    // create new guide
+    const createForm = document.querySelector("#create-form");
+
+    this.props.db
+      .collection("guides")
+      .add({
+        title: title,
+        content: content
+      })
+      .then(() => {
+        // close the create modal & reset form
+        const modal = document.querySelector("#modal-create");
+        M.Modal.getInstance(modal).close();
+        //this.createForm.reset();
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
+
   render() {
-    if (
-      this.props.target
-        .trim()
-        .toUpperCase()
-        .includes("LOGIN")
-    ) {
-      return (
-        <div>
-          <form id="login-form">
-            <div class="input-field">
-              <input type="email" id="login-email" required />
-              <label for="login-email">Email address</label>
+    return (
+      <div id="modal-create" className="modal">
+        <div className="modal-content">
+          <h4>Create Guide</h4>
+          <form id="create-form" onSubmit={this.handleSubmit}>
+            <div className="input-field">
+              <input
+                type="text"
+                id="title"
+                onChange={this.handleChangeTitle}
+                required
+              />
+              <label htmlFor="title">Journey</label>
             </div>
-            <div class="input-field">
-              <input type="password" id="login-password" required />
-              <label for="login-password">Your password</label>
+            <div className="input-field">
+              <textarea
+                id="content"
+                className="materialize-textarea"
+                onChange={this.handleChangeContent}
+                required
+              />
+              <label htmlFor="content">Details</label>
             </div>
-            <button class="btn yellow darken-2 z-depth-0">Login</button>
-            <p class="error pink-text center-align" />
+            <button className="btn yellow darken-2 z-depth-0">Create</button>
           </form>
         </div>
-      );
-    } else {
-      return <div />;
-    }
+      </div>
+    );
   }
 }
 

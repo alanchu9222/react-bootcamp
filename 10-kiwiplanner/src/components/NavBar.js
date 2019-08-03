@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Login from "./U_login";
 import Logout from "./U_logout";
 import Create from "./U_create";
-import Mode from "./U_mode";
-import Signup from "./U_signup";
+//import Mode from "./U_mode";
+//import Signup from "./U_signup";
 
 import M from "materialize-css";
 class NavBar extends Component {
@@ -122,7 +122,11 @@ class NavBar extends Component {
           id="modal-logout"
           auth={this.props.auth}
         />
-
+        <Create
+          setIsLoggedIn={this.props.setIsLoggedIn}
+          id="modal-create"
+          db={this.props.db}
+        />
         <ul className="sidenav" id="mobile-nav">
           {this.currentMenuItems().map(this.showSideMenuItem)}
         </ul>

@@ -33,18 +33,23 @@ class U_login extends Component {
     const password = this.state.password;
 
     // log the user in
-    this.props.auth.signInWithEmailAndPassword(email, password).then(cred => {
-      // close the signup modal & reset form
-      const modal = document.querySelector("#modal-login");
-      //      console.log("DOM");
-      //      console.log(M.Modal.getInstance(modal));
-      //      console.log("REF");
-      //      console.log(this.loginModal);
-      //      console.log(this.loginModal.current);
-      this.props.setIsLoggedIn(true);
-      M.Modal.getInstance(modal).close();
-      this.loginForm.current.reset();
-    });
+    this.props.auth
+      .signInWithEmailAndPassword(email, password)
+      .then(cred => {
+        // close the signup modal & reset form
+        const modal = document.querySelector("#modal-login");
+        //      console.log("DOM");
+        //      console.log(M.Modal.getInstance(modal));
+        //      console.log("REF");
+        //      console.log(this.loginModal);
+        //      console.log(this.loginModal.current);
+        this.props.setIsLoggedIn(true);
+        M.Modal.getInstance(modal).close();
+        this.loginForm.current.reset();
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
   };
 
   render() {
