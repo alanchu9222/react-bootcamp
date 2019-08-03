@@ -1,6 +1,7 @@
 import React from "react";
 import NavBar from "./components/NavBar";
 import TravelPlan from "./components/TravelPlan";
+import TravelCards from "./components/TravelCards";
 import { DB_CONFIG } from "./config/config";
 import app from "firebase/app";
 import "firebase/auth";
@@ -15,11 +16,10 @@ class App extends React.Component {
     this.db = app.firestore();
     this.auth = app.auth();
   }
-
   state = {
     user: "",
     isLoggedIn: false,
-    view_mode: 0,
+    view_mode: "0",
     auth: null,
     db: null
   };
@@ -38,17 +38,18 @@ class App extends React.Component {
             auth={this.auth}
           />
         }
-        {this.state.isLoggedIn && this.state.view_mode == 0 ? (
-          <TravelPlan user={this.state.user} />
+
+        {this.state.isLoggedIn && this.state.view_mode === "0" ? (
+          <TravelPlan user={this.state.user} auth={this.auth} db={this.db} />
         ) : (
           <div />
         )}
-        {this.state.isLoggedIn && this.state.view_mode == 1 ? (
+
+        {this.state.isLoggedIn && this.state.view_mode == "1" ? (
           <TravelCards user={this.state.user} />
         ) : (
           <div />
         )}
-        }
       </div>
     );
   }

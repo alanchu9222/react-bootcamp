@@ -64,10 +64,6 @@ class NavBar extends Component {
     });
   }
 
-  setIsLoggedIn = isLoggedIn => {
-    this.setState({ isLoggedIn: isLoggedIn });
-    this.props.setIsLoggedIn(isLoggedIn);
-  };
   showMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id} className="{menuItem.show_when}">
@@ -96,10 +92,9 @@ class NavBar extends Component {
   };
 
   currentMenuItems = () => {
-    console.log("Show current login status");
-    console.log(this.props);
+    // Current menu item depends on the state of authentication
     const mode = this.props.isLoggedIn ? "logged-in" : "logged-out";
-    return this.props.menuItems.filter(a => a.show_when === mode);
+    return this.props.menuItems.filter(item => item.show_when === mode);
   };
 
   render() {
@@ -118,12 +113,12 @@ class NavBar extends Component {
         </nav>
 
         <Login
-          setIsLoggedIn={this.setIsLoggedIn}
+          setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-login"
           auth={this.props.auth}
         />
         <Logout
-          setIsLoggedIn={this.setIsLoggedIn}
+          setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-logout"
           auth={this.props.auth}
         />
