@@ -56,14 +56,12 @@ class App extends React.Component {
           />
         }
 
-        {this.state.isLoggedIn && this.state.view_mode === "0" ? (
-          <TravelPlan user={this.state.user} auth={this.auth} db={this.db} />
-        ) : (
-          <div />
-        )}
+        {this.state.isLoggedIn ? (
+          <div>
+            <TravelCards user={this.state.user} />
 
-        {this.state.isLoggedIn && this.state.view_mode === "1" ? (
-          <TravelCards user={this.state.user} />
+            <TravelPlan user={this.state.user} auth={this.auth} db={this.db} />
+          </div>
         ) : (
           <div />
         )}
@@ -73,3 +71,7 @@ class App extends React.Component {
 }
 
 export default App;
+
+{
+  /* <TravelCards user={this.state.user} />*/
+}
