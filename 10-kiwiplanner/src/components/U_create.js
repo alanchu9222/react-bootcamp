@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+import PickCity from "./U_pickcity";
+import PickCountry from "./U_pickcountry";
+import PickDate from "./U_pickdate";
+
 import M from "materialize-css";
 
 class U_create extends Component {
@@ -9,6 +13,7 @@ class U_create extends Component {
     super(props);
     this.state = { title: "", content: "" };
   }
+
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
       const elems = document.querySelectorAll(".modal");
@@ -52,16 +57,30 @@ class U_create extends Component {
     return (
       <div id="modal-create" className="modal">
         <div className="modal-content">
-          <h4>Create Guide</h4>
+          <h4>Add a trip</h4>
           <form id="create-form" onSubmit={this.handleSubmit}>
+            {/*/<PickCountry />*/}
+            <PickCity />
+            <PickDate />
+
             <div className="input-field">
               <input
                 type="text"
-                id="title"
+                id="country"
                 onChange={this.handleChangeTitle}
                 required
               />
-              <label htmlFor="title">Journey</label>
+              <label htmlFor="country">Country</label>
+            </div>
+
+            <div className="input-field">
+              <input
+                type="text"
+                id="city"
+                onChange={this.handleChangeTitle}
+                required
+              />
+              <label htmlFor="city">City</label>
             </div>
             <div className="input-field">
               <textarea
@@ -70,8 +89,45 @@ class U_create extends Component {
                 onChange={this.handleChangeContent}
                 required
               />
-              <label htmlFor="content">Details</label>
+              <label htmlFor="content">Arrival Date</label>
             </div>
+            <div className="input-field">
+              <textarea
+                id="content"
+                className="materialize-textarea"
+                onChange={this.handleChangeContent}
+                required
+              />
+              <label htmlFor="content">Departure Date</label>
+            </div>
+            <div className="input-field">
+              <textarea
+                id="content"
+                className="materialize-textarea"
+                onChange={this.handleChangeContent}
+                required
+              />
+              <label htmlFor="content">Place of Interest 1</label>
+            </div>
+            <div className="input-field">
+              <textarea
+                id="content"
+                className="materialize-textarea"
+                onChange={this.handleChangeContent}
+                required
+              />
+              <label htmlFor="content">Place of Interest 2</label>
+            </div>
+            <div className="input-field">
+              <textarea
+                id="content"
+                className="materialize-textarea"
+                onChange={this.handleChangeContent}
+                required
+              />
+              <label htmlFor="content">Place of Interest 3</label>
+            </div>
+
             <button className="btn yellow darken-2 z-depth-0">Create</button>
           </form>
         </div>

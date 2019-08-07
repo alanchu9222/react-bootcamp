@@ -30,7 +30,7 @@ class Tripcard extends Component {
         <div className="box">
           <img src={imgSrc} alt={this.props.name} />
           <div className="text">
-            <h5 className="Tripcard-title">{this.props.name}</h5>
+            <div className="Tripcard-title">{this.props.name}</div>
           </div>
         </div>
 
