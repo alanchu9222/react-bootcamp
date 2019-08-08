@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PickCity from "./U_pickcity";
-import PickCountry from "./U_pickcountry";
+import "./U_create.css";
 import PickDate from "./U_pickdate";
 
 import M from "materialize-css";
@@ -57,78 +57,60 @@ class U_create extends Component {
     return (
       <div id="modal-create" className="modal">
         <div className="modal-content">
-          <h4>Add a trip</h4>
-          <form id="create-form" onSubmit={this.handleSubmit}>
-            {/*/<PickCountry />*/}
-            <PickCity />
+          <form
+            autocomplete="off"
+            id="create-form"
+            onSubmit={this.handleSubmit}
+          >
             <PickDate />
+            <PickCity />
+            <div class="flex-container">
+              <div className="input-field">
+                <textarea
+                  id="content"
+                  className="materialize-textarea"
+                  onChange={this.handleChangeContent}
+                  required
+                />
 
-            <div className="input-field">
-              <input
-                type="text"
-                id="country"
-                onChange={this.handleChangeTitle}
-                required
-              />
-              <label htmlFor="country">Country</label>
-            </div>
+                <label htmlFor="content">Place of Interest 1</label>
+              </div>
+              <div className="spacer" />
 
-            <div className="input-field">
-              <input
-                type="text"
-                id="city"
-                onChange={this.handleChangeTitle}
-                required
-              />
-              <label htmlFor="city">City</label>
-            </div>
-            <div className="input-field">
-              <textarea
-                id="content"
-                className="materialize-textarea"
-                onChange={this.handleChangeContent}
-                required
-              />
-              <label htmlFor="content">Arrival Date</label>
-            </div>
-            <div className="input-field">
-              <textarea
-                id="content"
-                className="materialize-textarea"
-                onChange={this.handleChangeContent}
-                required
-              />
-              <label htmlFor="content">Departure Date</label>
-            </div>
-            <div className="input-field">
-              <textarea
-                id="content"
-                className="materialize-textarea"
-                onChange={this.handleChangeContent}
-                required
-              />
-              <label htmlFor="content">Place of Interest 1</label>
-            </div>
-            <div className="input-field">
-              <textarea
-                id="content"
-                className="materialize-textarea"
-                onChange={this.handleChangeContent}
-                required
-              />
-              <label htmlFor="content">Place of Interest 2</label>
-            </div>
-            <div className="input-field">
-              <textarea
-                id="content"
-                className="materialize-textarea"
-                onChange={this.handleChangeContent}
-                required
-              />
-              <label htmlFor="content">Place of Interest 3</label>
+              <div className="input-field">
+                <textarea
+                  id="content"
+                  className="materialize-textarea"
+                  onChange={this.handleChangeContent}
+                  required
+                />
+                <label htmlFor="content">Place of Interest 2</label>
+              </div>
+              <div className="spacer" />
+
+              <div className="input-field">
+                <textarea
+                  id="content"
+                  className="materialize-textarea"
+                  onChange={this.handleChangeContent}
+                  required
+                />
+                <label htmlFor="content">Place of Interest 3</label>
+              </div>
+              <div className="spacer" />
+
+              <div className="input-field">
+                <textarea
+                  id="content"
+                  className="materialize-textarea"
+                  onChange={this.handleChangeContent}
+                  required
+                />
+                <label htmlFor="content">Place of Interest 4</label>
+              </div>
             </div>
 
-            <button className="btn yellow darken-2 z-depth-0">Create</button>
+            <button className="btn yellow darken-2 z-depth-0">Submit</button>
           </form>
         </div>
       </div>

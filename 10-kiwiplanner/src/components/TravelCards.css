@@ -1,5 +1,7 @@
 .CardDeck {
   text-align: center;
+  width: 70%;
+  margin: auto;
 }
 .Trip-cards {
   display: flex;

@@ -28,18 +28,6 @@ class TravelCards extends Component {
         name: "Hobart",
         type: "18",
         base_experience: "AUG 13"
-      },
-      {
-        id: 25,
-        name: "Shepparton",
-        type: "18",
-        base_experience: "AUG 13"
-      },
-      {
-        id: 39,
-        name: "Sorrento",
-        type: "18",
-        base_experience: "AUG 13"
       }
     ]
   };

@@ -16,20 +16,14 @@ export class PickCity extends Component {
 
   render() {
     return (
-      <div class="row">
-        <div class="col s12">
-          <div class="row">
-            <div class="input-field col s12">
-              <input
-                type="text"
-                id="autocomplete-input"
-                ref={this.countryInput}
-                class="autocomplete"
-              />
-              <label for="autocomplete-input">Destination City</label>
-            </div>
-          </div>
-        </div>
+      <div class="input-field col s12">
+        <input
+          type="text"
+          id="autocomplete-input"
+          ref={this.countryInput}
+          class="autocomplete"
+        />
+        <label for="autocomplete-input">Destination City/Airport</label>
       </div>
     );
   }
