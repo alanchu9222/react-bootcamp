@@ -22,11 +22,11 @@
   margin: 0 auto;
   left: 0;
   right: 0;
-  top: 10%; /* Adjust this value to move the positioned div up and down */
+  top: 70%; /* Adjust this value to move the positioned div up and down */
   text-align: center;
-  color: whitesmoke;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
-    1px 1px 0 #000;
+  color: rgb(20, 248, 96);
+  text-shadow: -1px -1px 0 rgb(6, 124, 79), 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 rgb(18, 61, 36);
 }
 .Tripcard-data {
   font-weight: normal;
@@ -34,12 +34,12 @@
 }
 
 .Tripcard-title {
-  margin-bottom: 1rem;
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 .Tripcard img {
   width: 130px;
+  height: 100px;
 }
 .Tripcard:hover {
   transform: scale(1.2);
