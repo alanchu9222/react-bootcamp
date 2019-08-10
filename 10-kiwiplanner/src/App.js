@@ -22,7 +22,14 @@ class App extends React.Component {
     view_mode: "0",
     auth: null,
     db: null,
-    refresh: false
+    refresh: false,
+    tripselected: {
+      city: "",
+      poi1: "",
+      poi2: "",
+      poi3: "",
+      poi4: ""
+    }
   };
   setIsLoggedIn = isLoggedIn => {
     this.setState({ isLoggedIn: isLoggedIn });

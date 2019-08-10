@@ -20,8 +20,6 @@ class Tripcard extends Component {
       }
     );
     this.setState({ imgSrc: response.data.results[0].urls.small });
-
-    console.log(response.data.results[0].urls.small);
   };
 
   render() {
@@ -32,8 +30,6 @@ class Tripcard extends Component {
       this.searchCity(this.props.city);
     }
 
-    console.log("Rendering for city");
-    console.log(this.props.city);
     return (
       <div className="Tripcard">
         <div className="box">

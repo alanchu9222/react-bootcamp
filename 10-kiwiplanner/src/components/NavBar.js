@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Login from "./U_login";
 import Logout from "./U_logout";
 import Create from "./U_create";
+import logo from "../img/image.png";
+import "./NavBar.css";
 //import Mode from "./U_mode";
 //import Signup from "./U_signup";
 
@@ -17,13 +19,6 @@ class NavBar extends Component {
     auth: null,
     menuItems: [
       {
-        list_id: "mode",
-        menu_id: "",
-        target: "modal-view",
-        description: "View Mode",
-        show_when: "logged-in"
-      },
-      {
         list_id: "logout",
         menu_id: "logout",
         target: "modal-logout",
@@ -34,8 +29,8 @@ class NavBar extends Component {
         list_id: "create",
         menu_id: "",
         target: "modal-create",
-        description: "Create Plan",
-        show_when: "logged-out",
+        description: "Add Destination",
+        show_when: "logged-in",
         component: "Login"
       },
       {
@@ -67,26 +62,29 @@ class NavBar extends Component {
   showMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id} className="{menuItem.show_when}">
-        <span
-          className="z-depth-0 teal lighten-4 grey-text waves-effect waves-light btn modal-trigger"
+        <a
           data-target={menuItem.target}
+          data-toggle="modal"
+          className="z-depth-0 white-text waves-effect waves-light modal-trigger"
           id={menuItem.menu_id}
+          href={menuItem.target}
         >
           {menuItem.description}
-        </span>
+        </a>
       </li>
     );
   };
   showSideMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id}>
-        <span
-          className="z-depth-0 white grey-text waves-effect waves-light btn modal-trigger"
+        <a
+          className="z-depth-0 black-text waves-effect waves-light modal-trigger"
           data-target={menuItem.target}
+          href={menuItem.target}
           id={menuItem.menu_id}
         >
           {menuItem.description}
-        </span>
+        </a>
       </li>
     );
   };
@@ -99,19 +97,24 @@ class NavBar extends Component {
 
   render() {
     return (
-      <div>
-        <nav className="z-depth-0 teal lighten-4">
-          <div className="nav-wrapper">
-            <span data-target="mobile-nav" className="sidenav-trigger">
-              <i className="material-icons">menu</i>
-            </span>
-
-            <ul id="nav-mobile" className="right hide-on-med-and-down">
-              {this.currentMenuItems().map(this.showMenuItem)}
-            </ul>
+      <div className="navbar-fixed">
+        <nav className="teal">
+          <div className="">
+            <div className="nav-wrapper">
+              <img className="kiwi" src={logo} alt="Logo" />
+              <span data-target="mobile-nav" className="sidenav-trigger">
+                <i className="material-icons">menu</i>
+              </span>
+              <ul
+                className="menuTop"
+                id="nav-mobile"
+                className="right hide-on-med-and-down"
+              >
+                {this.currentMenuItems().map(this.showMenuItem)}
+              </ul>
+            </div>
           </div>
         </nav>
-
         <Login
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-login"

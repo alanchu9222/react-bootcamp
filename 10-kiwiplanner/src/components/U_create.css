@@ -9,18 +9,22 @@
 .flex-container > .input-field {
   width: 40%;
   margin-top: 0.5rem !important;
-  margin-bottom: 0rem !important;
+  margin-bottom: 0.5rem !important;
 }
 .flex-container > .spacer {
   width: 10%;
 }
 
 .input-field .active {
-  transform: translateY(-8px) !important;
+  transform: translateY(-10px) !important;
 }
 textarea {
   font-size: 1rem !important;
 }
 .span {
   display: inline-block;
+}
+
+.button {
+  margin-top: 30px;
 }

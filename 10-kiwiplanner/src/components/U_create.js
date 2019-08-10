@@ -58,13 +58,13 @@ class U_create extends Component {
       <div id="modal-create" className="modal">
         <div className="modal-content">
           <form
-            autocomplete="off"
+            autoComplete="off"
             id="create-form"
             onSubmit={this.handleSubmit}
           >
             <PickDate />
             <PickCity />
-            <div class="flex-container">
+            <div className="flex-container">
               <div className="input-field">
                 <textarea
                   id="content"
@@ -110,7 +110,9 @@ class U_create extends Component {
               </div>
             </div>
 
-            <button className="btn yellow darken-2 z-depth-0">Submit</button>
+            <button className="button btn yellow darken-2 z-depth-0">
+              Submit
+            </button>
           </form>
         </div>
       </div>
