@@ -8,13 +8,6 @@ class U_logout extends Component {
     this.logoutModal = React.createRef();
     this.logoutForm = React.createRef();
   }
-  componentDidMount() {
-    document.addEventListener("DOMContentLoaded", function() {
-      const elems = document.querySelectorAll(".modal");
-      M.Modal.init(elems, {});
-    });
-  }
-
   handleSubmit = e => {
     e.preventDefault();
     // log the user out
@@ -24,18 +17,18 @@ class U_logout extends Component {
     M.Modal.getInstance(modal).close();
   };
 
+  componentDidMount() {
+    document.addEventListener("DOMContentLoaded", function() {
+      const elems = document.querySelectorAll(".modal");
+      M.Modal.init(elems, {});
+    });
+  }
+
   render() {
     return (
       <div id="modal-logout" className="modal">
         <div className="modal-content logout">
           <h4>Logging out</h4>
-          <button
-            className="btn yellow darken-2 z-depth-0"
-            onClick={this.handleSubmit}
-          >
-            Ok
-          </button>
-          <p className="error pink-text center-align" />
         </div>
       </div>
     );

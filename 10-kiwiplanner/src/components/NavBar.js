@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Login from "./U_login";
-import Logout from "./U_logout";
 import Create from "./U_create";
 import SignUp from "./U_signup";
 import logo from "../img/image.png";
@@ -18,13 +17,13 @@ class NavBar extends Component {
   static defaultProps = {
     auth: null,
     menuItems: [
-      {
-        list_id: "logout",
-        menu_id: "logout",
-        target: "modal-logout",
-        description: "Logout",
-        show_when: "logged-in"
-      },
+      // {
+      //   list_id: "logout",
+      //   menu_id: "logout",
+      //   target: "modal-logout",
+      //   description: "Logout",
+      //   show_when: "logged-in"
+      // },
       {
         list_id: "create",
         menu_id: "",
@@ -94,7 +93,10 @@ class NavBar extends Component {
     const mode = this.props.isLoggedIn ? "logged-in" : "logged-out";
     return this.props.menuItems.filter(item => item.show_when === mode);
   };
-
+  handleClick = () => {
+    this.props.auth.signOut();
+    this.props.setIsLoggedIn(false);
+  };
   render() {
     return (
       <div className="navbar-fixed">
@@ -116,6 +118,18 @@ class NavBar extends Component {
                 className="right hide-on-med-and-down"
               >
                 {this.currentMenuItems().map(this.showMenuItem)}
+                {this.props.isLoggedIn && (
+                  <li>
+                    <a
+                      href="#"
+                      onClick={this.handleClick}
+                      className="z-depth-0 white-text waves-effect waves-light"
+                      id="nav-logout"
+                    >
+                      Logout
+                    </a>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -131,11 +145,6 @@ class NavBar extends Component {
           auth={this.props.auth}
         />
 
-        <Logout
-          setIsLoggedIn={this.props.setIsLoggedIn}
-          id="modal-logout"
-          auth={this.props.auth}
-        />
         <Create
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-create"
@@ -144,6 +153,18 @@ class NavBar extends Component {
         />
         <ul className="sidenav" id="mobile-nav">
           {this.currentMenuItems().map(this.showSideMenuItem)}
+          {this.props.isLoggedIn && (
+            <li>
+              <a
+                className="z-depth-0 black-text waves-effect waves-light"
+                href="#"
+                onClick={this.handleClick}
+                id="side-logout"
+              >
+                Logout
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     );
