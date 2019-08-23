@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import Login from "./U_login";
 import Logout from "./U_logout";
 import Create from "./U_create";
+import SignUp from "./U_signup";
 import logo from "../img/image.png";
 import "./NavBar.css";
 //import Mode from "./U_mode";
-//import Signup from "./U_signup";
 
 import M from "materialize-css";
 class NavBar extends Component {
@@ -102,9 +102,14 @@ class NavBar extends Component {
           <div className="">
             <div className="nav-wrapper">
               <img className="kiwi" src={logo} alt="Logo" />
+
               <span data-target="mobile-nav" className="sidenav-trigger">
                 <i className="material-icons">menu</i>
               </span>
+              <a href="#" class="brand-logo">
+                Kiwi Planner
+              </a>
+
               <ul
                 className="menuTop"
                 id="nav-mobile"
@@ -120,6 +125,12 @@ class NavBar extends Component {
           id="modal-login"
           auth={this.props.auth}
         />
+        <SignUp
+          setIsLoggedIn={this.props.setIsLoggedIn}
+          id="modal-signup"
+          auth={this.props.auth}
+        />
+
         <Logout
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-logout"

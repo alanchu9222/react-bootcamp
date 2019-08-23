@@ -1,0 +1,11 @@
+.kiwi {
+  height: 35px;
+  margin-top: 15px;
+}
+.navbar-fixed {
+  z-index: 999;
+}
+.brand-logo {
+  width: 300px;
+  text-align: center;
+}

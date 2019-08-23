@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import M from "materialize-css";
+import "./U_logout.css";
 
 class U_logout extends Component {
   constructor(props) {
@@ -21,23 +22,20 @@ class U_logout extends Component {
     const modal = document.querySelector("#modal-logout");
     this.props.setIsLoggedIn(false);
     M.Modal.getInstance(modal).close();
-    this.logoutForm.current.reset();
   };
 
   render() {
     return (
-      <div id="modal-logout" className="modal" ref={this.loginModal}>
-        <div className="modal-content">
-          <h4>You are now logged out</h4>
-
-          <form
-            id="logout-form"
-            ref={this.logoutForm}
-            onSubmit={this.handleSubmit}
+      <div id="modal-logout" className="modal">
+        <div className="modal-content logout">
+          <h4>Logging out</h4>
+          <button
+            className="btn yellow darken-2 z-depth-0"
+            onClick={this.handleSubmit}
           >
-            <button className="btn yellow darken-2 z-depth-0">Ok</button>
-            <p className="error pink-text center-align" />
-          </form>
+            Ok
+          </button>
+          <p className="error pink-text center-align" />
         </div>
       </div>
     );

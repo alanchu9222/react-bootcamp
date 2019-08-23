@@ -7,30 +7,30 @@ class TravelCards extends Component {
     trips: [
       {
         id: 4,
-        city: "Adelaide",
-        country: "Australia",
-        temperature: "18",
+        city: "Santiago",
+        country: "Chile",
+        temperature: "2",
         date: "AUG 13"
       },
       {
         id: 7,
-        city: "Melbourne",
-        country: "Australia",
-        temperature: "18",
+        city: "Cairo",
+        country: "Egypt",
+        temperature: "28",
         date: "AUG 13"
       },
       {
         id: 11,
-        city: "Sydney",
-        country: "Australia",
+        city: "Beijing",
+        country: "China",
         temperature: "18",
         date: "AUG 13"
       },
       {
         id: 12,
-        city: "Hobart",
+        city: "Darwin",
         country: "Australia",
-        temperature: "18",
+        temperature: "40",
         date: "AUG 13"
       }
     ]
