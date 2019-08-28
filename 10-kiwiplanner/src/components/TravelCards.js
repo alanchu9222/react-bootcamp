@@ -37,6 +37,21 @@ class TravelCards extends Component {
     console.log(month + " " + day);
     return fdate;
   };
+  handleCardClick = city => {
+    const temp = [];
+    temp.push(city);
+    const destRecord = this.state.travelPlan.find(record => {
+      return record.city === city.trim();
+    });
+    if (destRecord) {
+      // If the field exist then push it into the MenuOptions
+      destRecord.place1 && temp.push(destRecord.place1);
+      destRecord.place2 && temp.push(destRecord.place2);
+      destRecord.place3 && temp.push(destRecord.place3);
+      destRecord.place4 && temp.push(destRecord.place4);
+    }
+    this.props.setMenuOptions(temp);
+  };
   componentDidUpdate() {
     if (this.props.user) {
       console.log("USER LOGGED IN AS " + this.props.user);
@@ -46,7 +61,6 @@ class TravelCards extends Component {
           .get()
           .then(
             snapshot => {
-              console.log("HERES THE OUTPUT FROM FIREBASE");
               console.log(snapshot.docs);
               const data = snapshot.docs;
               if (data.length) {
@@ -70,10 +84,8 @@ class TravelCards extends Component {
                 });
                 this.setState({ travelPlan: tripArray });
                 this.setState({ cardsUpdated: true });
-                //guideList.innerHTML = html;
               } else {
-                //guideList.innerHTML =
-                //  '<h5 class="center-align">Login to view guides</h5>';
+                console.log("No records found");
               }
             },
             err => console.log(err.message)
@@ -99,6 +111,7 @@ class TravelCards extends Component {
                 temperature={p.temperature}
                 startDate={p.dateStart}
                 endDate={p.dateEnd}
+                clickHandler={this.handleCardClick}
               />
             ))}
           </div>

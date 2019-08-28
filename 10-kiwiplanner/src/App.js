@@ -19,25 +19,27 @@ class App extends React.Component {
   state = {
     user: "",
     isLoggedIn: false,
-    view_mode: "0",
     auth: null,
     db: null,
-    refresh: false,
-    tripselected: {
-      city: "",
-      poi1: "",
-      poi2: "",
-      poi3: "",
-      poi4: ""
-    }
+    menuOptions: [],
+    placeSelected: ""
   };
   setUser = user => {
     this.setState({ user: user });
+  };
+  setPlace = place => {
+    this.setState({ placeSelected: place });
   };
 
   setIsLoggedIn = isLoggedIn => {
     this.setState({ isLoggedIn: isLoggedIn });
   };
+
+  setMenuOptions = list => {
+    // A list of locations to be added to the navbar and sidebar
+    this.setState({ menuOptions: list });
+  };
+
   setRefresh = () => {
     console.log("Refresh called");
     this.setState({ refresh: true });
@@ -61,9 +63,11 @@ class App extends React.Component {
             setState={this.updateAuthState}
             isLoggedIn={this.state.isLoggedIn}
             setIsLoggedIn={this.setIsLoggedIn}
+            menuOptions={this.state.menuOptions}
             auth={this.auth}
             db={this.db}
             setUser={this.setUser}
+            setPlace={this.setPlace}
             refresh={this.setRefresh}
           />
         }
@@ -72,12 +76,18 @@ class App extends React.Component {
         {this.state.isLoggedIn ? (
           <div>
             <TravelCards
+              setMenuOptions={this.setMenuOptions}
               user={this.state.user}
               isLoggedIn={this.state.isLoggedIn}
               db={this.db}
             />
 
-            <TravelPlan user={this.state.user} auth={this.auth} db={this.db} />
+            <TravelPlan
+              user={this.state.user}
+              auth={this.auth}
+              db={this.db}
+              place={this.state.placeSelected}
+            />
           </div>
         ) : (
           <div />
@@ -88,7 +98,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-{
-  /* <TravelCards user={this.state.user} />*/
-}

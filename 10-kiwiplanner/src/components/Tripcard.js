@@ -22,6 +22,9 @@ class Tripcard extends Component {
     this.setState({ imgSrc: response.data.results[0].urls.small });
   };
 
+  clickHandler = () => {
+    this.props.clickHandler(this.props.city);
+  };
   render() {
     const imgSrc = this.state.imgSrc;
 
@@ -31,7 +34,7 @@ class Tripcard extends Component {
     }
 
     return (
-      <div className="Tripcard">
+      <div className="Tripcard" onClick={this.clickHandler}>
         <div className="box">
           <img src={imgSrc} alt={this.props.city} />
           <div className="text">

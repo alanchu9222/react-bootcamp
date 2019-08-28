@@ -11,19 +11,13 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: false,
+      menuOptions: []
     };
   }
   static defaultProps = {
     auth: null,
     menuItems: [
-      // {
-      //   list_id: "logout",
-      //   menu_id: "logout",
-      //   target: "modal-logout",
-      //   description: "Logout",
-      //   show_when: "logged-in"
-      // },
       {
         list_id: "create",
         menu_id: "",
@@ -48,6 +42,16 @@ class NavBar extends Component {
       }
     ]
   };
+  componentDidUpdate() {
+    if (!this.props.menuOptions) {
+      return;
+    } else if (!this.state.menuOptions) {
+      //this.setState({ menuOptions: this.props.menuOptions });
+      //alert("Setting Up MenuOptions");
+    } else if (this.state.menuOptions[0] != this.props.menuOptions[0]) {
+      this.setState({ menuOptions: this.props.menuOptions });
+    }
+  }
 
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
@@ -57,7 +61,9 @@ class NavBar extends Component {
       M.Sidenav.init(sideNav, {});
     });
   }
-
+  handleClick = event => {
+    this.props.setPlace(event.currentTarget.dataset.place);
+  };
   showMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id} className="{menuItem.show_when}">
@@ -73,6 +79,22 @@ class NavBar extends Component {
       </li>
     );
   };
+  showMenuPlace = place => {
+    // Data-place store the parameter for the onCLick Call
+    // The value is retrieved using event.currentTarget.dataset.place
+    return (
+      <li key={place} className="logged-in">
+        <a
+          className="z-depth-0 white-text waves-effect waves-light modal-trigger"
+          data-place={place}
+          onClick={this.handleClick}
+        >
+          {place}
+        </a>
+      </li>
+    );
+  };
+
   showSideMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id}>
@@ -96,6 +118,7 @@ class NavBar extends Component {
   // handle logout
   handleLogout = () => {
     this.props.auth.signOut();
+    this.setState({ menuOptions: [] });
     this.props.setIsLoggedIn(false);
     this.props.setUser("");
   };
@@ -108,7 +131,6 @@ class NavBar extends Component {
           <div className="">
             <div className="nav-wrapper">
               <img className="kiwi" src={logo} alt="Logo" />
-
               <span data-target="mobile-nav" className="sidenav-trigger">
                 <i className="material-icons">menu</i>
               </span>
@@ -121,6 +143,8 @@ class NavBar extends Component {
                 id="nav-mobile"
                 className="right hide-on-med-and-down"
               >
+                {this.props.isLoggedIn &&
+                  this.state.menuOptions.map(this.showMenuPlace)}
                 {this.currentMenuItems().map(this.showMenuItem)}
                 {this.props.isLoggedIn && (
                   <li>
