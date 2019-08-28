@@ -75,19 +75,19 @@ class App extends React.Component {
 
         {this.state.isLoggedIn ? (
           <div>
-            <TravelCards
+            {/* <TravelCards
               setMenuOptions={this.setMenuOptions}
               user={this.state.user}
               isLoggedIn={this.state.isLoggedIn}
               db={this.db}
-            />
+            /> */}
 
-            <TravelPlan
+            {/* <TravelPlan
               user={this.state.user}
               auth={this.auth}
               db={this.db}
               place={this.state.placeSelected}
-            />
+            /> */}
           </div>
         ) : (
           <div />

@@ -19,7 +19,6 @@ class TravelPlan extends Component {
   componentDidUpdate() {
     var items = document.querySelectorAll(".collapsible");
     M.Collapsible.init(items);
-    //    M.Collapsible.init(this.collapsible);
   }
 
   getPlaceInfo = (searchKey, title) => {

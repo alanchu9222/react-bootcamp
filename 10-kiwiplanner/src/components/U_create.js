@@ -11,7 +11,19 @@ class U_create extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { title: "", content: "" };
+    this.state = {
+      city: "",
+      country: "",
+      poi1: "",
+      poi2: "",
+      poi3: "",
+      poi4: "",
+      dateStart: "",
+      dateEnd: "",
+      temperature: "",
+      weather: "",
+      coordinates: ""
+    };
   }
 
   componentDidMount() {
@@ -21,25 +33,35 @@ class U_create extends Component {
     });
   }
 
-  handleChangeTitle = e => {
-    this.setState({ title: e.target.value });
+  setDestination = (city, country) => {
+    this.setState({ city: city, country: country });
+    alert("detected " + city + " " + country);
   };
-  handleChangeContnet = e => {
-    this.setState({ content: e.target.value });
+  setDates = (start, end) => {
+    this.setState({ dateStart: start, dateEnd: end });
+  };
+
+  handlePlaceChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    const title = this.state.title;
-    const content = this.state.content;
-
-    // create new guide
-
+    alert("saving record for " + this.state.city + " " + this.state.country);
     this.props.db
-      .collection("guides")
+      .collection("trips")
       .add({
-        title: title,
-        content: content
+        city: this.state.city,
+        country: this.state.country,
+        temperature: this.state.temperature,
+        weather: this.state.weather,
+        dateStart: this.state.dateStart,
+        dateEnd: this.state.dateEnd,
+        place1: this.state.poi1,
+        place2: this.state.poi2,
+        place3: this.state.poi3,
+        place4: this.state.poi4,
+        coordinates: this.state.coordinates
       })
       .then(() => {
         // close the create modal & reset form
@@ -62,15 +84,15 @@ class U_create extends Component {
             id="create-form"
             onSubmit={this.handleSubmit}
           >
-            <PickDate />
-            <PickCity />
+            <PickDate setDates={this.setDates} />
+            <PickCity setDestination={this.setDestination} />
             <div className="flex-container">
               <div className="input-field">
                 <textarea
                   id="content"
                   className="materialize-textarea"
-                  onChange={this.handleChangeContent}
-                  required
+                  onChange={this.handlePlaceChange}
+                  name="poi1"
                 />
 
                 <label htmlFor="content">Place of Interest 1</label>
@@ -81,8 +103,8 @@ class U_create extends Component {
                 <textarea
                   id="content"
                   className="materialize-textarea"
-                  onChange={this.handleChangeContent}
-                  required
+                  onChange={this.handlePlaceChange}
+                  name="poi2"
                 />
                 <label htmlFor="content">Place of Interest 2</label>
               </div>
@@ -92,8 +114,8 @@ class U_create extends Component {
                 <textarea
                   id="content"
                   className="materialize-textarea"
-                  onChange={this.handleChangeContent}
-                  required
+                  onChange={this.handlePlaceChange}
+                  name="poi3"
                 />
                 <label htmlFor="content">Place of Interest 3</label>
               </div>
@@ -103,8 +125,8 @@ class U_create extends Component {
                 <textarea
                   id="content"
                   className="materialize-textarea"
-                  onChange={this.handleChangeContent}
-                  required
+                  onChange={this.handlePlaceChange}
+                  name="poi4"
                 />
                 <label htmlFor="content">Place of Interest 4</label>
               </div>
