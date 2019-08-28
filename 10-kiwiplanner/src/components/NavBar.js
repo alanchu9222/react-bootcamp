@@ -93,12 +93,16 @@ class NavBar extends Component {
     const mode = this.props.isLoggedIn ? "logged-in" : "logged-out";
     return this.props.menuItems.filter(item => item.show_when === mode);
   };
-  handleClick = () => {
+  // handle logout
+  handleLogout = () => {
     this.props.auth.signOut();
     this.props.setIsLoggedIn(false);
+    this.props.setUser("");
   };
   render() {
     return (
+      // ---------------------------------------------------------------------
+      // Navbar
       <div className="navbar-fixed">
         <nav className="teal">
           <div className="">
@@ -108,7 +112,7 @@ class NavBar extends Component {
               <span data-target="mobile-nav" className="sidenav-trigger">
                 <i className="material-icons">menu</i>
               </span>
-              <a href="#" class="brand-logo">
+              <a href="#" className="brand-logo">
                 Kiwi Planner
               </a>
 
@@ -122,7 +126,7 @@ class NavBar extends Component {
                   <li>
                     <a
                       href="#"
-                      onClick={this.handleClick}
+                      onClick={this.handleLogout}
                       className="z-depth-0 white-text waves-effect waves-light"
                       id="nav-logout"
                     >
@@ -134,23 +138,28 @@ class NavBar extends Component {
             </div>
           </div>
         </nav>
+        // ---------------------------------------------------------------------
+        // Modals
         <Login
           setIsLoggedIn={this.props.setIsLoggedIn}
+          setUser={this.props.setUser}
           id="modal-login"
           auth={this.props.auth}
+          user={this.props.user}
         />
         <SignUp
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-signup"
           auth={this.props.auth}
         />
-
         <Create
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-create"
           refresh={this.props.refresh}
           db={this.props.db}
         />
+        // ---------------------------------------------------------------------
+        // Sidenav
         <ul className="sidenav" id="mobile-nav">
           {this.currentMenuItems().map(this.showSideMenuItem)}
           {this.props.isLoggedIn && (
@@ -158,7 +167,7 @@ class NavBar extends Component {
               <a
                 className="z-depth-0 black-text waves-effect waves-light"
                 href="#"
-                onClick={this.handleClick}
+                onClick={this.handleLogout}
                 id="side-logout"
               >
                 Logout

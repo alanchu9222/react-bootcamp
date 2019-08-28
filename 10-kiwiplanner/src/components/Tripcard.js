@@ -25,7 +25,7 @@ class Tripcard extends Component {
   render() {
     const imgSrc = this.state.imgSrc;
 
-    if (this.props.city != this.state.city) {
+    if (this.props.city !== this.state.city) {
       this.setState({ city: this.props.city });
       this.searchCity(this.props.city);
     }

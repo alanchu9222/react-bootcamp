@@ -6,7 +6,7 @@ import { DB_CONFIG } from "./config/config";
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-
+import Seed from "./seed/seed";
 import "./App.css";
 
 class App extends React.Component {
@@ -31,6 +31,10 @@ class App extends React.Component {
       poi4: ""
     }
   };
+  setUser = user => {
+    this.setState({ user: user });
+  };
+
   setIsLoggedIn = isLoggedIn => {
     this.setState({ isLoggedIn: isLoggedIn });
   };
@@ -59,13 +63,19 @@ class App extends React.Component {
             setIsLoggedIn={this.setIsLoggedIn}
             auth={this.auth}
             db={this.db}
+            setUser={this.setUser}
             refresh={this.setRefresh}
           />
         }
+        {/* <Seed db={this.db} /> */}
 
         {this.state.isLoggedIn ? (
           <div>
-            <TravelCards user={this.state.user} />
+            <TravelCards
+              user={this.state.user}
+              isLoggedIn={this.state.isLoggedIn}
+              db={this.db}
+            />
 
             <TravelPlan user={this.state.user} auth={this.auth} db={this.db} />
           </div>
