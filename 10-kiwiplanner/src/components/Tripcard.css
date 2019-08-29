@@ -37,10 +37,20 @@
   font-size: 1em;
 }
 
-.Tripcard img {
+.Trip-image {
   width: 130px;
   height: 100px;
 }
+.Tripcard-icon {
+  width: 60px;
+  height: 60px;
+}
+.Tripcard-temp {
+  font-size: 1.64rem;
+  margin-top: 0rem;
+  margin-bottom: 0.656rem;
+}
+
 .Tripcard:hover {
   transform: scale(1.2);
   opacity: 0.8;

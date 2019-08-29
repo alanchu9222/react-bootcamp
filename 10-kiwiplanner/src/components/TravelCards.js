@@ -8,34 +8,9 @@ class TravelCards extends Component {
     cardsUpdated: false,
     travelPlan: []
   };
-  formatDate = date => {
-    if (date.length != 10) {
-      return "";
-    }
-    let fdate = "";
-    let month = "";
-    let day = "";
-
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-    month = date.slice(5, 7);
-    day = date.slice(-2);
-    fdate = day + " " + months[Number(month - 1)];
-    console.log("month day");
-    console.log(month + " " + day);
-    return fdate;
+  stripYear = date => {
+    const temp = date.split(" ");
+    return temp[0] + " " + temp[1];
   };
   handleCardClick = city => {
     const temp = [];
@@ -67,12 +42,14 @@ class TravelCards extends Component {
                 let tripArray = [];
                 data.forEach(doc => {
                   const trip = doc.data();
-                  const startDate = this.formatDate(trip.dateStart);
-                  const endDate = this.formatDate(trip.dateEnd);
+                  const startDate = this.stripYear(trip.dateStart);
+                  const endDate = this.stripYear(trip.dateEnd);
                   let tripRecord = {
                     city: trip.city,
                     country: trip.country,
                     temperature: trip.temperature,
+                    weather: trip.weather,
+                    weatherIcon: trip.weatherIcon,
                     dateStart: startDate,
                     dateEnd: endDate,
                     place1: trip.place1,
@@ -81,6 +58,8 @@ class TravelCards extends Component {
                     place4: trip.place4
                   };
                   tripArray.push(tripRecord);
+                  console.log("trip record");
+                  console.log(tripRecord);
                 });
                 this.setState({ travelPlan: tripArray });
                 this.setState({ cardsUpdated: true });
@@ -108,6 +87,8 @@ class TravelCards extends Component {
                 key={p.country + p.city}
                 city={p.city}
                 country={p.country}
+                weather={p.weather}
+                icon={p.weatherIcon}
                 temperature={p.temperature}
                 startDate={p.dateStart}
                 endDate={p.dateEnd}

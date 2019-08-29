@@ -13,22 +13,23 @@ export class PickDate extends Component {
       startDate: new Date(),
       endDate: new Date()
     };
-    this.handleChangeStart = this.handleChangeStart.bind(this);
-    this.handleChangeEnd = this.handleChangeEnd.bind(this);
   }
-
-  handleChangeStart(date) {
+  componentDidMount() {
+    // Inform the parent of the initial dates
+    this.props.setDates(this.state.startDate, this.state.endDate);
+  }
+  handleChangeStart = date => {
     this.setState({
       startDate: date
     });
     this.props.setDates(this.state.startDate, this.state.endDate);
-  }
-  handleChangeEnd(date) {
+  };
+  handleChangeEnd = date => {
     this.setState({
       endDate: date
     });
     this.props.setDates(this.state.startDate, this.state.endDate);
-  }
+  };
 
   render() {
     return (

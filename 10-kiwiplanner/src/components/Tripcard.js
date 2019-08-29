@@ -25,6 +25,53 @@ class Tripcard extends Component {
   clickHandler = () => {
     this.props.clickHandler(this.props.city);
   };
+  
+  // Conditional rendering - Use historical data if not this month
+  cityWeather = () => {
+    const iconUrl =
+      "http://openweathermap.org/img/w/" + this.props.icon + ".png";
+
+    const d = new Date();
+    const index = d.getMonth();
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    const thisMonth = months[index];
+    const tripDate = this.props.startDate.split(" ");
+    const tripMonth = tripDate[1].trim();
+    if (tripMonth === thisMonth) {
+      return (
+        <div>
+          <img
+            className="Tripcard-icon"
+            src={iconUrl}
+            alt={this.props.weather}
+          />
+          <div className="Tripcard-temp">{this.props.temperature} &#8451;</div>
+        </div>
+      );
+    } else {
+      return (
+        <CityTemperature
+          city={this.props.city}
+          country={this.props.country}
+          month={tripMonth}
+        />
+      );
+    }
+  };
+
   render() {
     const imgSrc = this.state.imgSrc;
 
@@ -36,18 +83,14 @@ class Tripcard extends Component {
     return (
       <div className="Tripcard" onClick={this.clickHandler}>
         <div className="box">
-          <img src={imgSrc} alt={this.props.city} />
+          <img className="Trip-image" src={imgSrc} alt={this.props.city} />
           <div className="text">
             <div className="Tripcard-title">{this.props.city}</div>
           </div>
         </div>
 
         <div className="Tripcard-data">
-          <CityTemperature
-            city={this.props.city}
-            country={this.props.country}
-            month="Aug"
-          />
+          {this.cityWeather()}
         </div>
 
         <div className="Tripcard-data">

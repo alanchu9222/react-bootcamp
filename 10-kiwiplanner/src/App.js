@@ -23,7 +23,7 @@ class App extends React.Component {
     isLoggedIn: false,
     auth: null,
     db: null,
-    flashMessage: "Welcome to Travel Planner",
+    flashMessage: "Welcome to Travel Planner - please sign in to begin",
     menuOptions: [],
     placeSelected: ""
   };
@@ -82,12 +82,12 @@ class App extends React.Component {
         <Flash message={this.state.flashMessage} />
         {this.state.isLoggedIn ? (
           <div>
-            {/* <TravelCards
+            <TravelCards
               setMenuOptions={this.setMenuOptions}
               user={this.state.user}
               isLoggedIn={this.state.isLoggedIn}
               db={this.db}
-            /> */}
+            />
 
             {/* <TravelPlan
               user={this.state.user}
