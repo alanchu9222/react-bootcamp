@@ -23,7 +23,7 @@ class NavBar extends Component {
         menu_id: "",
         target: "modal-create",
         description: "Add Destination",
-        show_when: "logged-in",
+        show_when: "logged-out",
         component: "Login"
       },
       {

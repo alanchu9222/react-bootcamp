@@ -1,30 +1,30 @@
-.modal {
+/* .modal {
   height: 100% !important ;
 }
-
+*/
 .flex-container {
   display: flex;
   flex-wrap: wrap;
 }
 .flex-container > .input-field {
   width: 40%;
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
+  /* margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important; */
 }
 .flex-container > .spacer {
   width: 10%;
 }
-
+/*
 .input-field .active {
   transform: translateY(-10px) !important;
-}
-textarea {
+} */
+/* textarea {
   font-size: 1rem !important;
-}
+} */
 .span {
   display: inline-block;
 }
 
 .button {
-  margin-top: 30px;
+  margin: 10px;
 }

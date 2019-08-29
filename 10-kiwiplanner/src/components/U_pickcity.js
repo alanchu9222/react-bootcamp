@@ -21,6 +21,17 @@ export class PickCity extends Component {
     });
   };
 
+  onSuggestionSelected = (event, { suggestionValue, method }) => {
+    event.preventDefault();
+    event.stopPropagation();
+    this.setState({isValid:true})
+    const arr = suggestionValue.split('-') 
+    const city = arr[0].trim()
+    const country = arr[1].trim()
+    this.props.setDestination(city,country)
+    //alert("User selected " + suggestionValue + " using: " + method);
+  };
+
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value }) => {
@@ -41,7 +52,7 @@ export class PickCity extends Component {
     //const theme = themeable(this.props.theme);
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: "Select destination city/airport",
+      placeholder: "Destination city/airport",
       spellCheck: false,
       value,
       onChange: this.onChange
@@ -50,6 +61,7 @@ export class PickCity extends Component {
     // Finally, render it!
     return (
       <Autosuggest
+        onSuggestionSelected={this.onSuggestionSelected}
         suggestions={suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}

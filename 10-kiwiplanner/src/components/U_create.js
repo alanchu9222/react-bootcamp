@@ -37,6 +37,7 @@ class U_create extends Component {
     this.setState({ city: city, country: country });
     alert("detected " + city + " " + country);
   };
+
   setDates = (start, end) => {
     this.setState({ dateStart: start, dateEnd: end });
   };
@@ -47,7 +48,10 @@ class U_create extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    alert("saving record for " + this.state.city + " " + this.state.country);
+    if (!this.state.city || !this.state.country) {
+      return;
+    }
+    alert("saving record for " + this.state.city + " " + this.state.country);    
     this.props.db
       .collection("trips")
       .add({
