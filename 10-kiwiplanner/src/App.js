@@ -4,6 +4,8 @@ import TravelPlan from "./components/TravelPlan";
 import TravelCards from "./components/TravelCards";
 import { DB_CONFIG } from "./config/config";
 import app from "firebase/app";
+import Flash from "./components/Flash";
+
 import "firebase/auth";
 import "firebase/firestore";
 import Seed from "./seed/seed";
@@ -21,6 +23,7 @@ class App extends React.Component {
     isLoggedIn: false,
     auth: null,
     db: null,
+    flashMessage: "Welcome to Travel Planner",
     menuOptions: [],
     placeSelected: ""
   };
@@ -44,6 +47,9 @@ class App extends React.Component {
     console.log("Refresh called");
     this.setState({ refresh: true });
   };
+  setFlashMessage = message => {
+    this.setState({ flashMessage: message });
+  };
 
   componentDidUpdate() {
     if (this.state.refresh === true) {
@@ -60,6 +66,7 @@ class App extends React.Component {
       <div>
         {
           <NavBar
+            setFlashMessage={this.setFlashMessage}
             setState={this.updateAuthState}
             isLoggedIn={this.state.isLoggedIn}
             setIsLoggedIn={this.setIsLoggedIn}
@@ -72,7 +79,7 @@ class App extends React.Component {
           />
         }
         {/* <Seed db={this.db} /> */}
-
+        <Flash message={this.state.flashMessage} />
         {this.state.isLoggedIn ? (
           <div>
             {/* <TravelCards

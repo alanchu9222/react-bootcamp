@@ -15,6 +15,10 @@ export class PickCity extends Component {
     };
   }
 
+  setDestination = dest => {
+    this.setState({ value: dest });
+  };
+
   onChange = (event, { newValue }) => {
     this.setState({
       value: newValue
@@ -24,12 +28,9 @@ export class PickCity extends Component {
   onSuggestionSelected = (event, { suggestionValue, method }) => {
     event.preventDefault();
     event.stopPropagation();
-    this.setState({isValid:true})
-    const arr = suggestionValue.split('-') 
-    const city = arr[0].trim()
-    const country = arr[1].trim()
-    this.props.setDestination(city,country)
-    //alert("User selected " + suggestionValue + " using: " + method);
+    this.setState({ isValid: true });
+    // Inform the parent - the value has changed
+    this.props.setDestination(suggestionValue);
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
@@ -48,6 +49,7 @@ export class PickCity extends Component {
   };
 
   render() {
+    // Value in the component state is used to render the autosuggest input field
     const { value, suggestions } = this.state;
     //const theme = themeable(this.props.theme);
     // Autosuggest will pass through all these props to the input.

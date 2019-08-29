@@ -23,7 +23,7 @@ class NavBar extends Component {
         menu_id: "",
         target: "modal-create",
         description: "Add Destination",
-        show_when: "logged-out",
+        show_when: "logged-in",
         component: "Login"
       },
       {
@@ -177,6 +177,7 @@ class NavBar extends Component {
           auth={this.props.auth}
         />
         <Create
+          setFlashMessage={this.props.setFlashMessage}
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-create"
           refresh={this.props.refresh}
