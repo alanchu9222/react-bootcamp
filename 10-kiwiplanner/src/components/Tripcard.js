@@ -2,14 +2,17 @@ import React, { Component } from "react";
 import unsplash from "./Unsplash";
 import "./Tripcard.css";
 import CityTemperature from "./CityTemperature";
-
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+const defaultImage =
+  "https://images.freeimages.com/images/large-previews/1f8/delicate-arch-1-1391746.jpg";
 class Tripcard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       city: "",
-      imgSrc:
-        "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjg0MDU4fQ"
+      imgSrc: defaultImage
     };
   }
   searchCity = async term => {
@@ -19,13 +22,23 @@ class Tripcard extends Component {
         params: { query: term }
       }
     );
-    this.setState({ imgSrc: response.data.results[0].urls.small });
+    try {
+      this.setState({ imgSrc: response.data.results[0].urls.small });
+    } catch (error) {
+      this.setState({ imgSrc: defaultImage });
+    }
   };
 
   clickHandler = () => {
     this.props.clickHandler(this.props.city);
   };
-  
+  deleteHandler = () => {
+    this.props.deleteHandler(this.props.city);
+  };
+  editHandler = () => {
+    this.props.editHandler(this.props.city);
+  };
+
   // Conditional rendering - Use historical data if not this month
   cityWeather = () => {
     const iconUrl =
@@ -50,6 +63,7 @@ class Tripcard extends Component {
     const thisMonth = months[index];
     const tripDate = this.props.startDate.split(" ");
     const tripMonth = tripDate[1].trim();
+    // If the trip is this month: we use the forecasted weather data
     if (tripMonth === thisMonth) {
       return (
         <div>
@@ -62,6 +76,7 @@ class Tripcard extends Component {
         </div>
       );
     } else {
+      // If the trip not this month: we use the historical weather data
       return (
         <CityTemperature
           city={this.props.city}
@@ -83,15 +98,29 @@ class Tripcard extends Component {
     return (
       <div className="Tripcard" onClick={this.clickHandler}>
         <div className="box">
+          <div className="Icons TrashRow">
+            <FontAwesomeIcon
+              className="TripIcon"
+              onClick={this.deleteHandler}
+              icon={faTrashAlt}
+              size="1x"
+            />
+          </div>
+          <div className="Icons EditRow">
+            <FontAwesomeIcon
+              className="TripIcon"
+              onClick={this.editHandler}
+              icon={faEdit}
+              size="1x"
+            />
+          </div>
           <img className="Trip-image" src={imgSrc} alt={this.props.city} />
           <div className="text">
             <div className="Tripcard-title">{this.props.city}</div>
           </div>
         </div>
 
-        <div className="Tripcard-data">
-          {this.cityWeather()}
-        </div>
+        <div className="Tripcard-data">{this.cityWeather()}</div>
 
         <div className="Tripcard-data">
           {this.props.startDate}-{this.props.endDate}

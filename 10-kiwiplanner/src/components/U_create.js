@@ -63,62 +63,6 @@ class U_create extends Component {
         console.log(err.message);
       });
   };
-  // // When the database is loaded with location information separate from
-  // // Trip Information - get coordinates for all locations
-  // getCoordinates = (places, country, coordinates) => {
-  //   axios
-  //     .get(
-  //       `https://us1.locationiq.com/v1/search.php?key=60b9313fae35ff&q=${
-  //         places[0]
-  //       }%20${country}&format=json`
-  //     )
-  //     .then(res => {
-  //       const data = res.data;
-  //       if (!data) {
-  //         console.log("NO DATA for " + places[0]);
-  //       }
-  //       //console.log(data[0].lat);
-  //       //console.log(data[0].lon);
-  //       coordinates.push({ lat: data[0].lat, lon: data[0].lon });
-  //       console.log(coordinates);
-  //       if (places.length === 1) {
-  //         this.setState({ coordinates: coordinates });
-  //         this.setState({ dataReady: true });
-  //         this.addLocationInfo();
-  //         return;
-  //       }
-  //       places.shift();
-  //       this.getCoordinates(places, country, coordinates);
-  //     });
-  // };
-
-  // getLocationDetails = () => {
-  //   let coordinates = [];
-  //   let locations = [
-  //     this.state.city,
-  //     this.state.poi1,
-  //     this.state.poi2,
-  //     this.state.poi3,
-  //     this.state.poi4
-  //   ];
-  //   this.setState({ dataReady: false });
-  //   this.setState({ coordinates: coordinates });
-  //   this.getCoordinates(locations, this.state.country, coordinates);
-  //   //    this.setState({ coordinates: coordinates });
-  //   //    console.log("coordinates " + this.state.coordinates);
-  // };
-  // componentDidUpdate() {
-  //   if (this.state.dataReady) {
-  //     console.log("1:" + this.state.coordinates[0].lat);
-  //     console.log("2:" + this.state.coordinates[1].lat);
-  //     console.log("3:" + this.state.coordinates[2].lat);
-  //     console.log("4:" + this.state.coordinates[3].lat);
-  //     console.log("5:" + this.state.coordinates[4].lat);
-  //   }
-  // }
-  // .get(
-  //   `https://api.openweathermap.org/data/2.5/weather?q=${this.state.city},${this.state.country}&appid=c6dd7c2aa863d2f936a3056172dffce8&units=metric`
-  // )
 
   getWeatherForecast = () => {};
   documentLoadedEventHandler = () => {

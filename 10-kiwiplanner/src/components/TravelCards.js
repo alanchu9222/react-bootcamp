@@ -27,6 +27,32 @@ class TravelCards extends Component {
     }
     this.props.setMenuOptions(temp, destRecord.country);
   };
+  handleCardDelete = city => {
+    const temp = [];
+    temp.push(city);
+    const destRecord = this.state.travelPlan.find(record => {
+      return record.city === city.trim();
+    });
+    if (destRecord) {
+      // If the field exist then push it into the MenuOptions
+      //alert("You have chosen to delete the trip to " + city);
+      this.props.performDelete(city, destRecord.country);
+    }
+    //this.props.setMenuOptions(temp, destRecord.country);
+  };
+  handleCardEdit = city => {
+    const temp = [];
+    temp.push(city);
+    const destRecord = this.state.travelPlan.find(record => {
+      return record.city === city.trim();
+    });
+    if (destRecord) {
+      // If the field exist then push it into the MenuOptions
+      alert("You have chosen to edit the trip to " + city);
+    }
+    //this.props.setMenuOptions(temp, destRecord.country);
+  };
+
   componentDidUpdate() {
     if (this.props.user) {
       console.log("USER LOGGED IN AS " + this.props.user);
@@ -60,8 +86,8 @@ class TravelCards extends Component {
                   tripArray.push(tripRecord);
                   console.log("trip record");
                   console.log(tripRecord);
-                });                
-                this.setState({ travelPlan: tripArray });                
+                });
+                this.setState({ travelPlan: tripArray });
                 this.setState({ cardsUpdated: true });
                 // Select the one place that is has the closest date to today
                 // Then render the travel plan for that place
@@ -95,6 +121,8 @@ class TravelCards extends Component {
                 startDate={p.dateStart}
                 endDate={p.dateEnd}
                 clickHandler={this.handleCardClick}
+                deleteHandler={this.handleCardDelete}
+                editHandler={this.handleCardEdit}
               />
             ))}
           </div>

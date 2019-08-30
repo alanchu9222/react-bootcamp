@@ -32,7 +32,35 @@
   font-weight: normal;
   font-size: 0.8em;
 }
+.TrashRow {
+  position: absolute;
+  z-index: 100;
+  margin: 10px;
+  left: 0;
+  right: 0;
+  text-align: right;
+}
+.EditRow {
+  position: absolute;
+  z-index: 100;
+  margin: 6px;
+  left: 0;
+  right: 0;
+  text-align: right;
+  top: 30%;
+}
 
+.TripIcon:hover {
+  color: red;
+  transform: scale(2);
+}
+.TripIcon {
+  color: white;
+}
+
+.OverlayContainer {
+  position: absolute;
+}
 .Tripcard-title {
   font-size: 1em;
 }

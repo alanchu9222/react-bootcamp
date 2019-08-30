@@ -5,12 +5,13 @@ import TravelCards from "./components/TravelCards";
 import { DB_CONFIG } from "./config/config";
 import app from "firebase/app";
 import Flash from "./components/Flash";
+import Update from "./components/U_update";
+import Delete from "./components/U_delete";
 import "./components/Flash.css";
 import "firebase/auth";
 import "firebase/firestore";
 import Seed from "./seed/seed";
 import "./App.css";
-import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
 class App extends React.Component {
@@ -19,6 +20,8 @@ class App extends React.Component {
     app.initializeApp(DB_CONFIG);
     this.db = app.firestore();
     this.auth = app.auth();
+    this.modalDelete = React.createRef();
+    this.modalUpdate = React.createRef();
   }
   state = {
     user: "",
@@ -63,6 +66,11 @@ class App extends React.Component {
   setFlashMessage = message => {
     this.setState({ flashMessage: message });
   };
+  // This will trigger the delete process
+  deleteTrip = (city, country) => {
+    // The ref must be called with the "current" attribute!!!
+    this.modalDelete.current.setPlaceDelete(city, country);
+  };
 
   componentDidUpdate() {
     if (this.state.refresh === true) {
@@ -72,31 +80,39 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        {
-          <NavBar
-            setFlashMessage={this.setFlashMessage}
-            setState={this.updateAuthState}
-            isLoggedIn={this.state.isLoggedIn}
-            setIsLoggedIn={this.setIsLoggedIn}
-            menuOptions={this.state.menuOptions}
-            auth={this.auth}
-            db={this.db}
-            setUser={this.setUser}
-            setPlace={this.setPlace}
-            refresh={this.setRefresh}
-          />
-        }
+        <NavBar
+          setFlashMessage={this.setFlashMessage}
+          setState={this.updateAuthState}
+          isLoggedIn={this.state.isLoggedIn}
+          setIsLoggedIn={this.setIsLoggedIn}
+          menuOptions={this.state.menuOptions}
+          auth={this.auth}
+          db={this.db}
+          setUser={this.setUser}
+          setPlace={this.setPlace}
+          refresh={this.setRefresh}
+        />
 
         {/* <Seed db={this.db} /> */}
         <Flash message={this.state.flashMessage} />
         {this.state.isLoggedIn ? (
           <div>
+            <Delete ref={this.modalDelete} db={this.props.db} />
+            <Update
+              ref="modal-update"
+              setFlashMessage={this.props.setFlashMessage}
+              setIsLoggedIn={this.props.setIsLoggedIn}
+              id="modal-update"
+              refresh={this.props.refresh}
+              db={this.props.db}
+            />
             <TravelCards
               setMenuOptions={this.setMenuOptions}
               setCountry={this.setCountry}
               user={this.state.user}
               isLoggedIn={this.state.isLoggedIn}
               db={this.db}
+              performDelete={this.deleteTrip}
             />
 
             <TravelPlan
