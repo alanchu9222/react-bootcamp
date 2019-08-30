@@ -25,7 +25,7 @@ class TravelCards extends Component {
       destRecord.place3 && temp.push(destRecord.place3);
       destRecord.place4 && temp.push(destRecord.place4);
     }
-    this.props.setMenuOptions(temp);
+    this.props.setMenuOptions(temp, destRecord.country);
   };
   componentDidUpdate() {
     if (this.props.user) {
@@ -60,9 +60,11 @@ class TravelCards extends Component {
                   tripArray.push(tripRecord);
                   console.log("trip record");
                   console.log(tripRecord);
-                });
-                this.setState({ travelPlan: tripArray });
+                });                
+                this.setState({ travelPlan: tripArray });                
                 this.setState({ cardsUpdated: true });
+                // Select the one place that is has the closest date to today
+                // Then render the travel plan for that place
               } else {
                 console.log("No records found");
               }

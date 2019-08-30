@@ -5,11 +5,13 @@ import TravelCards from "./components/TravelCards";
 import { DB_CONFIG } from "./config/config";
 import app from "firebase/app";
 import Flash from "./components/Flash";
-
+import "./components/Flash.css";
 import "firebase/auth";
 import "firebase/firestore";
 import Seed from "./seed/seed";
 import "./App.css";
+import toast from "toasted-notes";
+import "toasted-notes/src/styles.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -25,22 +27,33 @@ class App extends React.Component {
     db: null,
     flashMessage: "Welcome to Travel Planner - please sign in to begin",
     menuOptions: [],
-    placeSelected: ""
+    citySelected: "",
+    countrySelected: ""
   };
+
   setUser = user => {
     this.setState({ user: user });
   };
-  setPlace = place => {
-    this.setState({ placeSelected: place });
+  setPlace = city => {
+    //    toast.notify('User selected '+ city)
+    this.setState({ citySelected: city });
+    // Get local info for this place
+    this.refs.travelPlan.setPlace(city, this.state.countrySelected);
   };
 
   setIsLoggedIn = isLoggedIn => {
     this.setState({ isLoggedIn: isLoggedIn });
   };
 
-  setMenuOptions = list => {
+  setMenuOptions = (list, country) => {
     // A list of locations to be added to the navbar and sidebar
-    this.setState({ menuOptions: list });
+    this.setState({
+      menuOptions: list,
+      citySelected: list[0],
+      countrySelected: country
+    });
+    // Get local info for this place
+    this.refs.travelPlan.setPlace(list[0], country);
   };
 
   setRefresh = () => {
@@ -57,11 +70,6 @@ class App extends React.Component {
     }
   }
   render() {
-    console.log("APP: isLoggedIn");
-    console.log(this.state.isLoggedIn);
-
-    console.log("Refreshing the view");
-
     return (
       <div>
         {
@@ -78,23 +86,25 @@ class App extends React.Component {
             refresh={this.setRefresh}
           />
         }
+
         {/* <Seed db={this.db} /> */}
         <Flash message={this.state.flashMessage} />
         {this.state.isLoggedIn ? (
           <div>
             <TravelCards
               setMenuOptions={this.setMenuOptions}
+              setCountry={this.setCountry}
               user={this.state.user}
               isLoggedIn={this.state.isLoggedIn}
               db={this.db}
             />
 
-            {/* <TravelPlan
+            <TravelPlan
+              ref="travelPlan"
               user={this.state.user}
               auth={this.auth}
               db={this.db}
-              place={this.state.placeSelected}
-            /> */}
+            />
           </div>
         ) : (
           <div />

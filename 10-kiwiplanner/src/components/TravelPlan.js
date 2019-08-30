@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
-
+// refer to https://www.npmjs.com/package/toasted-notes
+import toast from "toasted-notes";
+import "toasted-notes/src/styles.css";
 import axios from "axios";
 import "./TravelPlan.css";
 import M from "materialize-css";
@@ -13,6 +15,12 @@ class TravelPlan extends Component {
   }
 
   state = {
+    city: "",
+    country: "",
+    lat: "",
+    lon: "",
+    ready: false,
+    searchInProgress: false,
     list: []
   };
 
@@ -20,18 +28,68 @@ class TravelPlan extends Component {
     var items = document.querySelectorAll(".collapsible");
     M.Collapsible.init(items);
   }
+  getCoordinates = (city, country) => {
+    axios
+      .get(
+        `https://us1.locationiq.com/v1/search.php?key=60b9313fae35ff&q=${city}%20${country}&format=json`
+      )
+      .then(res => {
+        // reset the information list
+        this.setState({ list: [] });
+        const data = res.data;
+        this.setState({
+          lat: data[0].lat,
+          lon: data[0].lon,
+          ready: true,
+          searchInProgress: true
+        });
 
-  getPlaceInfo = (searchKey, title) => {
+        let searchList = [
+          { "LOCAL ATTRACTIONS ": "attractions", city: this.state.city },
+          { "ACCOMODATIONS ": "hotel_motel", city: this.state.city },
+          { "FOOD ": "restaurant", city: this.state.city },
+          { "CAFE ": "cafe", city: this.state.city },
+          { "RECREATION ": "recreation", city: this.state.city }
+        ];
+        this.getPlaceInfo(searchList);
+        return;
+      });
+  };
+  // The parent component triggers rendering of place information with this method
+  setPlace = (city, country) => {
+    if (this.state.city === city && this.state.country === country) {
+      return;
+    }
+    //    toast.notify("Getting info for " + city + " " + country);
+
+    if (this.state.searchInProgress) {
+      // toast.notify("Loading data for " + city + " " + country);
+      return;
+    } else {
+      // toast.notify("Getting info for " + city + " " + country);
+    }
+    this.setState({ city: city, country: country, ready: false });
+    // Get the new coordinates, only set to ready when the coordinates are available
+    this.getCoordinates(city, country);
+  };
+
+  getPlaceInfo = searchList => {
+    const searchKey = Object.values(searchList[0])[0];
+    // Append the city name to the Category Title
+    const title =
+      Object.keys(searchList[0])[0] + " - " + Object.values(searchList[0])[1];
+    searchList.shift();
     const placeInfo = [];
     axios
       .get(
         "https://api.tomtom.com/search/2/search/" +
           searchKey +
-          ".json?key=nWLvkbwKuylT208jAh7FEOR9JFAxzg0I&lat=37.8085&lon=-122.4239"
+          ".json?key=nWLvkbwKuylT208jAh7FEOR9JFAxzg0I&lat=" +
+          this.state.lat +
+          "&lon=" +
+          this.state.lon
       )
       .then(response => {
-        console.log("Attractions");
-        console.log(response.data);
         let content = [];
         response.data.results.forEach(item => {
           console.log(
@@ -58,37 +116,20 @@ class TravelPlan extends Component {
         };
         placeInfo.push(doc);
         this.setupGuides(placeInfo);
+        if (searchList.length > 0) {
+          // Search the next keyword/category
+          this.getPlaceInfo(searchList);
+        } else {
+          // End the keyword/category search
+          this.setState({ searchInProgress: false });
+          return;
+        }
+      })
+      .catch(error => {
+        this.setState({ searchInProgress: false });
+        console.log(error);
       });
   };
-
-  componentDidMount() {
-    //set state with data
-
-    // listen for auth status changes
-    this.props.auth.onAuthStateChanged(user => {
-      if (user) {
-        /*  this.props.db
-          .collection("guides")
-          .get()
-          .then(
-            snapshot => {
-              this.setupGuides(snapshot.docs);
-            },
-            err => console.log(err.message)
-          );
-        */
-
-        this.getPlaceInfo("attractions", "LOCAL ATTRACTIONS");
-        this.getPlaceInfo("hotel_motel", "ACCOMODATIONS");
-        this.getPlaceInfo("restaurant", "FOOD");
-        this.getPlaceInfo("cafe", "CAFE");
-        this.getPlaceInfo("museum", "MUSEUMS and GALLERIES");
-        this.getPlaceInfo("recreation", "RECREATION");
-      } else {
-        this.setupGuides([]);
-      }
-    });
-  }
 
   // setup guides
   setupGuides = data => {
@@ -101,8 +142,6 @@ class TravelPlan extends Component {
           list: this.state.list.concat(listItem)
         });
       });
-      console.log("setup guides");
-      console.log(data[0].content);
     }
   };
 
@@ -132,7 +171,6 @@ class TravelPlan extends Component {
   listTravelPlan = listItem => {
     console.log("list item 0 name");
     console.log(listItem.content[0].name);
-
     return (
       <li key={listItem.title}>
         <div className="collapsible-header grey lighten-4 grey-text">
@@ -149,7 +187,7 @@ class TravelPlan extends Component {
     return (
       <div className="container">
         <ul className="collapsible z-depth-0 ref={this.collapsible}">
-          {this.state.list.map(this.listTravelPlan)}
+          {this.state.ready && this.state.list.map(this.listTravelPlan)}
         </ul>
       </div>
     );
