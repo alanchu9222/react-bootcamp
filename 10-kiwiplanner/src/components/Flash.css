@@ -1,0 +1,11 @@
+.flash {
+  border: none;
+  border-radius: 1rem;
+  /* color: whitesmoke;
+  background: #ffc3a7; */
+  color: #02587f;
+  background-color: #cdeefd;
+  margin: 1rem;
+  padding: 1rem;
+  text-align: center;
+}
