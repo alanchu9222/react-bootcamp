@@ -41,10 +41,8 @@ class TravelCards extends Component {
     });
     if (destRecord) {
       // If the field exist then push it into the MenuOptions
-      //alert("You have chosen to delete the trip to " + city);
       this.props.performDelete(destRecord);
     }
-    //this.props.setMenuOptions(temp, destRecord.country);
   };
   handleCardEdit = city => {
     const temp = [];
@@ -54,7 +52,7 @@ class TravelCards extends Component {
     });
     if (destRecord) {
       // If the field exist then push it into the MenuOptions
-      alert("You have chosen to edit the trip to " + city);
+      this.props.performUpdate(destRecord);
     }
     //this.props.setMenuOptions(temp, destRecord.country);
   };

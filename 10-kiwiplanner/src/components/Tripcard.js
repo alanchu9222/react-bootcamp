@@ -36,7 +36,8 @@ class Tripcard extends Component {
     event.stopPropagation();
     this.props.deleteHandler(this.props.city);
   };
-  editHandler = () => {
+  editHandler = event => {
+    event.stopPropagation();
     this.props.editHandler(this.props.city);
   };
 

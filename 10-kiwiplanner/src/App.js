@@ -33,9 +33,9 @@ class App extends React.Component {
     flashMessage: "Welcome to Travel Planner - please sign in to begin",
     menuOptions: [],
     citySelected: "",
-    countrySelected: "",
+    countrySelected: ""
     // This will trigger cards update when a trip is deleted
-    deleteInProgress: false
+    //deleteInProgress: false
   };
 
   setUser = user => {
@@ -73,7 +73,7 @@ class App extends React.Component {
 
   deleteCompleted = result => {
     // This will trigger the trips desplayed to be updates
-    this.setState({ deleteInProgress: false });
+    //this.setState({ deleteInProgress: false });
     if (result) {
       console.log("Delete succesful");
       this.travelCards.current.updateCards();
@@ -86,7 +86,12 @@ class App extends React.Component {
   deleteTrip = tripRecord => {
     // The ref must be called with the "current" attribute!!!
     this.modalDelete.current.setPlaceDelete(tripRecord);
-    this.setState({ deleteInProgress: true });
+    //this.setState({ deleteInProgress: true });
+  };
+  // This will trigger the update process
+  updateTrip = tripRecord => {
+    // The ref must be called with the "current" attribute!!!
+    this.modalUpdate.current.setPlaceUpdate(tripRecord);
   };
 
   componentDidUpdate() {
@@ -119,14 +124,7 @@ class App extends React.Component {
               db={this.db}
               deleteCompleted={this.deleteCompleted}
             />
-            <Update
-              ref="modal-update"
-              setFlashMessage={this.props.setFlashMessage}
-              setIsLoggedIn={this.props.setIsLoggedIn}
-              id="modal-update"
-              refresh={this.props.refresh}
-              db={this.props.db}
-            />
+            <Update ref={this.modalUpdate} db={this.props.db} />
 
             <TravelCards
               ref={this.travelCards}
@@ -136,6 +134,7 @@ class App extends React.Component {
               isLoggedIn={this.state.isLoggedIn}
               db={this.db}
               performDelete={this.deleteTrip}
+              performUpdate={this.updateTrip}
             />
 
             <TravelPlan
