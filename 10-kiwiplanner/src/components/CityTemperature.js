@@ -14,13 +14,11 @@ import { faUmbrella } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function CityTemperature(props) {
-
   let city_record = obj => {
     return obj.City === props.city && obj.Country === props.country;
   };
-
-  const getCity = data.find(city_record);
-  const temp = getCity[props.month];
+  const cityRecord = data.find(city_record);
+  const temp = cityRecord[props.month.slice(0,3)];
 
   let ficon = temp < 5 ? faSnowflake : faCloudSun;
   if (temp > 35) ficon = faTemperatureHigh;

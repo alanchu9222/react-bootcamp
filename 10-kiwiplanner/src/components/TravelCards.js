@@ -4,13 +4,18 @@ import "./TravelCards.css";
 
 class TravelCards extends Component {
   state = {
-    user: "",
+    city: "",
+    country: "",
     cardsUpdated: false,
     travelPlan: []
   };
   stripYear = date => {
     const temp = date.split(" ");
     return temp[0] + " " + temp[1];
+  };
+  updateCards = () => {
+    // Cards not updated will trigger a re-render of the cards
+    this.setState({ cardsUpdated: false });
   };
   handleCardClick = city => {
     const temp = [];
@@ -25,6 +30,7 @@ class TravelCards extends Component {
       destRecord.place3 && temp.push(destRecord.place3);
       destRecord.place4 && temp.push(destRecord.place4);
     }
+    this.setState({ city: city, country: destRecord.country });
     this.props.setMenuOptions(temp, destRecord.country);
   };
   handleCardDelete = city => {
@@ -36,7 +42,7 @@ class TravelCards extends Component {
     if (destRecord) {
       // If the field exist then push it into the MenuOptions
       //alert("You have chosen to delete the trip to " + city);
-      this.props.performDelete(city, destRecord.country);
+      this.props.performDelete(destRecord);
     }
     //this.props.setMenuOptions(temp, destRecord.country);
   };
@@ -52,7 +58,7 @@ class TravelCards extends Component {
     }
     //this.props.setMenuOptions(temp, destRecord.country);
   };
-
+  // This gets called when the cards have been updated (delete or update events)
   componentDidUpdate() {
     if (this.props.user) {
       console.log("USER LOGGED IN AS " + this.props.user);
@@ -71,6 +77,7 @@ class TravelCards extends Component {
                   const startDate = this.stripYear(trip.dateStart);
                   const endDate = this.stripYear(trip.dateEnd);
                   let tripRecord = {
+                    id: doc.id,
                     city: trip.city,
                     country: trip.country,
                     temperature: trip.temperature,
@@ -84,13 +91,28 @@ class TravelCards extends Component {
                     place4: trip.place4
                   };
                   tripArray.push(tripRecord);
-                  console.log("trip record");
-                  console.log(tripRecord);
                 });
+
                 this.setState({ travelPlan: tripArray });
                 this.setState({ cardsUpdated: true });
-                // Select the one place that is has the closest date to today
-                // Then render the travel plan for that place
+                // Check that the current selected city still exists in the database
+                // (maybe it just got deleted)
+                let city_record = obj => {
+                  return (
+                    obj.City === this.state.city &&
+                    obj.Country === this.state.country
+                  );
+                };
+                const selectedCityFound = tripArray.find(city_record);
+                if (!selectedCityFound) {
+                  // Assign another selected city
+                  this.setState({
+                    city: tripArray[0].city,
+                    country: tripArray[0].country
+                  });
+                  // Simulate user selection of the first card in the deck
+                  this.handleCardClick(tripArray[0].city);
+                }
               } else {
                 console.log("No records found");
               }

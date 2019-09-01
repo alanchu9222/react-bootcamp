@@ -22,6 +22,8 @@ class App extends React.Component {
     this.auth = app.auth();
     this.modalDelete = React.createRef();
     this.modalUpdate = React.createRef();
+    this.travelCards = React.createRef();
+    this.travelPlan = React.createRef();
   }
   state = {
     user: "",
@@ -31,7 +33,9 @@ class App extends React.Component {
     flashMessage: "Welcome to Travel Planner - please sign in to begin",
     menuOptions: [],
     citySelected: "",
-    countrySelected: ""
+    countrySelected: "",
+    // This will trigger cards update when a trip is deleted
+    deleteInProgress: false
   };
 
   setUser = user => {
@@ -66,10 +70,23 @@ class App extends React.Component {
   setFlashMessage = message => {
     this.setState({ flashMessage: message });
   };
+
+  deleteCompleted = result => {
+    // This will trigger the trips desplayed to be updates
+    this.setState({ deleteInProgress: false });
+    if (result) {
+      console.log("Delete succesful");
+      this.travelCards.current.updateCards();
+    } else {
+      console.log("Delete failed");
+    }
+  };
+
   // This will trigger the delete process
-  deleteTrip = (city, country) => {
+  deleteTrip = tripRecord => {
     // The ref must be called with the "current" attribute!!!
-    this.modalDelete.current.setPlaceDelete(city, country);
+    this.modalDelete.current.setPlaceDelete(tripRecord);
+    this.setState({ deleteInProgress: true });
   };
 
   componentDidUpdate() {
@@ -97,7 +114,11 @@ class App extends React.Component {
         <Flash message={this.state.flashMessage} />
         {this.state.isLoggedIn ? (
           <div>
-            <Delete ref={this.modalDelete} db={this.props.db} />
+            <Delete
+              ref={this.modalDelete}
+              db={this.db}
+              deleteCompleted={this.deleteCompleted}
+            />
             <Update
               ref="modal-update"
               setFlashMessage={this.props.setFlashMessage}
@@ -106,7 +127,9 @@ class App extends React.Component {
               refresh={this.props.refresh}
               db={this.props.db}
             />
+
             <TravelCards
+              ref={this.travelCards}
               setMenuOptions={this.setMenuOptions}
               setCountry={this.setCountry}
               user={this.state.user}

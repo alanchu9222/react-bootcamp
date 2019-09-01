@@ -28,11 +28,12 @@ class Tripcard extends Component {
       this.setState({ imgSrc: defaultImage });
     }
   };
-
+  // The click handle will not respond if the user selected delete icon or update icon
   clickHandler = () => {
     this.props.clickHandler(this.props.city);
   };
-  deleteHandler = () => {
+  deleteHandler = event => {
+    event.stopPropagation();
     this.props.deleteHandler(this.props.city);
   };
   editHandler = () => {

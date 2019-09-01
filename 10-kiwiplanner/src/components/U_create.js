@@ -31,39 +31,6 @@ class U_create extends Component {
       coordinates: []
     };
   }
-  addLocationInfo = () => {
-    this.props.db
-      .collection("location")
-      .add({
-        country: this.state.country,
-        temperature: this.state.temperature,
-        weather: this.state.weather,
-        weather: this.state.weatherIcon,
-        dateStart: this.state.dateStart,
-        dateEnd: this.state.dateEnd,
-        place1: this.state.poi1,
-        place2: this.state.poi2,
-        place3: this.state.poi3,
-        place4: this.state.poi4
-        //        coordinates: this.state.coordinates
-      })
-      .then(() => {
-        this.setState({ city: "", country: "" });
-        // Get location coordinates and store in locations database
-        // Allow UI to proceed while the location related operations
-        // happen from the event queue
-        this.getLocationDetails();
-        // close the create modal & reset form
-        const modal = document.querySelector("#modal-create");
-        M.Modal.getInstance(modal).close();
-        this.props.refresh();
-        //this.createForm.reset();
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-  };
-
   getWeatherForecast = () => {};
   documentLoadedEventHandler = () => {
     const elems = document.querySelectorAll(".modal");
@@ -144,7 +111,6 @@ class U_create extends Component {
       this.state.alertBox.open();
       return;
     }
-    alert("saving record for " + this.state.city + " " + this.state.country);
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?q=${this.state.city},${this.state.country}&appid=c6dd7c2aa863d2f936a3056172dffce8&units=metric`
@@ -173,6 +139,13 @@ class U_create extends Component {
             place4: this.state.poi4
           })
           .then(() => {
+            alert(
+              "Successsfully saved record for " +
+                this.state.city +
+                " " +
+                this.state.country
+            );
+
             this.setState({ city: "", country: "" });
             // close the create modal & reset form
             const modal = document.querySelector("#modal-create");
