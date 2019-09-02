@@ -3,6 +3,7 @@
 
 import React, { Component } from "react";
 import "./U_pickdate.css";
+// Refer to https://reactdatepicker.com/#example-default
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -14,49 +15,28 @@ export class PickDate extends Component {
       endDate: new Date()
     };
   }
-  componentDidMount() {
+  setInitialDates = (start, end) => {
     this.setState({
-      startDate: this.props.trip.startDate,
-      endDate: this.props.trip.endDate
+      startDate: start,
+      endDate: end
     });
-  }
+  };
+
   componentDidMount() {
     // Inform the parent of the initial dates
     this.props.setDates(this.state.startDate, this.state.endDate);
   }
-  handleChangeStart = date => {
+  handleChangeStart = startDate => {
     this.setState({
-      startDate: date
+      startDate: startDate
     });
-    this.props.setDates(this.state.startDate, this.state.endDate);
+    this.props.setDates(startDate, this.state.endDate);
   };
-  handleChangeEnd = date => {
+  handleChangeEnd = endDate => {
     this.setState({
-      endDate: date
+      endDate: endDate
     });
-    this.props.setDates(this.state.startDate, this.state.endDate);
-  };
-  formatDate = date => {
-    var monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var year = date.getFullYear();
-
-    return day + " " + monthNames[monthIndex] + " " + year;
+    this.props.setDates(this.state.startDate, endDate);
   };
 
   render() {

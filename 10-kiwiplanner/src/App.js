@@ -124,7 +124,11 @@ class App extends React.Component {
               db={this.db}
               deleteCompleted={this.deleteCompleted}
             />
-            <Update ref={this.modalUpdate} db={this.props.db} />
+            <Update
+              ref={this.modalUpdate}
+              db={this.db}
+              refresh={this.setRefresh}
+            />
 
             <TravelCards
               ref={this.travelCards}
