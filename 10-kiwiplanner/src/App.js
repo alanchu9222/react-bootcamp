@@ -64,7 +64,7 @@ class App extends React.Component {
   };
 
   setRefresh = () => {
-    console.log("Refresh called");
+    this.travelCards.current.updateCards();
     this.setState({ refresh: true });
   };
   setFlashMessage = message => {
@@ -72,7 +72,7 @@ class App extends React.Component {
   };
 
   deleteCompleted = result => {
-    // This will trigger the trips desplayed to be updates
+    // This will trigger the trips displayed to be updated
     //this.setState({ deleteInProgress: false });
     if (result) {
       console.log("Delete succesful");

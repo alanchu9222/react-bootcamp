@@ -54,16 +54,16 @@ class U_create extends Component {
     const city = arr[0].trim();
     const country = arr[1].trim();
     this.setState({ destinationValue: dest, city: city, country: country });
-    alert(
-      "detected " +
-        city +
-        " " +
-        country +
-        "dates " +
-        this.state.dateStart +
-        " " +
-        this.state.dateEnd
-    );
+    // alert(
+    //   "detected " +
+    //     city +
+    //     " " +
+    //     country +
+    //     "dates " +
+    //     this.state.dateStart +
+    //     " " +
+    //     this.state.dateEnd
+    // );
   };
   formatDate = date => {
     var monthNames = [
@@ -89,8 +89,10 @@ class U_create extends Component {
   };
   setDates = (start, end) => {
     this.setState({
-      dateStart: this.formatDate(start),
-      dateEnd: this.formatDate(end)
+      // dateStart: this.formatDate(start),
+      // dateEnd: this.formatDate(end)
+      dateStart: start,
+      dateEnd: end
     });
   };
 
@@ -139,7 +141,7 @@ class U_create extends Component {
             place4: this.state.poi4
           })
           .then(() => {
-            alert(
+            console.log(
               "Successsfully saved record for " +
                 this.state.city +
                 " " +

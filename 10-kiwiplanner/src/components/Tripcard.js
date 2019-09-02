@@ -36,19 +36,8 @@ class Tripcard extends Component {
     event.stopPropagation();
     this.props.deleteHandler(this.props.city);
   };
-  editHandler = event => {
-    event.stopPropagation();
-    this.props.editHandler(this.props.city);
-  };
-
-  // Conditional rendering - Use historical data if not this month
-  cityWeather = () => {
-    const iconUrl =
-      "http://openweathermap.org/img/w/" + this.props.icon + ".png";
-
-    const d = new Date();
-    const index = d.getMonth();
-    const months = [
+  month = monthSelected => {
+    const m = [
       "Jan",
       "Feb",
       "Mar",
@@ -62,9 +51,28 @@ class Tripcard extends Component {
       "Nov",
       "Dec"
     ];
-    const thisMonth = months[index];
-    const tripDate = this.props.startDate.split(" ");
-    const tripMonth = tripDate[1].trim();
+    return m[monthSelected];
+  };
+  editHandler = event => {
+    event.stopPropagation();
+    this.props.editHandler(this.props.city);
+  };
+  formatDate = dateSeconds => {
+    const dateObj = new Date(dateSeconds * 1000);
+    return dateObj.getDate() + " " + this.month(dateObj.getMonth());
+  };
+
+  // Conditional rendering - Use historical data if not this month
+  cityWeather = () => {
+    const iconUrl =
+      "http://openweathermap.org/img/w/" + this.props.icon + ".png";
+
+    const d = new Date();
+    const index = d.getMonth();
+    const thisMonth = this.month[index];
+    const startDate = new Date(this.props.startDate * 1000);
+    const endDate = new Date(this.props.endDate * 1000);
+    const tripMonth = this.month[startDate.getMonth()];
     // If the trip is this month: we use the forecasted weather data
     if (tripMonth === thisMonth) {
       return (
@@ -125,7 +133,8 @@ class Tripcard extends Component {
         <div className="Tripcard-data">{this.cityWeather()}</div>
 
         <div className="Tripcard-data">
-          {this.props.startDate}-{this.props.endDate}
+          {this.formatDate(this.props.startDate)}-
+          {this.formatDate(this.props.endDate)}
         </div>
       </div>
     );

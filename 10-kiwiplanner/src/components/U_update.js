@@ -19,30 +19,19 @@ class U_update extends Component {
       modalUpdate: null,
       alertBox: null,
       dataReady: false,
-      city: "",
-      country: "",
-      poi1: "",
-      poi2: "",
-      poi3: "",
-      poi4: "",
-      dateStart: "",
-      dateEnd: "",
-      temperature: "",
-      weather: "",
-      places: [],
-      coordinates: []
+      tripData: ""
     };
   }
   // The parent will trigger a update process form this method
   setPlaceUpdate = trip => {
     this.setState({
-      tripIdToUpdate: trip.id
+      tripIdToUpdate: trip.id,
+      tripData: trip
     });
     this.state.modalUpdate.open();
   };
 
   getWeatherForecast = () => {};
-
   componentDidMount() {
     const elems = document.querySelectorAll(".modal");
     M.Modal.init(elems, {});
@@ -135,17 +124,17 @@ class U_update extends Component {
         this.props.db
           .collection("trips")
           .add({
-            city: this.state.city,
-            country: this.state.country,
-            temperature: this.state.temperature,
-            weather: this.state.weather,
-            weatherIcon: this.state.weatherIcon,
-            dateStart: this.state.dateStart,
-            dateEnd: this.state.dateEnd,
-            place1: this.state.poi1,
-            place2: this.state.poi2,
-            place3: this.state.poi3,
-            place4: this.state.poi4
+            city: this.state.trip.city,
+            country: this.state.trip.country,
+            temperature: this.state.trip.temperature,
+            weather: this.state.trip.weather,
+            weatherIcon: this.state.trip.weatherIcon,
+            dateStart: this.state.trip.dateStart,
+            dateEnd: this.state.trip.dateEnd,
+            place1: this.state.trip.poi1,
+            place2: this.state.trip.poi2,
+            place3: this.state.trip.poi3,
+            place4: this.state.trip.poi4
           })
           .then(() => {
             alert(

@@ -15,6 +15,12 @@ export class PickDate extends Component {
     };
   }
   componentDidMount() {
+    this.setState({
+      startDate: this.props.trip.startDate,
+      endDate: this.props.trip.endDate
+    });
+  }
+  componentDidMount() {
     // Inform the parent of the initial dates
     this.props.setDates(this.state.startDate, this.state.endDate);
   }
@@ -29,6 +35,28 @@ export class PickDate extends Component {
       endDate: date
     });
     this.props.setDates(this.state.startDate, this.state.endDate);
+  };
+  formatDate = date => {
+    var monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return day + " " + monthNames[monthIndex] + " " + year;
   };
 
   render() {

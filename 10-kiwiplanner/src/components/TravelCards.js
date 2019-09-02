@@ -56,6 +56,7 @@ class TravelCards extends Component {
     }
     //this.props.setMenuOptions(temp, destRecord.country);
   };
+
   // This gets called when the cards have been updated (delete or update events)
   componentDidUpdate() {
     if (this.props.user) {
@@ -72,8 +73,6 @@ class TravelCards extends Component {
                 let tripArray = [];
                 data.forEach(doc => {
                   const trip = doc.data();
-                  const startDate = this.stripYear(trip.dateStart);
-                  const endDate = this.stripYear(trip.dateEnd);
                   let tripRecord = {
                     id: doc.id,
                     city: trip.city,
@@ -81,8 +80,8 @@ class TravelCards extends Component {
                     temperature: trip.temperature,
                     weather: trip.weather,
                     weatherIcon: trip.weatherIcon,
-                    dateStart: startDate,
-                    dateEnd: endDate,
+                    dateStart: trip.dateStart.seconds,
+                    dateEnd: trip.dateEnd.seconds,
                     place1: trip.place1,
                     place2: trip.place2,
                     place3: trip.place3,
