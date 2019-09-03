@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import PickCountry from "./U_pickcountry";
 import PickCity from "./U_pickcity";
+//import PickCountry from "./U_pickcountry";
 import "./U_create.css";
 import PickDate from "./U_pickdate";
 import axios from "axios";
@@ -12,7 +14,9 @@ class U_create extends Component {
 
   constructor(props) {
     super(props);
+    this.pickCountry = React.createRef();
     this.pickCity = React.createRef();
+
     this.state = {
       destinationValue: "",
       alertBox: null,
@@ -46,51 +50,28 @@ class U_create extends Component {
       this.documentLoadedEventHandler
     );
   }
+  resetCreateForm = () => {
+    alert("user selected create");
+    this.pickCity.current.reset();
+    this.pickCountry.current.reset();
+  };
+
   // ACDEBUG
   // When destination is identified
   // Get the weather forecast for the given date
-  setDestination = dest => {
+  setDestinationCity = dest => {
     const arr = dest.split("-");
     const city = arr[0].trim();
     const country = arr[1].trim();
     this.setState({ destinationValue: dest, city: city, country: country });
-    // alert(
-    //   "detected " +
-    //     city +
-    //     " " +
-    //     country +
-    //     "dates " +
-    //     this.state.dateStart +
-    //     " " +
-    //     this.state.dateEnd
-    // );
   };
-  formatDate = date => {
-    var monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var year = date.getFullYear();
-
-    return day + " " + monthNames[monthIndex] + " " + year;
+  setDestinationCountry = country => {
+    this.setState({ country: country.trim() });
+    this.pickCity.current.shortlistCities(country);
   };
+
   setDates = (start, end) => {
     this.setState({
-      // dateStart: this.formatDate(start),
-      // dateEnd: this.formatDate(end)
       dateStart: start,
       dateEnd: end
     });
@@ -113,52 +94,93 @@ class U_create extends Component {
       this.state.alertBox.open();
       return;
     }
-    axios
-      .get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${this.state.city},${this.state.country}&appid=c6dd7c2aa863d2f936a3056172dffce8&units=metric`
-      )
-      .then(res => {
-        const data = res.data;
-        this.setState({
-          temperature: data.main.temp,
-          weather: data.weather[0].main,
-          weatherIcon: data.weather[0].icon
-        });
-        // Update database with the latest weather information
-        this.props.db
-          .collection("trips")
-          .add({
-            city: this.state.city,
-            country: this.state.country,
-            temperature: this.state.temperature,
-            weather: this.state.weather,
-            weatherIcon: this.state.weatherIcon,
-            dateStart: this.state.dateStart,
-            dateEnd: this.state.dateEnd,
-            place1: this.state.poi1,
-            place2: this.state.poi2,
-            place3: this.state.poi3,
-            place4: this.state.poi4
-          })
-          .then(() => {
-            console.log(
-              "Successsfully saved record for " +
-                this.state.city +
-                " " +
-                this.state.country
-            );
+    // Update database with the latest weather information
+    this.props.db
+      .collection("trips")
+      .add({
+        city: this.state.city,
+        country: this.state.country,
+        temperature: 20.06,
+        weather: "Clear",
+        weatherIcon: "01d",
+        dateStart: this.state.dateStart,
+        dateEnd: this.state.dateEnd,
+        place1: this.state.poi1,
+        place2: this.state.poi2,
+        place3: this.state.poi3,
+        place4: this.state.poi4
+      })
+      .then(() => {
+        console.log(
+          "Successsfully saved record for " +
+            this.state.city +
+            " " +
+            this.state.country
+        );
+        this.resetCreateForm();
+        this.setState({ city: "", country: "" });
+        // close the create modal & reset form
+        const modal = document.querySelector("#modal-create");
 
-            this.setState({ city: "", country: "" });
-            // close the create modal & reset form
-            const modal = document.querySelector("#modal-create");
-            M.Modal.getInstance(modal).close();
-            this.props.refresh();
-            //this.createForm.reset();
-          })
-          .catch(err => {
-            console.log(err.message);
-          });
+        M.Modal.getInstance(modal).close();
+
+        this.props.refresh();
+        //this.createForm.reset();
+      })
+      .catch(err => {
+        console.log(err.message);
+        alert("UNABLE TO SAVE DATA TO FIREBASE");
       });
+
+    // axios
+    //   .get(
+    //     `https://api.openweathermap.org/data/2.5/weather?q=${this.state.city},${this.state.country}&appid=c6dd7c2aa863d2f936a3056172dffce8&units=metric`
+    //   )
+    //   .then(res => {
+    //     const data = res.data;
+    //     this.setState({
+    //       temperature: data.main.temp,
+    //       weather: data.weather[0].main,
+    //       weatherIcon: data.weather[0].icon
+    //     });
+    //     // Update database with the latest weather information
+    //     this.props.db
+    //       .collection("trips")
+    //       .add({
+    //         city: this.state.city,
+    //         country: this.state.country,
+    //         temperature: this.state.temperature,
+    //         weather: this.state.weather,
+    //         weatherIcon: this.state.weatherIcon,
+    //         dateStart: this.state.dateStart,
+    //         dateEnd: this.state.dateEnd,
+    //         place1: this.state.poi1,
+    //         place2: this.state.poi2,
+    //         place3: this.state.poi3,
+    //         place4: this.state.poi4
+    //       })
+    //       .then(() => {
+    //         console.log(
+    //           "Successsfully saved record for " +
+    //             this.state.city +
+    //             " " +
+    //             this.state.country
+    //         );
+    //         alert("reset the form");
+    //         this.setState({ city: "", country: "" });
+    //         // close the create modal & reset form
+    //         const modal = document.querySelector("#modal-create");
+
+    //         M.Modal.getInstance(modal).close();
+
+    //         this.props.refresh();
+    //         //this.createForm.reset();
+    //       })
+    //       .catch(err => {
+    //         console.log(err.message);
+    //         alert("UNABLE TO GET THE WEATHER");
+    //       });
+    //   });
   };
 
   render() {
@@ -184,11 +206,21 @@ class U_create extends Component {
             onSubmit={this.handleSubmit}
           >
             <PickDate setDates={this.setDates} />
-            <PickCity
-              ref={this.pickCity}
-              setDestination={this.setDestination}
-              destVal={this.destinationValue}
-            />
+            <div className="b1">
+              <PickCountry
+                ref={this.pickCountry}
+                setDestination={this.setDestinationCountry}
+                destVal={this.destinationValue}
+              />
+            </div>
+            <div className="b2">
+              <PickCity
+                ref={this.pickCity}
+                country={this.state.country}
+                setDestination={this.setDestinationCity}
+                destVal={this.destinationValue}
+              />
+            </div>
             <div className="flex-container">
               <div className="input-field">
                 <textarea

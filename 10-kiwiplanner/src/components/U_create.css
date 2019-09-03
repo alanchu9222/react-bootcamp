@@ -28,3 +28,14 @@
 .button {
   margin: 10px;
 }
+
+.b1 {
+  display: inline-block;
+  width: 50%;
+  margin: auto;
+}
+.b2 {
+  display: inline-block;
+  width: 50%;
+  margin: auto;
+}

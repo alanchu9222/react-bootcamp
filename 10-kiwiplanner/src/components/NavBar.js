@@ -110,6 +110,10 @@ class NavBar extends Component {
     );
   };
 
+  resetCreateModal = () => {
+    alert("Im gonna reset the create form NOW!");
+  };
+
   currentMenuItems = () => {
     // Current menu item depends on the state of authentication
     const mode = this.props.isLoggedIn ? "logged-in" : "logged-out";
