@@ -34,8 +34,6 @@ class App extends React.Component {
     menuOptions: [],
     citySelected: "",
     countrySelected: ""
-    // This will trigger cards update when a trip is deleted
-    //deleteInProgress: false
   };
 
   setUser = user => {
@@ -60,7 +58,7 @@ class App extends React.Component {
       countrySelected: country
     });
     // Get local info for this place
-    //this.refs.travelPlan.setPlace(list[0], country);
+    this.refs.travelPlan.setPlace(list[0], country);
   };
 
   setRefresh = () => {
@@ -140,13 +138,13 @@ class App extends React.Component {
               performDelete={this.deleteTrip}
               performUpdate={this.updateTrip}
             />
-            {/* 
+
             <TravelPlan
               ref="travelPlan"
               user={this.state.user}
               auth={this.auth}
               db={this.db}
-            /> */}
+            />
           </div>
         ) : (
           <div />

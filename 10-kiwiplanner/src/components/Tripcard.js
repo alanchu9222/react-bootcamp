@@ -111,45 +111,6 @@ class Tripcard extends Component {
       });
   };
 
-  // // Conditional rendering - Use historical data if not this month
-  // cityWeather = () => {
-  //   const iconUrl =
-  //     "http://openweathermap.org/img/w/" + this.props.icon + ".png";
-
-  //   const today = new Date();
-  //   const startDate = new Date(this.props.startDate * 1000);
-  //   const endDate = new Date(this.props.startDate * 1000);
-  //   const tripMonth = this.month(startDate.getMonth());
-  //   let tripStarted = today.getTime() >= startDate.getTime();
-  //   let tripNotFinished =
-  //     today.getTime() <= endDate.getTime() + 1000 * 60 * 60 * 12;
-
-  //   // If the trip is within the next 5 days: we use the forecasted weather data
-  //   if (tripStarted && tripNotFinished) {
-  //     this.getWeatherUpdate();
-  //     // Trip is in progress - we want accurate weather information
-  //     return (
-  //       <div>
-  //         <img
-  //           className="Tripcard-icon"
-  //           src={this.state.iconUrl}
-  //           alt={this.state.weather}
-  //         />
-  //         <div className="Tripcard-temp">{this.state.temperature} &#8451;</div>
-  //       </div>
-  //     );
-  //   } else {
-  //     //If the trip not in progress: we use the historical weather data
-  //     return (
-  //       <CityTemperature
-  //         city={this.props.city}
-  //         country={this.props.country}
-  //         month={tripMonth}
-  //       />
-  //     );
-  //   }
-  // };
-
   render() {
     const imgSrc = this.state.imgSrc;
 
