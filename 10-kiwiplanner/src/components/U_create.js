@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import PickCountry from "./U_pickcountry";
 import PickCity from "./U_pickcity";
-//import PickCountry from "./U_pickcountry";
 import "./U_create.css";
 import PickDate from "./U_pickdate";
-import axios from "axios";
 import M from "materialize-css";
 
 class U_create extends Component {
@@ -51,7 +49,6 @@ class U_create extends Component {
     );
   }
   resetCreateForm = () => {
-    alert("user selected create");
     this.pickCity.current.reset();
     this.pickCountry.current.reset();
   };

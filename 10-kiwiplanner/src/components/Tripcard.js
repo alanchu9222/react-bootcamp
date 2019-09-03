@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import unsplash from "./Unsplash";
 import "./Tripcard.css";
+import axios from "axios";
 import CityTemperature from "./CityTemperature";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +13,10 @@ class Tripcard extends Component {
     super(props);
     this.state = {
       city: "",
-      imgSrc: defaultImage
+      imgSrc: defaultImage,
+      temperature: "loading",
+      weather: "loading",
+      iconUrl: "http://openweathermap.org/img/w/01d.png"
     };
   }
   searchCity = async term => {
@@ -62,31 +66,56 @@ class Tripcard extends Component {
     return dateObj.getDate() + " " + this.month(dateObj.getMonth());
   };
 
+  getWeatherUpdate = () => {
+    axios
+      .get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${this.props.city},${this.props.country}&appid=c6dd7c2aa863d2f936a3056172dffce8&units=metric`
+      )
+      .then(res => {
+        const data = res.data;
+        let icon = data.weather[0].icon;
+        let temperature = data.main.temp;
+        // Replace night with daytime icons
+        if (icon.slice(2, 3) === "n") {
+          icon = icon.slice(0, 2) + "d";
+        }
+        this.setState({
+          temperature: temperature.toFixed(1),
+          weather: data.weather[0].main,
+          iconUrl: "http://openweathermap.org/img/w/" + icon + ".png"
+        });
+      });
+  };
+
   // Conditional rendering - Use historical data if not this month
   cityWeather = () => {
     const iconUrl =
       "http://openweathermap.org/img/w/" + this.props.icon + ".png";
 
-    const d = new Date();
-    const index = d.getMonth();
-    const thisMonth = this.month[index];
+    const today = new Date();
     const startDate = new Date(this.props.startDate * 1000);
-    const endDate = new Date(this.props.endDate * 1000);
-    const tripMonth = this.month[startDate.getMonth()];
-    // If the trip is this month: we use the forecasted weather data
-    if (tripMonth === thisMonth) {
+    const endDate = new Date(this.props.startDate * 1000);
+    const tripMonth = this.month(startDate.getMonth());
+    let tripStarted = today.getTime() >= startDate.getTime();
+    let tripNotFinished =
+      today.getTime() <= endDate.getTime() + 1000 * 60 * 60 * 12;
+
+    // If the trip is within the next 5 days: we use the forecasted weather data
+    if (tripStarted && tripNotFinished) {
+      this.getWeatherUpdate();
+      // Trip is in progress - we want accurate weather information
       return (
         <div>
           <img
             className="Tripcard-icon"
-            src={iconUrl}
-            alt={this.props.weather}
+            src={this.state.iconUrl}
+            alt={this.state.weather}
           />
-          <div className="Tripcard-temp">{this.props.temperature} &#8451;</div>
+          <div className="Tripcard-temp">{this.state.temperature} &#8451;</div>
         </div>
       );
     } else {
-      // If the trip not this month: we use the historical weather data
+      //If the trip not in progress: we use the historical weather data
       return (
         <CityTemperature
           city={this.props.city}
