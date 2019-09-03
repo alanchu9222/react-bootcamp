@@ -1,6 +1,6 @@
 import React from "react";
 // get our fontawesome imports
-import { faSnowflake } from "@fortawesome/free-solid-svg-icons";
+import { faSnowflake, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { faMoon } from "@fortawesome/free-solid-svg-icons";
 
 import { faCloudSun } from "@fortawesome/free-solid-svg-icons";
@@ -18,8 +18,12 @@ function CityTemperature(props) {
     return obj.City === props.city && obj.Country === props.country;
   };
   const cityRecord = data.find(city_record);
-  const temp = cityRecord[props.month.slice(0,3)];
-
+  let temp = 25;
+  try {
+    temp = cityRecord[props.month.slice(0, 3)];
+  } catch {
+    console.log("Delay getting temperature for  " + props.city);
+  }
   let ficon = temp < 5 ? faSnowflake : faCloudSun;
   if (temp > 35) ficon = faTemperatureHigh;
 

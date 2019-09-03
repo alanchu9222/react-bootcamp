@@ -12,6 +12,8 @@ class Tripcard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tripMonth: "January",
+      tripInProgress: false,
       city: "",
       imgSrc: defaultImage,
       temperature: "loading",
@@ -67,6 +69,21 @@ class Tripcard extends Component {
   };
 
   getWeatherUpdate = () => {
+    const iconUrl =
+      "http://openweathermap.org/img/w/" + this.props.icon + ".png";
+
+    const today = new Date();
+    const startDate = new Date(this.props.startDate * 1000);
+    const endDate = new Date(this.props.startDate * 1000);
+    this.setState({ tripMonth: this.month(startDate.getMonth()) });
+    let tripStarted = today.getTime() >= startDate.getTime();
+    let tripNotFinished =
+      today.getTime() <= endDate.getTime() + 1000 * 60 * 60 * 12;
+    const tripNow = tripStarted && tripNotFinished;
+    this.setState({ tripInProgress: tripNow });
+    if (!tripNow) {
+      return;
+    }
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?q=${this.props.city},${this.props.country}&appid=c6dd7c2aa863d2f936a3056172dffce8&units=metric`
@@ -84,47 +101,54 @@ class Tripcard extends Component {
           weather: data.weather[0].main,
           iconUrl: "http://openweathermap.org/img/w/" + icon + ".png"
         });
+      })
+      .catch(() => {
+        this.setState({
+          temperature: "unknown",
+          weather: "unknown",
+          iconUrl: "http://openweathermap.org/img/w/02d.png"
+        });
       });
   };
 
-  // Conditional rendering - Use historical data if not this month
-  cityWeather = () => {
-    const iconUrl =
-      "http://openweathermap.org/img/w/" + this.props.icon + ".png";
+  // // Conditional rendering - Use historical data if not this month
+  // cityWeather = () => {
+  //   const iconUrl =
+  //     "http://openweathermap.org/img/w/" + this.props.icon + ".png";
 
-    const today = new Date();
-    const startDate = new Date(this.props.startDate * 1000);
-    const endDate = new Date(this.props.startDate * 1000);
-    const tripMonth = this.month(startDate.getMonth());
-    let tripStarted = today.getTime() >= startDate.getTime();
-    let tripNotFinished =
-      today.getTime() <= endDate.getTime() + 1000 * 60 * 60 * 12;
+  //   const today = new Date();
+  //   const startDate = new Date(this.props.startDate * 1000);
+  //   const endDate = new Date(this.props.startDate * 1000);
+  //   const tripMonth = this.month(startDate.getMonth());
+  //   let tripStarted = today.getTime() >= startDate.getTime();
+  //   let tripNotFinished =
+  //     today.getTime() <= endDate.getTime() + 1000 * 60 * 60 * 12;
 
-    // If the trip is within the next 5 days: we use the forecasted weather data
-    if (tripStarted && tripNotFinished) {
-      this.getWeatherUpdate();
-      // Trip is in progress - we want accurate weather information
-      return (
-        <div>
-          <img
-            className="Tripcard-icon"
-            src={this.state.iconUrl}
-            alt={this.state.weather}
-          />
-          <div className="Tripcard-temp">{this.state.temperature} &#8451;</div>
-        </div>
-      );
-    } else {
-      //If the trip not in progress: we use the historical weather data
-      return (
-        <CityTemperature
-          city={this.props.city}
-          country={this.props.country}
-          month={tripMonth}
-        />
-      );
-    }
-  };
+  //   // If the trip is within the next 5 days: we use the forecasted weather data
+  //   if (tripStarted && tripNotFinished) {
+  //     this.getWeatherUpdate();
+  //     // Trip is in progress - we want accurate weather information
+  //     return (
+  //       <div>
+  //         <img
+  //           className="Tripcard-icon"
+  //           src={this.state.iconUrl}
+  //           alt={this.state.weather}
+  //         />
+  //         <div className="Tripcard-temp">{this.state.temperature} &#8451;</div>
+  //       </div>
+  //     );
+  //   } else {
+  //     //If the trip not in progress: we use the historical weather data
+  //     return (
+  //       <CityTemperature
+  //         city={this.props.city}
+  //         country={this.props.country}
+  //         month={tripMonth}
+  //       />
+  //     );
+  //   }
+  // };
 
   render() {
     const imgSrc = this.state.imgSrc;
@@ -132,6 +156,7 @@ class Tripcard extends Component {
     if (this.props.city !== this.state.city) {
       this.setState({ city: this.props.city });
       this.searchCity(this.props.city);
+      this.getWeatherUpdate();
     }
 
     return (
@@ -159,7 +184,27 @@ class Tripcard extends Component {
           </div>
         </div>
 
-        <div className="Tripcard-data">{this.cityWeather()}</div>
+        <div className="Tripcard-data">
+          {this.state.tripInProgress ? (
+            <div>
+              <img
+                className="Tripcard-icon"
+                src={this.state.iconUrl}
+                alt={this.state.weather}
+              />
+              <div className="Tripcard-temp">
+                {this.state.temperature} &#8451;
+              </div>
+            </div>
+          ) : (
+            //If the trip not in progress: we use the historical weather data
+            <CityTemperature
+              city={this.props.city}
+              country={this.props.country}
+              month={this.state.tripMonth}
+            />
+          )}
+        </div>
 
         <div className="Tripcard-data">
           {this.formatDate(this.props.startDate)}-

@@ -59,8 +59,7 @@ class U_create extends Component {
   setDestinationCity = dest => {
     const arr = dest.split("-");
     const city = arr[0].trim();
-    const country = arr[1].trim();
-    this.setState({ destinationValue: dest, city: city, country: country });
+    this.setState({ destinationValue: dest, city: city });
   };
   setDestinationCountry = country => {
     this.setState({ country: country.trim() });
