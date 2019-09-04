@@ -196,41 +196,38 @@ class App extends React.Component {
 
         {/* <Seed db={this.db} /> */}
         <Flash message={this.state.flashMessage} />
-        {this.state.isLoggedIn ? (
-          <div>
-            <Delete
-              ref={this.modalDelete}
-              db={this.db}
-              deleteCompleted={this.deleteCompleted}
-            />
-            <Update
-              ref={this.modalUpdate}
-              db={this.db}
-              refresh={this.setRefresh}
-            />
+        <div className={this.state.isLoggedIn ? "show" : "hide"}>
+          <Delete
+            ref={this.modalDelete}
+            db={this.db}
+            deleteCompleted={this.deleteCompleted}
+          />
+          <Update
+            ref={this.modalUpdate}
+            db={this.db}
+            refresh={this.setRefresh}
+          />
 
-            <TravelCards
-              ref={this.travelCards}
-              setMenuOptions={this.setMenuOptions}
-              setCountry={this.setCountry}
-              setTripDates={this.setTripDates}
-              user={this.state.user}
-              isLoggedIn={this.state.isLoggedIn}
-              db={this.db}
-              performDelete={this.deleteTrip}
-              performUpdate={this.updateTrip}
-            />
+          <TravelCards
+            ref={this.travelCards}
+            setMenuOptions={this.setMenuOptions}
+            setCountry={this.setCountry}
+            setTripDates={this.setTripDates}
+            user={this.state.user}
+            isLoggedIn={this.state.isLoggedIn}
+            db={this.db}
+            performDelete={this.deleteTrip}
+            performUpdate={this.updateTrip}
+          />
 
-            <TravelPlan
-              ref="travelPlan"
-              user={this.state.user}
-              auth={this.auth}
-              db={this.db}
-            />
-          </div>
-        ) : (
-          <div />
-        )}
+          <TravelPlan
+            className="Scroll-container"
+            ref="travelPlan"
+            user={this.state.user}
+            auth={this.auth}
+            db={this.db}
+          />
+        </div>
       </div>
     );
   }
