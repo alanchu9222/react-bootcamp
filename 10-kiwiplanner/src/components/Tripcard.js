@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import unsplash from "./Unsplash";
 import "./Tripcard.css";
 import axios from "axios";
 import CityTemperature from "./CityTemperature";
@@ -8,6 +7,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const defaultImage =
   "https://images.freeimages.com/images/large-previews/1f8/delicate-arch-1-1391746.jpg";
+
 class Tripcard extends Component {
   constructor(props) {
     super(props);
@@ -21,19 +21,6 @@ class Tripcard extends Component {
       iconUrl: "http://openweathermap.org/img/w/01d.png"
     };
   }
-  searchCity = async term => {
-    const response = await unsplash.get(
-      "https://api.unsplash.com/search/photos?per_page=1&order_by='popular'",
-      {
-        params: { query: term }
-      }
-    );
-    try {
-      this.setState({ imgSrc: response.data.results[0].urls.small });
-    } catch (error) {
-      this.setState({ imgSrc: defaultImage });
-    }
-  };
   // The click handle will not respond if the user selected delete icon or update icon
   clickHandler = () => {
     this.props.clickHandler(this.props.city);
@@ -69,9 +56,6 @@ class Tripcard extends Component {
   };
 
   getWeatherUpdate = () => {
-    const iconUrl =
-      "http://openweathermap.org/img/w/" + this.props.icon + ".png";
-
     const today = new Date();
     const startDate = new Date(this.props.startDate * 1000);
     const endDate = new Date(this.props.startDate * 1000);
@@ -104,19 +88,18 @@ class Tripcard extends Component {
       })
       .catch(() => {
         this.setState({
-          temperature: "unknown",
+          temperature: 25,
           weather: "unknown",
           iconUrl: "http://openweathermap.org/img/w/02d.png"
         });
       });
   };
-
   render() {
-    const imgSrc = this.state.imgSrc;
-
     if (this.props.city !== this.state.city) {
       this.setState({ city: this.props.city });
-      this.searchCity(this.props.city);
+      if (this.props.imageUrl) {
+        this.setState({ imgSrc: this.props.imageUrl });
+      }
       this.getWeatherUpdate();
     }
 
@@ -139,7 +122,11 @@ class Tripcard extends Component {
               size="1x"
             />
           </div>
-          <img className="Trip-image" src={imgSrc} alt={this.props.city} />
+          <img
+            className="Trip-image"
+            src={this.state.imgSrc}
+            alt={this.props.city}
+          />
           <div className="text">
             <div className="Tripcard-title">{this.props.city}</div>
           </div>

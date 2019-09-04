@@ -10,7 +10,6 @@ import Delete from "./components/U_delete";
 import "./components/Flash.css";
 import "firebase/auth";
 import "firebase/firestore";
-import Seed from "./seed/seed";
 import "./App.css";
 import "toasted-notes/src/styles.css";
 

@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
-// refer to https://www.npmjs.com/package/toasted-notes
-import toast from "toasted-notes";
-import "toasted-notes/src/styles.css";
 import axios from "axios";
 import "./TravelPlan.css";
 import M from "materialize-css";
@@ -60,13 +57,11 @@ class TravelPlan extends Component {
     if (this.state.city === city && this.state.country === country) {
       return;
     }
-    //    toast.notify("Getting info for " + city + " " + country);
-
     if (this.state.searchInProgress) {
-      // toast.notify("Loading data for " + city + " " + country);
+      console.log("Loading data for " + city + " " + country);
       return;
     } else {
-      // toast.notify("Getting info for " + city + " " + country);
+      console.log("Getting info for " + city + " " + country);
     }
     this.setState({ city: city, country: country, ready: false });
     // Get the new coordinates, only set to ready when the coordinates are available
@@ -151,11 +146,11 @@ class TravelPlan extends Component {
     if (menuItem.url) {
       return (
         <li className="z-depth-0 white grey-text listItem">
-          <a href={menuItem.url} target="_blank">
+          <a href={menuItem.url} target="">
             {menuItem.name}
           </a>
           + <FontAwesomeIcon icon={faPhone} size="1x" color="grey" /> +
-          {menuItem.phone} + <a />
+          {menuItem.phone}
         </li>
       );
     } else {
@@ -163,7 +158,7 @@ class TravelPlan extends Component {
         <li className="z-depth-0 white grey-text listItem">
           {menuItem.name}
           + <FontAwesomeIcon icon={faPhone} size="1x" color="grey" /> +
-          {menuItem.phone} + <a />
+          {menuItem.phone}
         </li>
       );
     }

@@ -1,15 +1,17 @@
 import React from "react";
 // get our fontawesome imports
-import { faSnowflake, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { faMoon } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSnowflake,
+  faCloudSun,
+  faTemperatureHigh
+} from "@fortawesome/free-solid-svg-icons";
 
-import { faCloudSun } from "@fortawesome/free-solid-svg-icons";
-import { faSun } from "@fortawesome/free-solid-svg-icons";
-import { faCloudSunRain } from "@fortawesome/free-solid-svg-icons";
-import { faCloudShowersHeavy } from "@fortawesome/free-solid-svg-icons";
-import { faTemperatureHigh } from "@fortawesome/free-solid-svg-icons";
-import { faTemperatureLow } from "@fortawesome/free-solid-svg-icons";
-import { faUmbrella } from "@fortawesome/free-solid-svg-icons";
+// import { faTemperatureLow } from "@fortawesome/free-solid-svg-icons";
+// import { faUmbrella } from "@fortawesome/free-solid-svg-icons";
+// import { faSun } from "@fortawesome/free-solid-svg-icons";
+// import { faCloudSunRain } from "@fortawesome/free-solid-svg-icons";
+// import { faCloudShowersHeavy } from "@fortawesome/free-solid-svg-icons";
+// import { faMoon } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

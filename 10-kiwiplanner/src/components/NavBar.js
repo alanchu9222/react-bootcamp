@@ -48,7 +48,7 @@ class NavBar extends Component {
     } else if (!this.state.menuOptions) {
       //this.setState({ menuOptions: this.props.menuOptions });
       //alert("Setting Up MenuOptions");
-    } else if (this.state.menuOptions[0] != this.props.menuOptions[0]) {
+    } else if (this.state.menuOptions[0] !== this.props.menuOptions[0]) {
       this.setState({ menuOptions: this.props.menuOptions });
     }
   }
@@ -143,9 +143,8 @@ class NavBar extends Component {
               </a>
 
               <ul
-                className="menuTop"
                 id="nav-mobile"
-                className="right hide-on-med-and-down"
+                className="menuTop right hide-on-med-and-down"
               >
                 {this.props.isLoggedIn &&
                   this.state.menuOptions.map(this.showMenuPlace)}
@@ -166,8 +165,8 @@ class NavBar extends Component {
             </div>
           </div>
         </nav>
-        // ---------------------------------------------------------------------
-        // Modals
+        {/* // ---------------------------------------------------------------------
+        // Modals */}
         <Login
           setIsLoggedIn={this.props.setIsLoggedIn}
           setUser={this.props.setUser}
@@ -187,8 +186,8 @@ class NavBar extends Component {
           refresh={this.props.refresh}
           db={this.props.db}
         />
-        // ---------------------------------------------------------------------
-        // Sidenav
+        {/* // ---------------------------------------------------------------------
+        // Sidenav */}
         <ul className="sidenav" id="mobile-nav">
           {this.currentMenuItems().map(this.showSideMenuItem)}
           {this.props.isLoggedIn && (

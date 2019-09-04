@@ -54,7 +54,6 @@ class TravelCards extends Component {
       // If the field exist then push it into the MenuOptions
       this.props.performUpdate(destRecord);
     }
-    //this.props.setMenuOptions(temp, destRecord.country);
   };
 
   // This gets called when the cards have been updated (delete or update events)
@@ -85,7 +84,8 @@ class TravelCards extends Component {
                     place1: trip.place1,
                     place2: trip.place2,
                     place3: trip.place3,
-                    place4: trip.place4
+                    place4: trip.place4,
+                    imageUrl: trip.imageUrl
                   };
                   tripArray.push(tripRecord);
                 });
@@ -134,9 +134,10 @@ class TravelCards extends Component {
                 key={p.country + p.city}
                 city={p.city}
                 country={p.country}
-                weather={p.weather}
-                icon={p.weatherIcon}
-                temperature={p.temperature}
+                imageUrl={p.imageUrl}
+                // weather={p.weather}
+                // icon={p.weatherIcon}
+                // temperature={p.temperature}
                 startDate={p.dateStart}
                 endDate={p.dateEnd}
                 clickHandler={this.handleCardClick}

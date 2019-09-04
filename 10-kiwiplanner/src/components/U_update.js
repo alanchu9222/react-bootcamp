@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import PickCity from "./U_pickcity";
 import "./U_create.css";
 import "./U_update.css";
 import PickDate from "./U_pickdate";
-import axios from "axios";
 import M from "materialize-css";
 
 class U_update extends Component {
