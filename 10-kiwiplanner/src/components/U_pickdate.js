@@ -56,6 +56,8 @@ export class PickDate extends Component {
               enabled: false // turn off since needs preventOverflow to be enabled
             }
           }}
+          minDate={this.props.minStartDate}
+          excludeDates={this.props.excludeDates}
           dateFormat="dd/MM/yyyy"
           selected={this.state.startDate}
           selectsStart
@@ -83,7 +85,9 @@ export class PickDate extends Component {
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           onChange={this.handleChangeEnd}
+          // minimum date is from startdate onwards
           minDate={this.state.startDate}
+          excludeDates={this.props.excludeDates}
         />
       </div>
     );

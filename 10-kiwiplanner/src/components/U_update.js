@@ -78,9 +78,6 @@ class U_update extends Component {
       .update({
         city: this.state.tripData.city,
         country: this.state.tripData.country,
-        temperature: this.state.tripData.temperature,
-        weather: this.state.tripData.weather,
-        weatherIcon: this.state.tripData.weatherIcon,
         dateStart: this.state.dateStart,
         dateEnd: this.state.dateEnd,
         place1: this.state.poi1,

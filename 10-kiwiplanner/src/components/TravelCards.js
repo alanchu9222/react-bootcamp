@@ -55,6 +55,11 @@ class TravelCards extends Component {
       this.props.performUpdate(destRecord);
     }
   };
+  dateObject = dateSeconds => {
+    // Date is stored in mongo as unix timestamp
+    // provide time in milliseconds as input argument to create Date Object
+    return new Date(dateSeconds * 1000);
+  };
 
   // This gets called when the cards have been updated (delete or update events)
   componentDidUpdate() {
@@ -69,6 +74,7 @@ class TravelCards extends Component {
               console.log(snapshot.docs);
               const data = snapshot.docs;
               if (data.length) {
+                let tripDates = [];
                 let tripArray = [];
                 data.forEach(doc => {
                   const trip = doc.data();
@@ -87,6 +93,11 @@ class TravelCards extends Component {
                     place4: trip.place4,
                     imageUrl: trip.imageUrl
                   };
+                  tripDates.push({
+                    start: this.dateObject(trip.dateStart.seconds),
+                    end: this.dateObject(trip.dateEnd.seconds)
+                  });
+                  this.props.setTripDates(tripDates);
                   tripArray.push(tripRecord);
                 });
 
@@ -135,9 +146,6 @@ class TravelCards extends Component {
                 city={p.city}
                 country={p.country}
                 imageUrl={p.imageUrl}
-                // weather={p.weather}
-                // icon={p.weatherIcon}
-                // temperature={p.temperature}
                 startDate={p.dateStart}
                 endDate={p.dateEnd}
                 clickHandler={this.handleCardClick}

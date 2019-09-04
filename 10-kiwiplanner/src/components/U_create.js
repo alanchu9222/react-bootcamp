@@ -17,12 +17,14 @@ class U_create extends Component {
     super(props);
     this.pickCountry = React.createRef();
     this.pickCity = React.createRef();
+    this.pickDate = React.createRef();
 
     this.state = {
       alertBox: null,
       dataReady: false,
       imageFound: false,
       countrySearch: false,
+
       city: "",
       country: "",
       poi1: "",
@@ -32,8 +34,6 @@ class U_create extends Component {
       dateStart: "",
       dateEnd: "",
       imgUrl: defaultImage,
-      // temperature: "",
-      // weather: "",
       places: [],
       coordinates: []
     };
@@ -45,6 +45,15 @@ class U_create extends Component {
     const m1 = document.querySelector("#modal1");
     const instance = M.Modal.getInstance(m1);
     this.setState({ alertBox: instance });
+  };
+  alertBoxClose = () => {
+    if (this.state.alertBox) {
+      this.state.alertBox.close();
+    }
+  };
+
+  initDatePicker = minStartDate => {
+    this.pickDate.current.setInitialDates(minStartDate, minStartDate);
   };
 
   componentDidMount() {
@@ -99,11 +108,16 @@ class U_create extends Component {
   handlePlaceChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+  showDates = () => {
+    alert("now showing dates");
+    console.log(this.props.tripDates);
+  };
 
   handleSubmit = e => {
     e.preventDefault();
     if (!this.state.city || !this.state.country) {
       this.setState({ city: "", country: "" });
+      this.resetCreateForm();
       this.setState({
         flashMessage:
           "Invalid destination specified, please select from presented options"
@@ -120,9 +134,6 @@ class U_create extends Component {
         city: this.state.city,
         country: this.state.country,
         imageUrl: this.state.imgUrl,
-        // temperature: 20.06,
-        // weather: "Clear",
-        // weatherIcon: "01d",
         dateStart: this.state.dateStart,
         dateEnd: this.state.dateEnd,
         place1: this.state.poi1,
@@ -132,7 +143,7 @@ class U_create extends Component {
       })
       .then(() => {
         console.log(
-          "Successsfully saved record for " +
+          "Successfully saved record for " +
             this.state.city +
             " " +
             this.state.country
@@ -149,7 +160,7 @@ class U_create extends Component {
       })
       .catch(err => {
         console.log(err.message);
-        alert("UNABLE TO SAVE DATA TO FIREBASE");
+        alert("Error saving document " + err.message);
       });
   };
 
@@ -163,7 +174,8 @@ class U_create extends Component {
             </div>
             <div class="modal-footer">
               <a
-                href="#!"
+                href="#"
+                onClick={this.alertBoxClose}
                 class="modal-close waves-effect waves-green btn-flat"
               >
                 Ok
@@ -175,7 +187,12 @@ class U_create extends Component {
             id="create-form"
             onSubmit={this.handleSubmit}
           >
-            <PickDate setDates={this.setDates} />
+            <PickDate
+              setDates={this.setDates}
+              minStartDate={this.props.minStartDate}
+              excludeDates={this.props.excludeDates}
+              ref={this.pickDate}
+            />
             <div className="b1">
               <PickCountry
                 ref={this.pickCountry}

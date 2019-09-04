@@ -87,9 +87,9 @@ class TravelPlan extends Component {
       .then(response => {
         let content = [];
         response.data.results.forEach(item => {
-          console.log(
-            item.poi.name + "   " + item.poi.phone + "   " + item.poi.url
-          );
+          // console.log(
+          //   item.poi.name + "   " + item.poi.phone + "   " + item.poi.url
+          // );
           let url = "";
           if (item.poi.url) {
             url =
@@ -141,8 +141,8 @@ class TravelPlan extends Component {
   };
 
   showListItem = menuItem => {
-    console.log(menuItem.name);
-    console.log(menuItem.url);
+    //    console.log(menuItem.name);
+    //    console.log(menuItem.url);
     if (menuItem.url) {
       return (
         <li className="z-depth-0 white grey-text listItem">
@@ -164,8 +164,8 @@ class TravelPlan extends Component {
     }
   };
   listTravelPlan = listItem => {
-    console.log("list item 0 name");
-    console.log(listItem.content[0].name);
+    // console.log("list item 0 name");
+    // console.log(listItem.content[0].name);
     return (
       <li key={listItem.title}>
         <div className="collapsible-header grey lighten-4 grey-text">

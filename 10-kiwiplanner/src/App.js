@@ -11,7 +11,6 @@ import "./components/Flash.css";
 import "firebase/auth";
 import "firebase/firestore";
 import "./App.css";
-import "toasted-notes/src/styles.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -19,6 +18,7 @@ class App extends React.Component {
     app.initializeApp(DB_CONFIG);
     this.db = app.firestore();
     this.auth = app.auth();
+    this.navBar = React.createRef();
     this.modalDelete = React.createRef();
     this.modalUpdate = React.createRef();
     this.travelCards = React.createRef();
@@ -31,15 +31,93 @@ class App extends React.Component {
     db: null,
     flashMessage: "Welcome to Travel Planner - please sign in to begin",
     menuOptions: [],
+    tripDates: [],
     citySelected: "",
-    countrySelected: ""
+    countrySelected: "",
+    excludeDates: [],
+    minStartDate: ""
+  };
+  setTripDates = dates => {
+    // Each date element is a pair of startdate and enddate objects
+    this.setState({ tripDates: dates });
+    const minStartDate = this.configureDatePicker(dates);
+    this.navBar.current.initDatePicker(minStartDate);
+  };
+  configureDatePicker = dates => {
+    const OneDay = 1000 * 60 * 60 * 24;
+    const today = new Date();
+    const excludeDates = this.getExcludeDates(dates);
+    let minStartDate = "";
+    this.setState({ excludeDates: excludeDates });
+    // If the the first exclude date on the list greater than today
+    // then we allow today to be the earliest date otherwise, step through
+    // the exclude days until there is a gap - then make that gap day the next
+    // available day for the date picker
+    if (excludeDates.length === 0) {
+      minStartDate = today;
+    } else if (today.getTime() < excludeDates[0].getTime()) {
+      minStartDate = today;
+    } else {
+      for (
+        let i = excludeDates[0].getTime();
+        i <= excludeDates[excludeDates.length - 1].getTime();
+        i = i + OneDay
+      ) {
+        // i is the right date if it is not in the excludeDates
+        const result = excludeDates.filter(d => {
+          const iMinus = i - OneDay / 2;
+          const iPlus = i + OneDay / 2;
+
+          return d.getTime() > iMinus && d.getTime() < iPlus;
+        });
+        // No matches then this is a valid minimum start date
+        if (result.length === 0) {
+          minStartDate = Date(i);
+        }
+      }
+      if (!minStartDate) {
+        minStartDate = excludeDates[excludeDates.length - 1];
+      }
+    }
+    this.setState({ minStartDate: minStartDate });
+    return minStartDate;
+  };
+
+  getExcludeDates = tripDates => {
+    let dates = [];
+    const oneDay = 1000 * 60 * 60 * 24;
+    // Run through all the trips and load each day of travel to the dates array
+    tripDates.forEach(trip => {
+      for (
+        let i = trip.start.getTime();
+        i <= trip.end.getTime();
+        i = i + oneDay
+      ) {
+        dates.push(new Date(i));
+      }
+    });
+
+    // Remove days that have passed from the array
+    const today = new Date();
+    const halfDay = oneDay / 2;
+    dates = dates.filter(date => {
+      return date.getTime() >= today.getTime() - halfDay;
+    });
+
+    // Sort the dates
+    dates.sort((a, b) => {
+      const aTime = a.getTime();
+      const bTime = b.getTime();
+      return aTime < bTime ? -1 : aTime > bTime ? 1 : 0;
+    });
+
+    return dates;
   };
 
   setUser = user => {
     this.setState({ user: user });
   };
   setPlace = city => {
-    //    toast.notify('User selected '+ city)
     this.setState({ citySelected: city });
     // Get local info for this place
     this.refs.travelPlan.setPlace(city, this.state.countrySelected);
@@ -100,6 +178,7 @@ class App extends React.Component {
     return (
       <div>
         <NavBar
+          ref={this.navBar}
           setFlashMessage={this.setFlashMessage}
           setState={this.updateAuthState}
           isLoggedIn={this.state.isLoggedIn}
@@ -107,6 +186,9 @@ class App extends React.Component {
           menuOptions={this.state.menuOptions}
           auth={this.auth}
           db={this.db}
+          excludeDates={this.state.excludeDates}
+          minStartDate={this.state.minStartDate}
+          tripDates={this.state.tripDates}
           setUser={this.setUser}
           setPlace={this.setPlace}
           refresh={this.setRefresh}
@@ -131,6 +213,7 @@ class App extends React.Component {
               ref={this.travelCards}
               setMenuOptions={this.setMenuOptions}
               setCountry={this.setCountry}
+              setTripDates={this.setTripDates}
               user={this.state.user}
               isLoggedIn={this.state.isLoggedIn}
               db={this.db}

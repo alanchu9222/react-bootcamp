@@ -10,6 +10,7 @@ import M from "materialize-css";
 class NavBar extends Component {
   constructor(props) {
     super(props);
+    this.createModal = React.createRef();
     this.state = {
       isLoggedIn: false,
       menuOptions: []
@@ -42,6 +43,9 @@ class NavBar extends Component {
       }
     ]
   };
+  initDatePicker = minStartDate => {
+    this.createModal.current.initDatePicker(minStartDate);
+  };
   componentDidUpdate() {
     if (!this.props.menuOptions) {
       return;
@@ -55,8 +59,6 @@ class NavBar extends Component {
 
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
-      //      const elems = document.querySelectorAll(".modal");
-      //      M.Modal.init(elems, {});
       const sideNav = document.querySelector(".sidenav");
       M.Sidenav.init(sideNav, {});
     });
@@ -108,10 +110,6 @@ class NavBar extends Component {
         </a>
       </li>
     );
-  };
-
-  resetCreateModal = () => {
-    alert("Im gonna reset the create form NOW!");
   };
 
   currentMenuItems = () => {
@@ -180,9 +178,13 @@ class NavBar extends Component {
           auth={this.props.auth}
         />
         <Create
+          ref={this.createModal}
           setFlashMessage={this.props.setFlashMessage}
           setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-create"
+          minStartDate={this.props.minStartDate}
+          excludeDates={this.props.excludeDates}
+          tripDates={this.props.tripDates}
           refresh={this.props.refresh}
           db={this.props.db}
         />
