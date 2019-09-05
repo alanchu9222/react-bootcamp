@@ -44,7 +44,7 @@ class NavBar extends Component {
     ]
   };
   initDatePicker = minStartDate => {
-    this.createModal.current.initDatePicker(minStartDate);
+    //    this.createModal.current.initDatePicker(minStartDate);
   };
   componentDidUpdate() {
     if (!this.props.menuOptions) {
@@ -97,6 +97,26 @@ class NavBar extends Component {
     );
   };
 
+  showImage = imageUrl => {
+    return <img className="side-image" src={imageUrl} alt="city_image"></img>;
+  };
+
+  showMenuPlaceSide = place => {
+    // Data-place store the parameter for the onCLick Call
+    // The value is retrieved using event.currentTarget.dataset.place
+    return (
+      <li key={place} className="logged-in">
+        <a
+          className="z-depth-0 black-text waves-effect waves-light modal-trigger"
+          data-place={place}
+          onClick={this.handleClick}
+        >
+          {place}
+        </a>
+      </li>
+    );
+  };
+
   showSideMenuItem = menuItem => {
     return (
       <li key={menuItem.list_id}>
@@ -111,7 +131,6 @@ class NavBar extends Component {
       </li>
     );
   };
-
   currentMenuItems = () => {
     // Current menu item depends on the state of authentication
     const mode = this.props.isLoggedIn ? "logged-in" : "logged-out";
@@ -190,7 +209,11 @@ class NavBar extends Component {
         />
         {/* // ---------------------------------------------------------------------
         // Sidenav */}
+
         <ul className="sidenav" id="mobile-nav">
+          {this.props.imageUrl && this.showImage(this.props.imageUrl)}
+          {this.props.isLoggedIn &&
+            this.state.menuOptions.map(this.showMenuPlaceSide)}
           {this.currentMenuItems().map(this.showSideMenuItem)}
           {this.props.isLoggedIn && (
             <li>

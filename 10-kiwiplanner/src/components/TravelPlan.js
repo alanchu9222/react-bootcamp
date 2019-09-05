@@ -9,6 +9,7 @@ class TravelPlan extends Component {
   constructor(props) {
     super(props);
     this.collapsible = React.createRef();
+    this.tripRecord = [];
   }
 
   state = {
@@ -22,8 +23,12 @@ class TravelPlan extends Component {
   };
 
   componentDidUpdate() {
-    var items = document.querySelectorAll(".collapsible");
-    M.Collapsible.init(items);
+    // var items = document.querySelectorAll(".collapsible.expandable");
+    // M.Collapsible.init(items);
+    var elem = document.querySelector(".collapsible.expandable");
+    var instance = M.Collapsible.init(elem, {
+      accordion: false
+    });
   }
   getCoordinates = (city, country) => {
     axios
@@ -64,8 +69,23 @@ class TravelPlan extends Component {
       console.log("Getting info for " + city + " " + country);
     }
     this.setState({ city: city, country: country, ready: false });
-    // Get the new coordinates, only set to ready when the coordinates are available
-    this.getCoordinates(city, country);
+    // If the required data is found in local store, skip the API fetch
+    const foundLocalRecord = JSON.parse(
+      localStorage.getItem(city + "-" + country)
+    );
+    if (foundLocalRecord) {
+      // Reset the state
+      this.setState({ list: [] });
+      // If the records exist in local storage, we skip access to the external database
+      console.log("local record looks like");
+      console.log(foundLocalRecord);
+      this.setState({ list: foundLocalRecord, ready: true });
+      //      this.setupGuides(foundLocalRecord);
+    } else {
+      this.tripRecord = [];
+      // Get the new coordinates, only set to ready when the coordinates are available
+      this.getCoordinates(city, country);
+    }
   };
 
   getPlaceInfo = searchList => {
@@ -107,6 +127,7 @@ class TravelPlan extends Component {
           content: content
         };
         placeInfo.push(doc);
+        this.tripRecord.push(doc);
         this.setupGuides(placeInfo);
         if (searchList.length > 0) {
           // Search the next keyword/category
@@ -114,22 +135,49 @@ class TravelPlan extends Component {
         } else {
           // End the keyword/category search
           this.setState({ searchInProgress: false });
+          // SAVE DATA TO LOCALSTORE - full data
+          const key = this.state.city + "-" + this.state.country;
+          const localRecord = this.tripRecord;
+          localStorage.setItem(key, JSON.stringify(localRecord));
+          const output = localStorage.getItem(key);
+          console.log(output);
           return;
         }
       })
       .catch(error => {
-        this.setState({ searchInProgress: false });
-        console.log(error);
+        if (searchList.length > 0) {
+          // Search the next keyword/category
+          this.getPlaceInfo(searchList);
+        } else {
+          // No more records, so we store whatever we managed to get
+          this.setState({ searchInProgress: false });
+          console.log(error);
+          // End the keyword/category search
+          this.setState({ searchInProgress: false });
+          // SAVE DATA TO LOCALSTORE - partial data
+          const key = this.state.city + "-" + this.state.country;
+          const localRecord = this.tripRecord;
+          localStorage.setItem(key, JSON.stringify(localRecord));
+          return;
+        }
       });
   };
 
   // setup guides
   setupGuides = data => {
+    console.log("SETUP GUIDES PROCESSING " + data.length + " Records");
     if (data.length) {
       data.forEach(doc => {
         const file = doc;
         const listItem = { title: file.title, content: file.content };
 
+        console.log(
+          "List item " +
+            listItem.title +
+            listItem.content[0].name +
+            listItem.content[1].name +
+            listItem.content[2].name
+        );
         this.setState({
           list: this.state.list.concat(listItem)
         });
@@ -173,8 +221,8 @@ class TravelPlan extends Component {
 
   render() {
     return (
-      <div className="container">
-        <ul className="collapsible z-depth-0 ref={this.collapsible}">
+      <div className="container travel-plan">
+        <ul className="collapsible expandable z-depth-0 ref={this.collapsible}">
           {this.state.ready && this.state.list.map(this.listTravelPlan)}
         </ul>
       </div>

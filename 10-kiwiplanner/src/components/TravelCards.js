@@ -31,7 +31,7 @@ class TravelCards extends Component {
       destRecord.place4 && temp.push(destRecord.place4);
     }
     this.setState({ city: city, country: destRecord.country });
-    this.props.setMenuOptions(temp, destRecord.country);
+    this.props.setMenuOptions(temp, destRecord.country, destRecord.imageUrl);
   };
   handleCardDelete = city => {
     const temp = [];
@@ -119,7 +119,7 @@ class TravelCards extends Component {
                     country: tripArray[0].country
                   });
                   // Simulate user selection of the first card in the deck
-                  this.handleCardClick(tripArray[0].city);
+                  //this.handleCardClick(tripArray[0].city);
                 }
               } else {
                 console.log("No records found");

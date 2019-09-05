@@ -22,9 +22,15 @@
 .App-link {
   color: #61dafb;
 }
-
+/* .App-main {
+  height: 100%;
+} */
 .show {
+  position: absolute;
+  background-image: linear-gradient(-90deg, rgb(21, 163, 173), white);
   display: block;
+  height: 100%;
+  width: 100%;
 }
 
 .hide {

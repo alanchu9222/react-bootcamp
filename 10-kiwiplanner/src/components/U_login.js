@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import SimpleModal from "./SimpleModal";
+import "./SimpleModal.css";
+
 import M from "materialize-css";
 
 class U_login extends Component {
@@ -7,10 +10,14 @@ class U_login extends Component {
     this.loginModal = React.createRef();
     this.loginForm = React.createRef();
     this.state = {
+      simpleModal: false,
       email: "",
       password: ""
     };
   }
+  selectSimpleModal = info => {
+    this.setState({ simpleModal: !this.state.simpleModal }); // true/false toggle
+  };
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
       const elems = document.querySelectorAll(".modal");
@@ -46,6 +53,7 @@ class U_login extends Component {
         this.loginForm.current.reset();
       })
       .catch(err => {
+        this.selectSimpleModal();
         console.log(err.message);
       });
   };
@@ -56,6 +64,11 @@ class U_login extends Component {
         <div className="modal-content">
           <h4>Sign In</h4>
 
+          <SimpleModal
+            displayModal={this.state.simpleModal}
+            closeModal={this.selectSimpleModal}
+            message="Incorrect login or password, please try again"
+          />
           <form
             id="login-form"
             ref={this.loginForm}

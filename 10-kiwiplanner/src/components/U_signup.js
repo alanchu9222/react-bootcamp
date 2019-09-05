@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import SimpleModal from "./SimpleModal";
+import "./SimpleModal.css";
 import M from "materialize-css";
 
 class U_signup extends Component {
@@ -8,7 +10,8 @@ class U_signup extends Component {
     this.signupForm = React.createRef();
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      error_message: ""
     };
   }
   componentDidMount() {
@@ -43,8 +46,12 @@ class U_signup extends Component {
         this.signupForm.current.reset();
       })
       .catch(err => {
-        console.log(err.message);
+        this.selectSimpleModal(err.message);
       });
+  };
+  selectSimpleModal = info => {
+    this.setState({ error_message: info });
+    this.setState({ simpleModal: !this.state.simpleModal }); // true/false toggle
   };
 
   render() {
@@ -52,7 +59,11 @@ class U_signup extends Component {
       <div id="modal-signup" className="modal" ref={this.signupModal}>
         <div className="modal-content">
           <h4>Sign Up</h4>
-
+          <SimpleModal
+            displayModal={this.state.simpleModal}
+            closeModal={this.selectSimpleModal}
+            message={this.state.error_message}
+          />
           <form
             id="signup-form"
             ref={this.signupForm}

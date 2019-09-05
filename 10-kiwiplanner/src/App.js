@@ -29,7 +29,7 @@ class App extends React.Component {
     isLoggedIn: false,
     auth: null,
     db: null,
-    flashMessage: "Welcome to Travel Planner - please sign in to begin",
+    flashMessage: "Welcome to Travel Planner - please log in to begin",
     menuOptions: [],
     tripDates: [],
     citySelected: "",
@@ -40,8 +40,8 @@ class App extends React.Component {
   setTripDates = dates => {
     // Each date element is a pair of startdate and enddate objects
     this.setState({ tripDates: dates });
-    const minStartDate = this.configureDatePicker(dates);
-    this.navBar.current.initDatePicker(minStartDate);
+    //  const minStartDate = this.configureDatePicker(dates);
+    //  this.navBar.current.initDatePicker(minStartDate);
   };
   configureDatePicker = dates => {
     const OneDay = 1000 * 60 * 60 * 24;
@@ -127,10 +127,11 @@ class App extends React.Component {
     this.setState({ isLoggedIn: isLoggedIn });
   };
 
-  setMenuOptions = (list, country) => {
+  setMenuOptions = (list, country, imageUrl) => {
     // A list of locations to be added to the navbar and sidebar
     this.setState({
       menuOptions: list,
+      imageUrl: imageUrl,
       citySelected: list[0],
       countrySelected: country
     });
@@ -176,7 +177,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div classname="App-main">
         <NavBar
           ref={this.navBar}
           setFlashMessage={this.setFlashMessage}
@@ -184,6 +185,7 @@ class App extends React.Component {
           isLoggedIn={this.state.isLoggedIn}
           setIsLoggedIn={this.setIsLoggedIn}
           menuOptions={this.state.menuOptions}
+          imageUrl={this.state.imageUrl}
           auth={this.auth}
           db={this.db}
           excludeDates={this.state.excludeDates}
@@ -221,7 +223,7 @@ class App extends React.Component {
           />
 
           <TravelPlan
-            className="Scroll-container"
+            className="travel-plan"
             ref="travelPlan"
             user={this.state.user}
             auth={this.auth}

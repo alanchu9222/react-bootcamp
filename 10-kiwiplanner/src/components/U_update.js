@@ -17,7 +17,7 @@ class U_update extends Component {
       tripIdToUpdate: "",
       destinationValue: "",
       modalUpdate: null,
-      alertBox: null,
+      //      alertBox: null,
       dataReady: false,
       tripData: "",
       poi1: "",
@@ -38,9 +38,9 @@ class U_update extends Component {
       poi4: trip.place4,
       tripData: trip
     });
-    const start = new Date(trip.dateStart * 1000);
-    const end = new Date(trip.dateEnd * 1000);
-    this.pickDate.current.setInitialDates(start, end);
+    //const start = new Date(trip.dateStart * 1000);
+    //const end = new Date(trip.dateEnd * 1000);
+    //this.pickDate.current.setInitialDates(start, end);
     this.state.modalUpdate.open();
   };
 
@@ -50,9 +50,9 @@ class U_update extends Component {
     const elems = document.querySelectorAll(".modal");
     M.Modal.init(elems, {});
 
-    const alertBox = document.querySelector("#modal2");
-    const instance = M.Modal.getInstance(alertBox);
-    this.setState({ alertBox: instance });
+    // const alertBox = document.querySelector("#modal2");
+    // const instance = M.Modal.getInstance(alertBox);
+    // this.setState({ alertBox: instance });
 
     const modalUpdate = document.querySelector("#modal-update");
     const instance2 = M.Modal.getInstance(modalUpdate);
@@ -71,6 +71,7 @@ class U_update extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     // Update database with the latest weather information
     this.props.db
       .collection("trips")
@@ -93,13 +94,12 @@ class U_update extends Component {
             this.state.country
         );
         this.setState({ city: "", country: "" });
-        // close the create modal & reset form
-        const modal = document.querySelector("#modal-update");
-        M.Modal.getInstance(modal).close();
+        this.state.modalUpdate.close();
         this.props.refresh();
         //this.createForm.reset();
       })
       .catch(err => {
+        alert(err.message);
         console.log(err.message);
       });
   };
@@ -108,19 +108,6 @@ class U_update extends Component {
     return (
       <div id="modal-update" className="modal">
         <div className="modal-content">
-          <div id="modal2" className="modal">
-            <div class="modal-content">
-              <p>{this.state.flashMessage}</p>
-            </div>
-            <div class="modal-footer">
-              <a
-                href="#!"
-                class="modal-close waves-effect waves-green btn-flat"
-              >
-                Ok
-              </a>
-            </div>
-          </div>
           <form
             autoComplete="off"
             id="create-form"
@@ -130,6 +117,8 @@ class U_update extends Component {
               setDates={this.setDates}
               trip={this.tripData}
               ref={this.pickDate}
+              minStartDate={null}
+              excludeDates={[]}
             />
             <div className="flex-container">
               <div className="form-header">

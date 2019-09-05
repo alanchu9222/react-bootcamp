@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PickCountry from "./U_pickcountry";
 import PickCity from "./U_pickcity";
 import unsplash from "./Unsplash";
+import SimpleModal from "./SimpleModal";
+import "./SimpleModal.css";
+
 import "./U_create.css";
 import PickDate from "./U_pickdate";
 import M from "materialize-css";
@@ -20,7 +23,6 @@ class U_create extends Component {
     this.pickDate = React.createRef();
 
     this.state = {
-      alertBox: null,
       dataReady: false,
       imageFound: false,
       countrySearch: false,
@@ -42,14 +44,10 @@ class U_create extends Component {
   documentLoadedEventHandler = () => {
     const elems = document.querySelectorAll(".modal");
     M.Modal.init(elems, {});
-    const m1 = document.querySelector("#modal1");
-    const instance = M.Modal.getInstance(m1);
-    this.setState({ alertBox: instance });
   };
-  alertBoxClose = () => {
-    if (this.state.alertBox) {
-      this.state.alertBox.close();
-    }
+
+  selectSimpleModal = info => {
+    this.setState({ simpleModal: !this.state.simpleModal }); // true/false toggle
   };
 
   initDatePicker = minStartDate => {
@@ -112,19 +110,20 @@ class U_create extends Component {
     alert("now showing dates");
     console.log(this.props.tripDates);
   };
+  formatString = text => {
+    let word = text.toLowerCase();
+    word = word.charAt(0).toUpperCase() + word.slice(1);
+    return word;
+  };
 
   handleSubmit = e => {
     e.preventDefault();
     if (!this.state.city || !this.state.country) {
       this.setState({ city: "", country: "" });
       this.resetCreateForm();
-      this.setState({
-        flashMessage:
-          "Invalid destination specified, please select from presented options"
-      });
-      this.setState({ destinationValue: "" });
       this.pickCity.current.setDestination("");
-      this.state.alertBox.open();
+      // Inform user, input is not valid
+      this.selectSimpleModal();
       return;
     }
     // Update database with the latest weather information
@@ -136,10 +135,10 @@ class U_create extends Component {
         imageUrl: this.state.imgUrl,
         dateStart: this.state.dateStart,
         dateEnd: this.state.dateEnd,
-        place1: this.state.poi1,
-        place2: this.state.poi2,
-        place3: this.state.poi3,
-        place4: this.state.poi4
+        place1: this.formatString(this.state.poi1),
+        place2: this.formatString(this.state.poi2),
+        place3: this.formatString(this.state.poi3),
+        place4: this.formatString(this.state.poi4)
       })
       .then(() => {
         console.log(
@@ -168,20 +167,12 @@ class U_create extends Component {
     return (
       <div id="modal-create" className="modal">
         <div className="modal-content">
-          <div id="modal1" class="modal">
-            <div class="modal-content">
-              <p>{this.state.flashMessage}</p>
-            </div>
-            <div class="modal-footer">
-              <a
-                href="#"
-                onClick={this.alertBoxClose}
-                class="modal-close waves-effect waves-green btn-flat"
-              >
-                Ok
-              </a>
-            </div>
-          </div>
+          <SimpleModal
+            displayModal={this.state.simpleModal}
+            closeModal={this.selectSimpleModal}
+            message="Invalid destination specified, please select from available options"
+          />
+
           <form
             autoComplete="off"
             id="create-form"
