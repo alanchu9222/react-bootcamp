@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./U_create.css";
 import "./U_update.css";
 import PickDate from "./U_pickdate";
 import M from "materialize-css";
@@ -110,7 +109,7 @@ class U_update extends Component {
         <div className="modal-content">
           <form
             autoComplete="off"
-            id="create-form"
+            id="update-form"
             onSubmit={this.handleSubmit}
           >
             <PickDate
@@ -130,54 +129,54 @@ class U_update extends Component {
               </div>
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="update_poi1"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
                   name="poi1"
                   value={this.state.poi1}
                 />
 
-                <label htmlFor="content"></label>
+                <label htmlFor="update_poi1"></label>
               </div>
               <div className="spacer" />
 
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="update_poi2"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
                   name="poi2"
                   value={this.state.poi2}
                 />
-                <label htmlFor="content"></label>
+                <label htmlFor="update_poi2"></label>
               </div>
               <div className="spacer" />
 
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="update_poi3"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
                   name="poi3"
                   value={this.state.poi3}
                 />
-                <label htmlFor="content"></label>
+                <label htmlFor="update_poi3"></label>
               </div>
               <div className="spacer" />
 
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="update_poi4"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
                   name="poi4"
                   value={this.state.poi4}
                 />
-                <label htmlFor="content"></label>
+                <label htmlFor="update_poi4"></label>
               </div>
             </div>
 
-            <button className="button btn yellow darken-2 z-depth-0">
+            <button className="button btn yellow darken-2 z-depth-1 waves-effect waves-light">
               Submit
             </button>
           </form>

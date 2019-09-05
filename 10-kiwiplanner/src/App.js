@@ -177,7 +177,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div classname="App-main">
+      <div className="App-main">
         <NavBar
           ref={this.navBar}
           setFlashMessage={this.setFlashMessage}

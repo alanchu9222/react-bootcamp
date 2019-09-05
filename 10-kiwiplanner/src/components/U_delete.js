@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./U_create.css";
+import "./U_delete.css";
 import M from "materialize-css";
 
 class U_delete extends Component {
@@ -50,21 +50,34 @@ class U_delete extends Component {
           <div className="modal-content">
             <p>{this.state.message}</p>
           </div>
-          <div class="modal-footer">
-            <a
+          <div className="modal-footer">
+            <button
+              onClick={this.deleteCancelled}
+              className="button-delete button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={this.deleteConfirmed}
+              className="button-delete button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+            >
+              Ok
+            </button>
+
+            {/* <a
               href="#!"
               onClick={this.deleteCancelled}
-              class="modal-close waves-effect waves-green btn-flat"
+              className="modal-close waves-effect waves-green btn-flat"
             >
               Cancel
             </a>
             <a
               href="#!"
               onClick={this.deleteConfirmed}
-              class="modal-close waves-effect waves-green btn-flat"
+              className="modal-close waves-effect waves-green btn-flat"
             >
               Ok
-            </a>
+            </a> */}
           </div>
         </div>
       </div>

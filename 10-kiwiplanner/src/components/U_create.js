@@ -200,22 +200,22 @@ class U_create extends Component {
             <div className="flex-container">
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="create_poi1"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
                   name="poi1"
                 />
 
-                <label htmlFor="content">Place of Interest 1</label>
+                <label htmlFor="create_poi1">Place of Interest 1</label>
               </div>
               <div className="spacer" />
 
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="create_poi2"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
-                  name="poi2"
+                  name="create_poi2"
                 />
                 <label htmlFor="content">Place of Interest 2</label>
               </div>
@@ -223,27 +223,27 @@ class U_create extends Component {
 
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="create_poi3"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
                   name="poi3"
                 />
-                <label htmlFor="content">Place of Interest 3</label>
+                <label htmlFor="create_poi3">Place of Interest 3</label>
               </div>
               <div className="spacer" />
 
               <div className="input-field">
                 <textarea
-                  id="content"
+                  id="create_poi4"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
                   name="poi4"
                 />
-                <label htmlFor="content">Place of Interest 4</label>
+                <label htmlFor="create_poi4">Place of Interest 4</label>
               </div>
             </div>
 
-            <button className="button btn yellow darken-2 z-depth-0">
+            <button className="button btn yellow darken-2 z-depth-1 waves-effect waves-light">
               Submit
             </button>
           </form>

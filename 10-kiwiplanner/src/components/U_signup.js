@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
+import "./U_signup.css";
+
 import M from "materialize-css";
 
 class U_signup extends Component {

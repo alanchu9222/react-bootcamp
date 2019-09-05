@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
+import "./U_login.css";
 
 import M from "materialize-css";
 
@@ -94,7 +95,9 @@ class U_login extends Component {
               />
               <label htmlFor="login-password">Your password</label>
             </div>
-            <button className="btn yellow darken-2 z-depth-0">Login</button>
+            <button className="btn yellow darken-2 z-depth-1 waves-effect waves-light">
+              Login
+            </button>
             <p className="error pink-text center-align" />
           </form>
         </div>

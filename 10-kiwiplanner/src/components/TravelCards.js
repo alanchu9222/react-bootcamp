@@ -64,14 +64,12 @@ class TravelCards extends Component {
   // This gets called when the cards have been updated (delete or update events)
   componentDidUpdate() {
     if (this.props.user) {
-      console.log("USER LOGGED IN AS " + this.props.user);
       if (!this.state.cardsUpdated) {
         this.props.db
           .collection("trips")
           .get()
           .then(
             snapshot => {
-              console.log(snapshot.docs);
               const data = snapshot.docs;
               if (data.length) {
                 let tripDates = [];
@@ -132,7 +130,6 @@ class TravelCards extends Component {
       if (this.state.cardsUpdated) {
         this.setState({ cardsUpdated: false });
       }
-      console.log("USER NOT LOGGED IN");
     }
   }
   render() {

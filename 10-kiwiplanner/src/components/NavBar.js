@@ -48,11 +48,17 @@ class NavBar extends Component {
   };
   componentDidUpdate() {
     if (!this.props.menuOptions) {
+      alert("no menu options)");
       return;
     } else if (!this.state.menuOptions) {
       //this.setState({ menuOptions: this.props.menuOptions });
       //alert("Setting Up MenuOptions");
     } else if (this.state.menuOptions[0] !== this.props.menuOptions[0]) {
+      this.setState({ menuOptions: this.props.menuOptions });
+    } else if (
+      this.state.menuOptions.length !== this.props.menuOptions.length
+    ) {
+      // Above may escape detection if destinations have same point of interest #1
       this.setState({ menuOptions: this.props.menuOptions });
     }
   }

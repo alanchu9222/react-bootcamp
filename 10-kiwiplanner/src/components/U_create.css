@@ -14,13 +14,6 @@
 .flex-container > .spacer {
   width: 10%;
 }
-/*
-.input-field .active {
-  transform: translateY(-10px) !important;
-} */
-/* textarea {
-  font-size: 1rem !important;
-} */
 .span {
   display: inline-block;
 }

@@ -171,13 +171,6 @@ class TravelPlan extends Component {
         const file = doc;
         const listItem = { title: file.title, content: file.content };
 
-        console.log(
-          "List item " +
-            listItem.title +
-            listItem.content[0].name +
-            listItem.content[1].name +
-            listItem.content[2].name
-        );
         this.setState({
           list: this.state.list.concat(listItem)
         });
