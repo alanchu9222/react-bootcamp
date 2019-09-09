@@ -47,7 +47,7 @@ class U_update extends Component {
 
   componentDidMount() {
     const elems = document.querySelectorAll(".modal");
-    M.Modal.init(elems, {});
+    M.Modal.init(elems, { dismissable: true });
 
     // const alertBox = document.querySelector("#modal2");
     // const instance = M.Modal.getInstance(alertBox);
@@ -102,7 +102,9 @@ class U_update extends Component {
         console.log(err.message);
       });
   };
-
+  closeForm = () => {
+    this.state.modalUpdate && this.state.modalUpdate.close();
+  };
   render() {
     return (
       <div id="modal-update" className="modal">
@@ -176,8 +178,17 @@ class U_update extends Component {
               </div>
             </div>
 
-            <button className="button btn yellow darken-2 z-depth-1 waves-effect waves-light">
-              Submit
+            <button
+              onClick={this.handleSubmit}
+              className="button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+            >
+              Update
+            </button>
+            <button
+              onClick={this.closeForm}
+              className="button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+            >
+              Cancel
             </button>
           </form>
         </div>

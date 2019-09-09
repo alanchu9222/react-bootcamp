@@ -32,3 +32,9 @@
   width: 50%;
   margin: auto;
 }
+
+.countries {
+  color: red !important;
+  display: inline;
+  float: none;
+}

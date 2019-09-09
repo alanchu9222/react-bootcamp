@@ -4,7 +4,7 @@
   margin: 1rem;
   box-shadow: 7px 10px 12px -5px rgba(0, 0, 0, 0.56);
   text-align: center;
-  background-color: white;
+  background-color: #f5fffa;
   border-radius: 3px;
   transition: all ease 500ms;
 }
@@ -82,4 +82,5 @@
 .Tripcard:hover {
   transform: scale(1.2);
   opacity: 0.8;
+  background-color: #fffff0;
 }

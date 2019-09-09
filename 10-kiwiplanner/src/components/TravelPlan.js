@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./TravelPlan.css";
+
 import M from "materialize-css";
 
 class TravelPlan extends Component {
@@ -55,11 +56,15 @@ class TravelPlan extends Component {
         ];
         this.getPlaceInfo(searchList);
         return;
+      })
+      .catch(e => {
+        this.setState({ spinner: "" });
       });
   };
   // The parent component triggers rendering of place information with this method
   setPlace = (city, country) => {
     if (this.state.city === city && this.state.country === country) {
+      this.setState({ spinner: "" });
       return;
     }
     if (this.state.searchInProgress) {
@@ -83,6 +88,7 @@ class TravelPlan extends Component {
       //      this.setupGuides(foundLocalRecord);
     } else {
       this.tripRecord = [];
+      this.setState({ spinner: "spinner" });
       // Get the new coordinates, only set to ready when the coordinates are available
       this.getCoordinates(city, country);
     }
@@ -133,6 +139,7 @@ class TravelPlan extends Component {
           // Search the next keyword/category
           this.getPlaceInfo(searchList);
         } else {
+          this.setState({ spinner: "" });
           // End the keyword/category search
           this.setState({ searchInProgress: false });
           // SAVE DATA TO LOCALSTORE - full data
@@ -149,6 +156,7 @@ class TravelPlan extends Component {
           // Search the next keyword/category
           this.getPlaceInfo(searchList);
         } else {
+          this.setState({ spinner: "" });
           // No more records, so we store whatever we managed to get
           this.setState({ searchInProgress: false });
           console.log(error);

@@ -61,7 +61,6 @@ class U_create extends Component {
     );
   }
   resetCreateForm = () => {
-    this.pickCity.current.reset();
     this.pickCountry.current.reset();
   };
 
@@ -118,14 +117,14 @@ class U_create extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (!this.state.city || !this.state.country) {
-      this.setState({ city: "", country: "" });
-      this.resetCreateForm();
-      this.pickCity.current.setDestination("");
-      // Inform user, input is not valid
-      this.selectSimpleModal();
-      return;
-    }
+    // if (!this.state.city || !this.state.country) {
+    //   this.setState({ city: "", country: "" });
+    //   this.resetCreateForm();
+    //   this.pickCity.current.setDestination("");
+    //   // Inform user, input is not valid
+    //   this.selectSimpleModal();
+    //   return;
+    // }
     // Update database with the latest weather information
     this.props.db
       .collection("trips")

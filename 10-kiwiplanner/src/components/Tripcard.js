@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Tripcard.css";
 import axios from "axios";
+import "./spinner.css";
 import CityTemperature from "./CityTemperature";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +13,7 @@ class Tripcard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      className: "Tripcard",
       tripMonth: "January",
       tripInProgress: false,
       city: "",
@@ -68,6 +70,7 @@ class Tripcard extends Component {
     if (!tripNow) {
       return;
     }
+    this.setState({ className: "Tripcard spinner" });
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?q=${this.props.city},${this.props.country}&appid=c6dd7c2aa863d2f936a3056172dffce8&units=metric`
@@ -81,6 +84,7 @@ class Tripcard extends Component {
           icon = icon.slice(0, 2) + "d";
         }
         this.setState({
+          className: "Tripcard",
           temperature: temperature.toFixed(1),
           weather: data.weather[0].main,
           iconUrl: "http://openweathermap.org/img/w/" + icon + ".png"
@@ -88,6 +92,7 @@ class Tripcard extends Component {
       })
       .catch(() => {
         this.setState({
+          className: "Tripcard",
           temperature: 25,
           weather: "unknown",
           iconUrl: "http://openweathermap.org/img/w/02d.png"
@@ -104,7 +109,7 @@ class Tripcard extends Component {
     }
 
     return (
-      <div className="Tripcard" onClick={this.clickHandler}>
+      <div className={this.state.className} onClick={this.clickHandler}>
         <div className="box">
           <div className="Icons TrashRow">
             <FontAwesomeIcon

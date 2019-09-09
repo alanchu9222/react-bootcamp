@@ -1,6 +1,16 @@
 input[type="text"] {
-  width: 50% !important;
+  width: 90% !important;
 }
+/*
 .react-datepicker-wrapper {
   width: 30% !important;
+} */
+.startDate {
+  padding-left: 0.5em;
+  padding-right: 1em;
+}
+
+.endDate {
+  padding-left: 0.5em;
+  padding-right: 1em;
 }

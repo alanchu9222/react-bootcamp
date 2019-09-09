@@ -42,7 +42,7 @@ export class PickDate extends Component {
   render() {
     return (
       <div id="dates">
-        Start Date &nbsp; &nbsp; &nbsp;
+        <span className="startDate">Start Date</span>
         <DatePicker
           popperPlacement="bottom"
           popperModifiers={{
@@ -65,7 +65,7 @@ export class PickDate extends Component {
           endDate={this.state.endDate}
           onChange={this.handleChangeStart}
         />
-        End Date &nbsp; &nbsp; &nbsp;
+        <span className="endDate">End Date</span>
         <DatePicker
           popperPlacement="bottom"
           popperModifiers={{

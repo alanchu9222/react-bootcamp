@@ -29,7 +29,7 @@ class App extends React.Component {
     isLoggedIn: false,
     auth: null,
     db: null,
-    flashMessage: "Welcome to Travel Planner - please log in to begin",
+    flashMessage: "Welcome to the World Travel Guide - please log in to begin",
     menuOptions: [],
     tripDates: [],
     citySelected: "",

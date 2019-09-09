@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-// REFER: https://github.com/moroshko/react-autosuggest
-import Autosuggest from "react-autosuggest";
+import M from "materialize-css";
 import "./theme.css";
 import "./U_pickcity.css";
 
@@ -8,10 +7,7 @@ export class PickCountry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userInput: "",
-      isValid: false,
-      value: "",
-      suggestions: []
+      value: ""
     };
   }
   reset = () => {
@@ -22,302 +18,267 @@ export class PickCountry extends Component {
     this.setState({ value: dest });
   };
 
-  onChange = (event, { newValue }) => {
+  onSelectChange = event => {
+    this.props.setDestination(event.target.value);
     this.setState({
-      value: newValue
+      value: event.target.value
     });
   };
 
-  onSuggestionSelected = (event, { suggestionValue, method }) => {
-    event.preventDefault();
-    event.stopPropagation();
-    this.setState({ isValid: true });
-    // Inform the parent - the value has changed
-    this.props.setDestination(suggestionValue);
+  documentLoadedEventHandler = () => {
+    const elems = document.querySelectorAll("select");
+    M.FormSelect.init(elems, {});
   };
 
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: getSuggestions(value)
-    });
-  };
-
-  // Autosuggest will call this function every time you need to clear suggestions.
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
-  };
+  componentDidMount() {
+    document.addEventListener(
+      "DOMContentLoaded",
+      this.documentLoadedEventHandler
+    );
+  }
 
   render() {
-    // Value in the component state is used to render the autosuggest input field
-    const { value, suggestions } = this.state;
-    //const theme = themeable(this.props.theme);
-    // Autosuggest will pass through all these props to the input.
-    const inputProps = {
-      placeholder: "Destination country",
-      spellCheck: false,
-      value,
-      onChange: this.onChange
-    };
-
-    // Finally, render it!
     return (
-      <Autosuggest
-        onSuggestionSelected={this.onSuggestionSelected}
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-      />
+      <div className="b1 input-field col s12">
+        <select id="countrySelect" onChange={this.onSelectChange}>
+          <option value="" disabled selected>
+            Select Country
+          </option>
+          {countries.map(country => {
+            return <option value={country}>{country}</option>;
+          })}
+        </select>
+      </div>
     );
   }
 }
 
 export default PickCountry;
 
-// Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = value => {
-  const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
-
-  return inputLength === 0
-    ? []
-    : countries.filter(country => country.name.toLowerCase().match(inputValue));
-};
-
-// When suggestion is clicked, Autosuggest needs to populate the input
-// based on the clicked suggestion. Teach Autosuggest how to calculate the
-// input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.name;
-
-// Use your imagination to render suggestions.
-const renderSuggestion = suggestion => <div>{suggestion.name}</div>;
 const countries = [
-  { name: "Afghanistan" },
-  { name: "Albania" },
-  { name: "Algeria" },
-  { name: "Andorra" },
-  { name: "Angola" },
-  { name: "Anguilla" },
-  { name: "Antigua & Barbuda" },
-  { name: "Argentina" },
-  { name: "Armenia" },
-  { name: "Aruba" },
-  { name: "Australia" },
-  { name: "Austria" },
-  { name: "Azerbaijan" },
-  { name: "Bahamas" },
-  { name: "Bahrain" },
-  { name: "Bangladesh" },
-  { name: "Barbados" },
-  { name: "Belarus" },
-  { name: "Belgium" },
-  { name: "Belize" },
-  { name: "Benin" },
-  { name: "Bermuda" },
-  { name: "Bhutan" },
-  { name: "Bolivia" },
-  { name: "Bosnia & Herzegovina" },
-  { name: "Botswana" },
-  { name: "Brazil" },
-  { name: "British Virgin Islands" },
-  { name: "Brunei" },
-  { name: "Bulgaria" },
-  { name: "Burkina Faso" },
-  { name: "Burundi" },
-  { name: "Cambodia" },
-  { name: "Cameroon" },
-  { name: "Canada" },
-  { name: "Cape Verde" },
-  { name: "Cayman Islands" },
-  { name: "Central Arfrican Republic" },
-  { name: "Chad" },
-  { name: "Chile" },
-  { name: "China" },
-  { name: "Colombia" },
-  { name: "Congo" },
-  { name: "Cook Islands" },
-  { name: "Costa Rica" },
-  { name: "Cote D Ivoire" },
-  { name: "Croatia" },
-  { name: "Cuba" },
-  { name: "Curacao" },
-  { name: "Cyprus" },
-  { name: "Czech Republic" },
-  { name: "Denmark" },
-  { name: "Djibouti" },
-  { name: "Dominica" },
-  { name: "Dominican Republic" },
-  { name: "Ecuador" },
-  { name: "Egypt" },
-  { name: "El Salvador" },
-  { name: "Equatorial Guinea" },
-  { name: "Eritrea" },
-  { name: "Estonia" },
-  { name: "Ethiopia" },
-  { name: "Falkland Islands" },
-  { name: "Faroe Islands" },
-  { name: "Fiji" },
-  { name: "Finland" },
-  { name: "France" },
-  { name: "French Polynesia" },
-  { name: "French West Indies" },
-  { name: "Gabon" },
-  { name: "Gambia" },
-  { name: "Georgia" },
-  { name: "Germany" },
-  { name: "Ghana" },
-  { name: "Gibraltar" },
-  { name: "Greece" },
-  { name: "Greenland" },
-  { name: "Grenada" },
-  { name: "Guam" },
-  { name: "Guatemala" },
-  { name: "Guernsey" },
-  { name: "Guinea" },
-  { name: "Guinea Bissau" },
-  { name: "Guyana" },
-  { name: "Haiti" },
-  { name: "Honduras" },
-  { name: "Hong Kong" },
-  { name: "Hungary" },
-  { name: "Iceland" },
-  { name: "India" },
-  { name: "Indonesia" },
-  { name: "Iran" },
-  { name: "Iraq" },
-  { name: "Ireland" },
-  { name: "Isle of Man" },
-  { name: "Israel" },
-  { name: "Italy" },
-  { name: "Jamaica" },
-  { name: "Japan" },
-  { name: "Jersey" },
-  { name: "Jordan" },
-  { name: "Kazakhstan" },
-  { name: "Kenya" },
-  { name: "Kiribati" },
-  { name: "Kosovo" },
-  { name: "Kuwait" },
-  { name: "Kyrgyzstan" },
-  { name: "Laos" },
-  { name: "Latvia" },
-  { name: "Lebanon" },
-  { name: "Lesotho" },
-  { name: "Liberia" },
-  { name: "Libya" },
-  { name: "Liechtenstein" },
-  { name: "Lithuania" },
-  { name: "Luxembourg" },
-  { name: "Macau" },
-  { name: "Macedonia" },
-  { name: "Madagascar" },
-  { name: "Malawi" },
-  { name: "Malaysia" },
-  { name: "Maldives" },
-  { name: "Mali" },
-  { name: "Malta" },
-  { name: "Marshall Islands" },
-  { name: "Mauritania" },
-  { name: "Mauritius" },
-  { name: "Mexico" },
-  { name: "Micronesia" },
-  { name: "Moldova" },
-  { name: "Monaco" },
-  { name: "Mongolia" },
-  { name: "Montenegro" },
-  { name: "Montserrat" },
-  { name: "Morocco" },
-  { name: "Mozambique" },
-  { name: "Myanmar" },
-  { name: "Namibia" },
-  { name: "Nauro" },
-  { name: "Nepal" },
-  { name: "Netherlands" },
-  { name: "Netherlands Antilles" },
-  { name: "New Caledonia" },
-  { name: "New Zealand" },
-  { name: "Nicaragua" },
-  { name: "Niger" },
-  { name: "Nigeria" },
-  { name: "North Korea" },
-  { name: "Norway" },
-  { name: "Oman" },
-  { name: "Pakistan" },
-  { name: "Palau" },
-  { name: "Palestine" },
-  { name: "Panama" },
-  { name: "Papua New Guinea" },
-  { name: "Paraguay" },
-  { name: "Peru" },
-  { name: "Philippines" },
-  { name: "Poland" },
-  { name: "Portugal" },
-  { name: "Puerto Rico" },
-  { name: "Qatar" },
-  { name: "Reunion" },
-  { name: "Romania" },
-  { name: "Russia" },
-  { name: "Rwanda" },
-  { name: "Saint Pierre & Miquelon" },
-  { name: "Samoa" },
-  { name: "San Marino" },
-  { name: "Sao Tome and Principe" },
-  { name: "Saudi Arabia" },
-  { name: "Senegal" },
-  { name: "Serbia" },
-  { name: "Seychelles" },
-  { name: "Sierra Leone" },
-  { name: "Singapore" },
-  { name: "Slovakia" },
-  { name: "Slovenia" },
-  { name: "Solomon Islands" },
-  { name: "Somalia" },
-  { name: "South Africa" },
-  { name: "South Korea" },
-  { name: "South Sudan" },
-  { name: "Spain" },
-  { name: "Sri Lanka" },
-  { name: "St Kitts & Nevis" },
-  { name: "St Lucia" },
-  { name: "St Vincent" },
-  { name: "Sudan" },
-  { name: "Suriname" },
-  { name: "Swaziland" },
-  { name: "Sweden" },
-  { name: "Switzerland" },
-  { name: "Syria" },
-  { name: "Taiwan" },
-  { name: "Tajikistan" },
-  { name: "Tanzania" },
-  { name: "Thailand" },
-  { name: "Timor L'Este" },
-  { name: "Togo" },
-  { name: "Tonga" },
-  { name: "Trinidad & Tobago" },
-  { name: "Tunisia" },
-  { name: "Turkey" },
-  { name: "Turkmenistan" },
-  { name: "Turks & Caicos" },
-  { name: "Tuvalu" },
-  { name: "Uganda" },
-  { name: "Ukraine" },
-  { name: "United Arab Emirates" },
-  { name: "United Kingdom" },
-  { name: "United States of America" },
-  { name: "Uruguay" },
-  { name: "Uzbekistan" },
-  { name: "Vanuatu" },
-  { name: "Vatican City" },
-  { name: "Venezuela" },
-  { name: "Vietnam" },
-  { name: "Virgin Islands (US)" },
-  { name: "Yemen" },
-  { name: "Zambia" },
-  { name: "Zimbabwe" }
+  "Afghanistan",
+  "Afghanistan",
+  "Albania",
+  "Albania",
+  "Algeria",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Anguilla",
+  "Antigua & Barbuda",
+  "Argentina",
+  "Armenia",
+  "Aruba",
+  "Australia",
+  "Austria",
+  "Azerbaijan",
+  "Bahamas",
+  "Bahrain",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Belize",
+  "Benin",
+  "Bermuda",
+  "Bhutan",
+  "Bolivia",
+  "Bosnia & Herzegovina",
+  "Botswana",
+  "Brazil",
+  "British Virgin Islands",
+  "Brunei",
+  "Bulgaria",
+  "Burkina Faso",
+  "Burundi",
+  "Cambodia",
+  "Cameroon",
+  "Canada",
+  "Cape Verde",
+  "Cayman Islands",
+  "Central Arfrican Republic",
+  "Chad",
+  "Chile",
+  "China",
+  "Colombia",
+  "Congo",
+  "Cook Islands",
+  "Costa Rica",
+  "Cote D Ivoire",
+  "Croatia",
+  "Cuba",
+  "Curacao",
+  "Cyprus",
+  "Czech Republic",
+  "Denmark",
+  "Djibouti",
+  "Dominica",
+  "Dominican Republic",
+  "Ecuador",
+  "Egypt",
+  "El Salvador",
+  "Equatorial Guinea",
+  "Eritrea",
+  "Estonia",
+  "Ethiopia",
+  "Falkland Islands",
+  "Faroe Islands",
+  "Fiji",
+  "Finland",
+  "France",
+  "French Polynesia",
+  "French West Indies",
+  "Gabon",
+  "Gambia",
+  "Georgia",
+  "Germany",
+  "Ghana",
+  "Gibraltar",
+  "Greece",
+  "Greenland",
+  "Grenada",
+  "Guam",
+  "Guatemala",
+  "Guernsey",
+  "Guinea",
+  "Guinea Bissau",
+  "Guyana",
+  "Haiti",
+  "Honduras",
+  "Hong Kong",
+  "Hungary",
+  "Iceland",
+  "India",
+  "Indonesia",
+  "Iran",
+  "Iraq",
+  "Ireland",
+  "Isle of Man",
+  "Israel",
+  "Italy",
+  "Jamaica",
+  "Japan",
+  "Jersey",
+  "Jordan",
+  "Kazakhstan",
+  "Kenya",
+  "Kiribati",
+  "Kosovo",
+  "Kuwait",
+  "Kyrgyzstan",
+  "Laos",
+  "Latvia",
+  "Lebanon",
+  "Lesotho",
+  "Liberia",
+  "Libya",
+  "Liechtenstein",
+  "Lithuania",
+  "Luxembourg",
+  "Macau",
+  "Macedonia",
+  "Madagascar",
+  "Malawi",
+  "Malaysia",
+  "Maldives",
+  "Mali",
+  "Malta",
+  "Marshall Islands",
+  "Mauritania",
+  "Mauritius",
+  "Mexico",
+  "Micronesia",
+  "Moldova",
+  "Monaco",
+  "Mongolia",
+  "Montenegro",
+  "Montserrat",
+  "Morocco",
+  "Mozambique",
+  "Myanmar",
+  "Namibia",
+  "Nauro",
+  "Nepal",
+  "Netherlands",
+  "Netherlands Antilles",
+  "New Caledonia",
+  "New Zealand",
+  "Nicaragua",
+  "Niger",
+  "Nigeria",
+  "North Korea",
+  "Norway",
+  "Oman",
+  "Pakistan",
+  "Palau",
+  "Palestine",
+  "Panama",
+  "Papua New Guinea",
+  "Paraguay",
+  "Peru",
+  "Philippines",
+  "Poland",
+  "Portugal",
+  "Puerto Rico",
+  "Qatar",
+  "Reunion",
+  "Romania",
+  "Russia",
+  "Rwanda",
+  "Saint Pierre & Miquelon",
+  "Samoa",
+  "San Marino",
+  "Sao Tome and Principe",
+  "Saudi Arabia",
+  "Senegal",
+  "Serbia",
+  "Seychelles",
+  "Sierra Leone",
+  "Singapore",
+  "Slovakia",
+  "Slovenia",
+  "Solomon Islands",
+  "Somalia",
+  "South Africa",
+  "South Korea",
+  "South Sudan",
+  "Spain",
+  "Sri Lanka",
+  "St Kitts & Nevis",
+  "St Lucia",
+  "St Vincent",
+  "Sudan",
+  "Suriname",
+  "Swaziland",
+  "Sweden",
+  "Switzerland",
+  "Syria",
+  "Taiwan",
+  "Tajikistan",
+  "Tanzania",
+  "Thailand",
+  "Timor L'Este",
+  "Togo",
+  "Tonga",
+  "Trinidad & Tobago",
+  "Tunisia",
+  "Turkey",
+  "Turkmenistan",
+  "Turks & Caicos",
+  "Tuvalu",
+  "Uganda",
+  "Ukraine",
+  "United Arab Emirates",
+  "United Kingdom",
+  "United States of America",
+  "Uruguay",
+  "Uzbekistan",
+  "Vanuatu",
+  "Vatican City",
+  "Venezuela",
+  "Vietnam",
+  "Virgin Islands (US)",
+  "Yemen",
+  "Zambia",
+  "Zimbabwe"
 ];

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
 import "./U_login.css";
-
+import "./spinner.css";
 import M from "materialize-css";
 
 class U_login extends Component {
@@ -11,6 +11,7 @@ class U_login extends Component {
     this.loginModal = React.createRef();
     this.loginForm = React.createRef();
     this.state = {
+      spinner: "",
       simpleModal: false,
       email: "",
       password: ""
@@ -36,14 +37,20 @@ class U_login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    if (this.props.sideMenu) {
+      alert("closing sidemenu");
+      this.props.sideMenu.close();
+    }
     // get user info
     const email = this.state.email;
     const password = this.state.password;
-
+    this.setState({ spinner: "spinner" });
     // log the user in
     this.props.auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
+        this.setState({ spinner: "" });
+
         // close the signup modal & reset form
         const modal = document.querySelector("#modal-login");
         this.props.setIsLoggedIn(true);
@@ -54,6 +61,7 @@ class U_login extends Component {
         this.loginForm.current.reset();
       })
       .catch(err => {
+        this.setState({ spinner: "" });
         this.selectSimpleModal();
         console.log(err.message);
       });
@@ -71,6 +79,7 @@ class U_login extends Component {
             message="Incorrect login or password, please try again"
           />
           <form
+            className={this.state.spinner}
             id="login-form"
             ref={this.loginForm}
             onSubmit={this.handleSubmit}

@@ -13,9 +13,11 @@ class NavBar extends Component {
     this.createModal = React.createRef();
     this.state = {
       isLoggedIn: false,
-      menuOptions: []
+      menuOptions: [],
+      sideMenu: ""
     };
   }
+
   static defaultProps = {
     auth: null,
     menuItems: [
@@ -48,7 +50,6 @@ class NavBar extends Component {
   };
   componentDidUpdate() {
     if (!this.props.menuOptions) {
-      alert("no menu options)");
       return;
     } else if (!this.state.menuOptions) {
       //this.setState({ menuOptions: this.props.menuOptions });
@@ -66,11 +67,25 @@ class NavBar extends Component {
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
       const sideNav = document.querySelector(".sidenav");
-      M.Sidenav.init(sideNav, {});
+      const sideMenu = M.Sidenav.init(sideNav, {});
+      //      alert("this sidemenu has been initialized");
+      this.setState = { sideMenu: M.Modal.getInstance(sideMenu) };
+      // const sm = document.querySelector("#mobile-nav");
+      // instance = M.Sidenav.getInstance(sm);
+      // instance.close();
     });
   }
-  handleClick = event => {
+  handleSideMenuClick = event => {
+    // alert("side click occured");
+    const sidenavInstance = document.getElementById("mobile-nav").M_Sidenav;
+    if (sidenavInstance) {
+      sidenavInstance.close();
+    }
+  };
+
+  handlePlaceClick = event => {
     this.props.setPlace(event.currentTarget.dataset.place);
+    this.handleSideMenuClick();
   };
   showMenuItem = menuItem => {
     return (
@@ -95,7 +110,7 @@ class NavBar extends Component {
         <a
           className="z-depth-0 white-text waves-effect waves-light modal-trigger"
           data-place={place}
-          onClick={this.handleClick}
+          onClick={this.handlePlaceClick}
         >
           {place}
         </a>
@@ -115,7 +130,7 @@ class NavBar extends Component {
         <a
           className="z-depth-0 black-text waves-effect waves-light modal-trigger"
           data-place={place}
-          onClick={this.handleClick}
+          onClick={this.handlePlaceClick}
         >
           {place}
         </a>
@@ -129,6 +144,7 @@ class NavBar extends Component {
         <a
           className="z-depth-0 black-text waves-effect waves-light modal-trigger"
           data-target={menuItem.target}
+          onClick={this.handleSideMenuClick}
           href={menuItem.target}
           id={menuItem.menu_id}
         >
@@ -157,12 +173,12 @@ class NavBar extends Component {
         <nav className="teal">
           <div className="">
             <div className="nav-wrapper">
-              <img className="kiwi" src={logo} alt="Logo" />
               <span data-target="mobile-nav" className="sidenav-trigger">
                 <i className="material-icons">menu</i>
               </span>
-              <a href="#" className="brand-logo">
-                Kiwi Planner
+              <a className="brand-logo">Kiwi Scout</a>
+              <a>
+                <img className="kiwi" src={logo} alt="Logo" />
               </a>
 
               <ul

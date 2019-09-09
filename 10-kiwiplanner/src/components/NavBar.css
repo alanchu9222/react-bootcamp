@@ -1,15 +1,20 @@
 .kiwi {
+  margin-left: 1em;
   height: 35px;
   margin-top: 15px;
+}
+.brand-logo {
+  margin-left: 2.5em;
 }
 .navbar-fixed {
   z-index: 999;
 }
-.brand-logo {
-  width: 300px;
-  text-align: center;
-}
 .side-image {
   height: 40%;
   width: 100%;
+}
+@media (min-width: 1080px) {
+  .sidenav-trigger {
+    display: none;
+  }
 }
