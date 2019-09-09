@@ -11,7 +11,7 @@ export class PickCity extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      shortlist: ["Select City"],
+      shortlist: [""],
       data: getCities(),
       selected: "Select City",
       open: false
@@ -21,25 +21,20 @@ export class PickCity extends Component {
   renderOptions() {
     return this.state.shortlist.map(city => {
       return (
-        <MenuItem
-          className="menuItem"
-          value={city}
-          key={city}
-          name={city}
-        >
+        <MenuItem className="menuItem" value={city} key={city} name={city}>
           {city}
         </MenuItem>
       );
     });
   }
 
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  // handleClose = () => {
+  //   this.setState({ open: false });
+  // };
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
+  // handleOpen = () => {
+  //   this.setState({ open: true });
+  // };
 
   shortlistCities = country => {
     const countrySelected = country.slice(0, 10);
@@ -61,19 +56,18 @@ export class PickCity extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="selectOptions">
-          <InputLabel>City/Airport</InputLabel>          
+          <InputLabel>City/Airport</InputLabel>
           <Select
             className="citySelector"
             value={this.state.selected}
             onChange={this.handleChange}
             inputProps={{
-              name: "age",
-              id: "age-simple"
+              name: "city",
+              id: "city"
             }}
           >
             {this.renderOptions()}
           </Select>
-          {/* <FormHelperText>City/Airport</FormHelperText> */}
         </div>
       </MuiThemeProvider>
     );
