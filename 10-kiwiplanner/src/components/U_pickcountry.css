@@ -1,11 +1,21 @@
 .selectOptions {
-  padding-top: 20px ;
-}
-.countrySelector {
   padding-top: 20px;
-  width: 200px;
 }
 
 .menuItem {
   padding: 10px;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .countrySelector {
+    padding-top: 20px;
+    width: 80%;
+  }
+}
+
+@media (min-width: 480px) {
+  .countrySelector {
+    padding-top: 20px;
+    width: 200px;
+  }
 }
