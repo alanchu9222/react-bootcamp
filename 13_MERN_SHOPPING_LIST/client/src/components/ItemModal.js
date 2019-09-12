@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import uuid from 'uuid';
-
 import {
   Button,
   Modal,
@@ -21,9 +19,6 @@ class ItemModal extends Component {
     name: ''
   };
 
-  static propTypes = {
-    isAuthenticated: PropTypes.bool
-  };
 
   toggle = () => {
     this.setState({
@@ -39,7 +34,6 @@ class ItemModal extends Component {
     e.preventDefault();
 
     const newItem = {
-      id: uuid(),
       name: this.state.name
     };
 
@@ -60,7 +54,7 @@ class ItemModal extends Component {
           >
             Add Item
           </Button>
-
+        ) 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader>
           <ModalBody>
