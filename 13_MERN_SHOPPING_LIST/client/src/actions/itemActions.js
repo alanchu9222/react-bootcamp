@@ -32,14 +32,14 @@ export const addItem = item => (dispatch, getState) => {
 };
 
 export const deleteItem = id => (dispatch, getState) => {
-  // axios
-  //   .delete(`/api/items/${id}`, tokenConfig(getState))
-  //   .then(res =>
-  //     dispatch({
-  //       type: DELETE_ITEM,
-  //       payload: id
-  //     })
-  //   )
+  axios
+    .delete(`/api/items/${id}`)
+    .then(res =>
+      dispatch({
+        type: DELETE_ITEM,
+        payload: id
+      })
+    )
   //   .catch(err =>
   //     dispatch(returnErrors(err.response.data, err.response.status))
   //   );
