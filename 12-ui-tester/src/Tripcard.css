@@ -1,0 +1,48 @@
+.Tripcard {
+  width: 120px;
+  padding: 10px;
+  margin: 1rem;
+  box-shadow: 7px 10px 12px -5px rgba(0, 0, 0, 0.56);
+  text-align: center;
+  background-color: white;
+  border-radius: 3px;
+  transition: all ease 500ms;
+}
+.Icons {
+  margin: 1em 0px;
+}
+.box {
+  position: relative;
+  display: inline-block; /* Make the width of box same as image */
+}
+
+.box .text {
+  position: absolute;
+  z-index: 999;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 40%; /* Adjust this value to move the positioned div up and down */
+  text-align: center;
+  color: whitesmoke;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+.Tripcard-data {
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.Tripcard-title {
+  margin-bottom: 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.Tripcard img {
+  width: 120px;
+}
+.Tripcard:hover {
+  transform: scale(1.2);
+  opacity: 0.8;
+}

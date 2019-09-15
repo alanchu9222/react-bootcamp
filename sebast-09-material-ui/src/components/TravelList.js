@@ -62,7 +62,7 @@ class TravelList extends Component {
 
         <Grid container spacing={24} style={{ padding: 24 }}>
           {this.state.plans.map(currentPlan => (
-            <Grid item xs={12} sm={6} lg={4} xl={3}>
+            <Grid item xs={12} sm={2} m={2} lg={2} xl={2}>
               <Plan plan={currentPlan} />
             </Grid>
           ))}
