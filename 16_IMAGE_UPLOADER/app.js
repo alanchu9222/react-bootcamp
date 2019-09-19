@@ -19,6 +19,7 @@ app.set("view engine", "ejs");
 // Mongo URI
 const mongoURI =
   "mongodb+srv://alanchu:Pa$$w0rd@cluster0-vgrym.mongodb.net/mongouploads?retryWrites=true&w=majority";
+
 const localURI = "mongodb://localhost:27017/myapp";
 const promise = mongoose.connect(mongoURI, {
   useNewUrlParser: true,
