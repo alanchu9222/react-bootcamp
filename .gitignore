@@ -1,6 +1,6 @@
 # Compiled source #
 ###################
-node_modules
+node_modules/
 *.com
 *.class
 *.dll
