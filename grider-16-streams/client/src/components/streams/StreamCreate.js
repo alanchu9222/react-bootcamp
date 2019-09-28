@@ -9,12 +9,12 @@ class StreamCreate extends React.Component {
   //   onSubmit = formValues => {
   //     this.props.createStream(formValues);
   //   };
-  renderInput(formProps) {
+  renderInput({ input, label }) {
     return (
-      <input
-        onChange={formProps.input.onChange}
-        value={formProps.input.value}
-      />
+      <div className="field">
+        <label>{label}</label>
+        <input {...input} />
+      </div>
     );
   }
 
@@ -31,7 +31,7 @@ class StreamCreate extends React.Component {
 
   render() {
     return (
-      <form>
+      <form className="ui form">
         <Field name="title" component={this.renderInput} label="Enter Title" />
         <Field
           name="description"
