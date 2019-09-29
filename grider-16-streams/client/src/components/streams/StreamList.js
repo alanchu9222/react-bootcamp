@@ -1,7 +1,7 @@
 import React from "react";
-//import { connect } from "react-redux";
+import { connect } from "react-redux";
 // import { Link } from "react-router-dom";
-// import { fetchStreams } from "../../actions";
+import { fetchStreams } from "../../actions";
 
 class StreamList extends React.Component {
   //   componentDidMount() {
@@ -73,7 +73,10 @@ class StreamList extends React.Component {
 //     // isSignedIn: state.auth.isSignedIn
 //   };
 // };
-export default StreamList;
+export default connect(
+  null,
+  { fetchStreams }
+)(StreamList);
 
 //export default connect()(StreamList);
 //   mapStateToProps
