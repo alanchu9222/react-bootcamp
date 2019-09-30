@@ -76,8 +76,3 @@ export default connect(
   null,
   { createStream }
 )(formWrapped);
-
-//export default connect()(StreamCreate);
-//   null
-//   ,
-//   { createStream }
