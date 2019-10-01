@@ -1,0 +1,20 @@
+{
+  "streams": [
+    {
+      "title": "new title from IKEA",
+      "description": "heres the latest From IKEA",
+      "id": 23
+    },
+    {
+      "title": "MUSICA CUBANA - IKEA",
+      "description": "HELLO HELLO - IKEA",
+      "id": 25
+    },
+    {
+      "title": "Balut",
+      "description": "is duck embryo in an egg",
+      "userId": "108679154753113632797",
+      "id": 27
+    }
+  ]
+}
