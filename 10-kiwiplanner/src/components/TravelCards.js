@@ -44,7 +44,7 @@ class TravelCards extends Component {
     }
     this.props.setCity(city);
     this.props.setCountry(destRecord.country);
-    this.props.setPlaces(places);
+    this.props.setMenuPlaces(places);
     this.props.setPlaceSelected(city);
     this.props.setImageUrl(destRecord.imageUrl);
     this.props.setCardsVisible(false);

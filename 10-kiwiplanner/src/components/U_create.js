@@ -1,10 +1,16 @@
 import { connect } from "react-redux";
 import { refreshCards } from "../actions";
+import axios from "axios";
+
+import geolocationApi from "../apis/geolocation";
+import unsplash from "../apis/unsplash";
+
+import { LOCATIONIQ_KEY } from "../apis/apikeys";
 
 import React, { Component } from "react";
 import PickCountry from "./U_pickcountry";
 import PickCity from "./U_pickcity";
-import unsplash from "./Unsplash";
+//import unsplash from "./Unsplash";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
 
@@ -130,6 +136,39 @@ class U_create extends Component {
     return word;
   };
 
+  getImageUrl = async (city, docRef) => {
+    const searchString = "https://api.unsplash.com/search/photos?per_page=1&order_by='popular'";
+    const response = await unsplash.get(searchString, {params: { query: city }});
+    try {
+      docRef.update({ imageUrl: response.data.results[0].urls.small });
+    } catch (error) {
+      // Nothing found for city, try country instead
+      const response2 = await unsplash.get(searchString, {params: { query: city }});
+      try {
+        docRef.update({ imgUrl: response2.data.results[0].urls.small });
+      } catch (error) {
+        // Nothing found again: use default image 
+        docRef.update({ imgUrl: defaultImage });
+      }        
+    }
+  };
+
+  getCoordinates = async (city, country, docRef) => {
+
+    try {
+      const resp = await geolocationApi.get(
+        `${LOCATIONIQ_KEY}&q=${city}%20${country}&format=json`
+      );
+
+      docRef.update({
+        lat: resp.data[0].lat,
+        lon: resp.data[0].lon
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     // if (!this.state.city || !this.state.country) {
@@ -154,7 +193,14 @@ class U_create extends Component {
         place3: this.formatString(this.state.poi3),
         place4: this.formatString(this.state.poi4)
       })
-      .then(() => {
+      .then(result => {
+        console.log("Create record successful");
+
+        var docRef = this.props.db.collection("trips").doc(result.id);
+
+        this.getCoordinates(this.state.city, this.state.country, docRef);
+        this.getImageUrl(this.state.city, docRef);
+
         console.log(
           "Successfully saved record for " +
             this.state.city +
@@ -171,8 +217,10 @@ class U_create extends Component {
 
         // 1. Refresh the UI - cardsUpdated: TravelCards()
         this.props.refreshCards();
-        // 2. Get Coordinates for this location
-        // 3. Store Coordinates for this location
+        // 2. Get Coordinates for this location - Async operation - store on return
+        //       this.getCoordinates(this.state.city, this.state.country, docRef );
+        // 3. Get Image Url for this location - Async operation - store on return
+        //this.getImageUrl(this.state.city, docRef);
 
         //this.props.refresh();
         //        this.createForm.reset();
