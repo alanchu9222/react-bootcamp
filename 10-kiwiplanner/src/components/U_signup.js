@@ -74,7 +74,7 @@ class U_signup extends Component {
           />
           <form
             className={this.state.spinner}
-            autocomplete="off"
+            autoComplete="off"
             id="signup-form"
             ref={this.signupForm}
             onSubmit={this.handleSubmit}
@@ -85,14 +85,14 @@ class U_signup extends Component {
                 onChange={this.handleChangeEmail}
                 value={this.state.email}
                 id="signup-email"
-                autocomplete="off"
+                autoComplete="off"
                 required
               />
               <label htmlFor="signup-email">Email address</label>
             </div>
             <div className="input-field">
               <input
-                autocomplete="new-password"
+                autoComplete="new-password"
                 type="password"
                 onChange={this.handleChangePassword}
                 value={this.state.password}

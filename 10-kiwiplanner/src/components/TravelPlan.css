@@ -1,6 +1,56 @@
+.disable-select {
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
 .listItem {
   text-transform: none;
 }
 .travel-plan {
   padding-bottom: 10%;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr 2fr);
+  grid-gap: 10px;
+}
+
+.grid-image {
+  width: 200px;
+  display: block;
+  margin-left: auto;
+}
+.grid-header {
+  color: #009688;
+  grid-column: 1 / span 4;
+}
+.grid-text {
+  padding: 1rem;
+}
+.panel-header {
+  color: #009688;
+  font-size: 1.5rem;
+}
+
+/* When the screen is below 700px reduce columns on display*/
+@media only screen and (max-width: 700px) {
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+  }
+  .grid-header {
+    color: #009688;
+    grid-column: 1 / span 1;
+  }
+  .panel-header {
+    grid-column: 1 / span 1;
+  }
+  .grid-image {
+    grid-column: 1 / span 1;
+  }
 }

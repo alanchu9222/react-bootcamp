@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import { food, culture, monuments, hotels, nature } from "../data/images";
+
 import axios from "axios";
 import "./TravelPlan.css";
 
@@ -26,10 +28,10 @@ class TravelPlan extends Component {
   componentDidUpdate() {
     // var items = document.querySelectorAll(".collapsible.expandable");
     // M.Collapsible.init(items);
-    var elem = document.querySelector(".collapsible.expandable");
-    var instance = M.Collapsible.init(elem, {
-      accordion: false
-    });
+    // var elem = document.querySelector(".collapsible.expandable");
+    // M.Collapsible.init(elem, {
+    //   accordion: false
+    // });
   }
   getCoordinates = (city, country) => {
     axios
@@ -178,7 +180,6 @@ class TravelPlan extends Component {
       data.forEach(doc => {
         const file = doc;
         const listItem = { title: file.title, content: file.content };
-
         this.setState({
           list: this.state.list.concat(listItem)
         });
@@ -187,17 +188,17 @@ class TravelPlan extends Component {
   };
 
   showListItem = menuItem => {
-    if (menuItem.url) {
+    if (menuItem.url && menuItem.phone) {
       return (
         <li className="z-depth-0 white grey-text listItem">
-          <a href={menuItem.url} target="">
+          <a href={menuItem.url} target="_blank">
             {menuItem.name}
           </a>
           + <FontAwesomeIcon icon={faPhone} size="1x" color="grey" /> +
           {menuItem.phone}
         </li>
       );
-    } else {
+    } else if (menuItem.phone) {
       return (
         <li className="z-depth-0 white grey-text listItem">
           {menuItem.name}
@@ -205,8 +206,17 @@ class TravelPlan extends Component {
           {menuItem.phone}
         </li>
       );
+    } else {
+      return (
+        <li className="z-depth-0 white grey-text listItem">{menuItem.name}</li>
+      );
     }
   };
+
+  random = n => {
+    return Math.floor(Math.random() * Math.floor(n)) + 1;
+  };
+
   listTravelPlan = listItem => {
     return (
       <li key={listItem.title}>
@@ -219,13 +229,51 @@ class TravelPlan extends Component {
       </li>
     );
   };
+  showTravelPanels = listItem => {
+    let imageUrl = "";
+    if (listItem.title.toUpperCase().includes("ATTRACTIONS")) {
+      imageUrl = monuments[this.random(10)];
+    }
+    if (listItem.title.toUpperCase().includes("FOOD")) {
+      imageUrl = food[this.random(10)];
+    }
+    if (listItem.title.toUpperCase().includes("CAFE")) {
+      imageUrl = culture[this.random(10)];
+    }
+    if (listItem.title.toUpperCase().includes("RECREATION")) {
+      imageUrl = nature[this.random(10)];
+    }
+    if (listItem.title.toUpperCase().includes("ACCOM")) {
+      imageUrl = hotels[this.random(10)];
+    }
+    return (
+      <>
+        <img className="grid-image disable-select" src={imageUrl} alt="" />
+        <div>
+          <div className="panel-header disable-select">{listItem.title}</div>
+          <ul>{listItem.content.map(this.showListItem)}</ul>
+        </div>
+      </>
+    );
+  };
 
   render() {
     return (
       <div className="container travel-plan">
-        <ul className="collapsible expandable z-depth-0 ref={this.collapsible}">
-          {this.state.ready && this.state.list.map(this.listTravelPlan)}
-        </ul>
+        {/* {this.props.visible && ( */}
+        {
+          <div className="grid-container">
+            <h2 className="grid-header disable-select">
+              {this.state.city} {this.statecountry}
+            </h2>
+            {this.state.ready && this.state.list.map(this.showTravelPanels)}
+          </div>
+        }
+        {/* {this.props.visible && (
+          <ul className="collapsible expandable z-depth-0 ref={this.collapsible}">
+            {this.state.ready && this.state.list.map(this.listTravelPlan)}
+          </ul>
+        )} */}
       </div>
     );
   }

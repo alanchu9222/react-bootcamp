@@ -44,7 +44,14 @@ class U_update extends Component {
   };
 
   getWeatherForecast = () => {};
-
+  capitalize = s => {
+    if (typeof s !== "string") return "";
+    //return s.charAt(0).toUpperCase() + s.slice(1);
+    return s.toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+  };
   componentDidMount() {
     const elems = document.querySelectorAll(".modal");
     M.Modal.init(elems, { dismissable: true });
@@ -65,7 +72,7 @@ class U_update extends Component {
   };
 
   handlePlaceChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: this.capitalize(event.target.value) });
   };
 
   handleSubmit = e => {
@@ -95,6 +102,10 @@ class U_update extends Component {
         this.setState({ city: "", country: "" });
         this.state.modalUpdate.close();
         this.props.refresh();
+        let menuOptions= [this.state.poi1,this.state.poi2,this.state.poi3,this.state.poi4].filter(item=>item.length>0);
+        this.props.updateCompleted(menuOptions);
+        this.setState({poi1:"",poi2:"",poi3:"",poi4:""})
+        
         //this.createForm.reset();
       })
       .catch(err => {
@@ -126,7 +137,8 @@ class U_update extends Component {
                 <h5>
                   {this.state.tripData.city +
                     "   " +
-                    this.state.tripData.country}
+                    this.state.tripData.country +
+                    " (update Local Places of Interest)"}
                 </h5>
               </div>
               <div className="input-field">

@@ -1,8 +1,14 @@
+import { connect } from "react-redux";
+import { setCardsVisible } from "./actions";
+
 import React from "react";
 import NavBar from "./components/NavBar";
 import TravelPlan from "./components/TravelPlan";
 import TravelCards from "./components/TravelCards";
+import Instructions from "./components/Instructions";
+
 import { DB_CONFIG } from "./config/config";
+
 import app from "firebase/app";
 import Flash from "./components/Flash";
 import Update from "./components/U_update";
@@ -29,14 +35,20 @@ class App extends React.Component {
     isLoggedIn: false,
     auth: null,
     db: null,
-    flashMessage: "Welcome to the World Travel Guide - please log in to begin",
+    flashMessage: "Welcome to the Local Travel Guide - please log in to begin",
     menuOptions: [],
     tripDates: [],
     citySelected: "",
     countrySelected: "",
     excludeDates: [],
-    minStartDate: ""
+    minStartDate: "",
+    cardsVisible: true
   };
+  setCardsVisible = setting => {
+    //   this.setState({ cardsVisible: setting });
+    this.props.setCardsVisible(setting);
+  };
+
   setTripDates = dates => {
     // Each date element is a pair of startdate and enddate objects
     this.setState({ tripDates: dates });
@@ -153,9 +165,14 @@ class App extends React.Component {
     if (result) {
       console.log("Delete succesful");
       this.travelCards.current.updateCards();
+      this.setState({ menuOptions: [] });
     } else {
       console.log("Delete failed");
     }
+  };
+
+  updateCompleted = poiList => {
+    this.setState({ menuOptions: poiList });
   };
 
   // This will trigger the delete process
@@ -180,8 +197,10 @@ class App extends React.Component {
       <div className="App-main">
         <NavBar
           ref={this.navBar}
-          setFlashMessage={this.setFlashMessage}
           setState={this.updateAuthState}
+          setFlashMessage={this.setFlashMessage}
+          cardsVisible={this.state.cardsVisible}
+          // setCardsVisible={this.setCardsVisible}
           isLoggedIn={this.state.isLoggedIn}
           setIsLoggedIn={this.setIsLoggedIn}
           menuOptions={this.state.menuOptions}
@@ -196,8 +215,12 @@ class App extends React.Component {
           refresh={this.setRefresh}
         />
 
-        {/* <Seed db={this.db} /> */}
         <Flash message={this.state.flashMessage} />
+
+        <div className={this.state.isLoggedIn ? "hide" : "show"}>
+          <Instructions />
+        </div>
+
         <div className={this.state.isLoggedIn ? "show" : "hide"}>
           <Delete
             ref={this.modalDelete}
@@ -208,6 +231,7 @@ class App extends React.Component {
             ref={this.modalUpdate}
             db={this.db}
             refresh={this.setRefresh}
+            updateCompleted={this.updateCompleted}
           />
 
           <TravelCards
@@ -221,18 +245,29 @@ class App extends React.Component {
             performDelete={this.deleteTrip}
             performUpdate={this.updateTrip}
           />
-
           <TravelPlan
             className="travel-plan"
             ref="travelPlan"
+            //visible={!this.state.cardsVisible}
             user={this.state.user}
             auth={this.auth}
             db={this.db}
           />
+
+          {/* {this.props.cards.cardsVisible && ( */}
+          {/* )} */}
         </div>
       </div>
     );
   }
 }
 
-export default App;
+//export default App;
+
+const mapStateToProps = state => {
+  return { cards: state.cards };
+};
+export default connect(
+  mapStateToProps,
+  { setCardsVisible: setCardsVisible }
+)(App);

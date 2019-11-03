@@ -7,7 +7,7 @@ class Flash extends React.Component {
   render() {
     return (
       <div className="container">
-        <FlashMessage duration={2000}>
+        <FlashMessage duration={6000}>
           <div className="flash">{this.props.message}</div>
         </FlashMessage>
       </div>

@@ -160,8 +160,8 @@ class Tripcard extends Component {
         </div>
 
         <div className="Tripcard-data">
-          {this.formatDate(this.props.startDate)}-
-          {this.formatDate(this.props.endDate)}
+          {this.formatDate(this.props.startDate)}
+          {/* {this.formatDate(this.props.endDate)} */}
         </div>
       </div>
     );

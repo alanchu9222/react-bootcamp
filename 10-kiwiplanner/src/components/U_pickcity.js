@@ -18,6 +18,11 @@ export class PickCity extends Component {
     };
   }
 
+  reset = () => {
+    this.setState({ selected: "" });
+    this.shortlistCities("");
+  };
+
   renderOptions() {
     return this.state.shortlist.map(city => {
       return (
@@ -28,23 +33,17 @@ export class PickCity extends Component {
     });
   }
 
-  // handleClose = () => {
-  //   this.setState({ open: false });
-  // };
-
-  // handleOpen = () => {
-  //   this.setState({ open: true });
-  // };
-
   shortlistCities = country => {
     const countrySelected = country.slice(0, 10);
+    // alert("countrySelected >>>"+this.state.data+"<<<");
     let shortlist = this.state.data.filter(
       city => city.country === countrySelected
     );
     const sl = shortlist.map(item => {
       return item.name;
     });
-    this.setState({ shortlist: sl });
+
+    this.setState({ shortlist: sl.sort() });
   };
 
   handleChange = event => {

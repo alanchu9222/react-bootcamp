@@ -1,5 +1,5 @@
 .Tripcard {
-  width: 150px;
+  width: 180px;
   padding: 10px;
   margin: 1rem;
   box-shadow: 7px 10px 12px -5px rgba(0, 0, 0, 0.56);
@@ -66,8 +66,8 @@
 }
 
 .Trip-image {
-  width: 130px;
-  height: 100px;
+  width: 160px;
+  height: 120px;
 }
 .Tripcard-icon {
   width: 60px;

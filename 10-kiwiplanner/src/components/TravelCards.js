@@ -1,3 +1,6 @@
+import { connect } from "react-redux";
+import { setCardsVisible } from "../actions";
+
 import React, { Component } from "react";
 import Tripcard from "./Tripcard";
 import "./TravelCards.css";
@@ -32,6 +35,7 @@ class TravelCards extends Component {
     }
     this.setState({ city: city, country: destRecord.country });
     this.props.setMenuOptions(temp, destRecord.country, destRecord.imageUrl);
+    this.props.setCardsVisible(false);
   };
   handleCardDelete = city => {
     const temp = [];
@@ -137,19 +141,20 @@ class TravelCards extends Component {
       <div>
         <div className="CardDeck">
           <div className="Trip-cards">
-            {this.state.travelPlan.map(p => (
-              <Tripcard
-                key={p.country + p.city}
-                city={p.city}
-                country={p.country}
-                imageUrl={p.imageUrl}
-                startDate={p.dateStart}
-                endDate={p.dateEnd}
-                clickHandler={this.handleCardClick}
-                deleteHandler={this.handleCardDelete}
-                editHandler={this.handleCardEdit}
-              />
-            ))}
+            {this.props.cards.cardsVisible &&
+              this.state.travelPlan.map(p => (
+                <Tripcard
+                  key={p.country + p.city}
+                  city={p.city}
+                  country={p.country}
+                  imageUrl={p.imageUrl}
+                  startDate={p.dateStart}
+                  endDate={p.dateEnd}
+                  clickHandler={this.handleCardClick}
+                  deleteHandler={this.handleCardDelete}
+                  editHandler={this.handleCardEdit}
+                />
+              ))}
           </div>
         </div>
       </div>
@@ -157,4 +162,13 @@ class TravelCards extends Component {
   }
 }
 
-export default TravelCards;
+//export default TravelCards;
+
+//export default NavBar;
+const mapStateToProps = state => {
+  return { cards: state.cards };
+};
+export default connect(
+  mapStateToProps,
+  { setCardsVisible: setCardsVisible }
+)(TravelCards);

@@ -28,7 +28,7 @@ export class PickDate extends Component {
   }
   handleChangeStart = startDate => {
     this.setState({
-      startDate: startDate
+      startDate: startDate      
     });
     this.props.setDates(startDate, this.state.endDate);
   };
@@ -42,7 +42,7 @@ export class PickDate extends Component {
   render() {
     return (
       <div id="dates">
-        <span className="startDate">Start Date</span>
+        <span className="startDate">Trip Date</span>
         <DatePicker
           popperPlacement="bottom"
           popperModifiers={{
@@ -65,8 +65,8 @@ export class PickDate extends Component {
           endDate={this.state.endDate}
           onChange={this.handleChangeStart}
         />
-        <span className="endDate">End Date</span>
-        <DatePicker
+        {/* <span className="endDate">End Date</span> */}
+        {/* <DatePicker
           popperPlacement="bottom"
           popperModifiers={{
             flip: {
@@ -88,7 +88,7 @@ export class PickDate extends Component {
           // minimum date is from startdate onwards
           minDate={this.state.startDate}
           excludeDates={this.props.excludeDates}
-        />
+        /> */}
       </div>
     );
   }
