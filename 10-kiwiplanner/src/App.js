@@ -131,6 +131,7 @@ class App extends React.Component {
   };
   setPlace = city => {
     this.setState({ citySelected: city });
+    // Menu Click detected
     // Get local info for this place
     this.refs.travelPlan.setPlace(city, this.state.countrySelected);
   };
@@ -147,6 +148,7 @@ class App extends React.Component {
       citySelected: list[0],
       countrySelected: country
     });
+    // Card click detected
     // Get local info for this place
     this.refs.travelPlan.setPlace(list[0], country);
   };
@@ -242,7 +244,7 @@ class App extends React.Component {
             user={this.state.user}
             isLoggedIn={this.state.isLoggedIn}
             db={this.db}
-            performDelete={this.deleteTrip}
+            //performDelete={this.deleteTrip}
             performUpdate={this.updateTrip}
           />
           <TravelPlan

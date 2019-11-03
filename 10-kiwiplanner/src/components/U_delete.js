@@ -1,3 +1,11 @@
+import { connect } from "react-redux";
+import {
+  refreshCards,
+  setMenuPlaces,
+  deleteTrip,
+  deleteDone
+} from "../actions";
+
 import React, { Component } from "react";
 import "./U_delete.css";
 import M from "materialize-css";
@@ -14,6 +22,7 @@ class U_delete extends Component {
       message:
         "Please confirm deletion of trip to " + trip.city + " " + trip.country
     });
+    this.props.deleteDone();
     this.state.modalDelete.open();
   };
   deleteCancelled = () => {
@@ -27,10 +36,13 @@ class U_delete extends Component {
       .doc(this.state.tripIdToDelete)
       .delete()
       .then(result => {
-        this.props.deleteCompleted(true);
+        // 1. Refresh the UI - cardsUpdated: TravelCards()
+        this.props.refreshCards();
+        this.props.setMenuPlaces([]);
+        //this.props.deleteCompleted(true);
       })
       .catch(err => {
-        this.props.deleteCompleted(false);
+        //this.props.deleteCompleted(false);
       });
     this.state.modalDelete.close();
   };
@@ -42,7 +54,11 @@ class U_delete extends Component {
     const instance = M.Modal.getInstance(modalDelete);
     this.setState({ modalDelete: instance });
   }
-
+  componentDidUpdate() {
+    if (this.props.cards.tripToDelete !== undefined) {
+      this.setPlaceDelete(this.props.cards.tripToDelete);
+    }
+  }
   render() {
     return (
       <div>
@@ -85,4 +101,11 @@ class U_delete extends Component {
   }
 }
 
-export default U_delete;
+//export default U_delete;
+const mapStateToProps = state => {
+  return { cards: state.cards };
+};
+export default connect(
+  mapStateToProps,
+  { refreshCards, setMenuPlaces, deleteTrip, deleteDone }
+)(U_delete);

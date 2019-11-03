@@ -75,11 +75,14 @@ class TravelPlan extends Component {
     } else {
       console.log("Getting info for " + city + " " + country);
     }
+
     this.setState({ city: city, country: country, ready: false });
+
     // If the required data is found in local store, skip the API fetch
     const foundLocalRecord = JSON.parse(
       localStorage.getItem(city + "-" + country)
     );
+
     if (foundLocalRecord) {
       // Reset the state
       this.setState({ list: [] });
@@ -180,7 +183,12 @@ class TravelPlan extends Component {
       data.forEach(doc => {
         const file = doc;
         const listItem = { title: file.title, content: file.content };
+        console.log(listItem);
+
         this.setState({
+          // Data from api is stored in the local state - list
+          // This state will trigger re-rendering
+          // Each list item corresponds with one API response
           list: this.state.list.concat(listItem)
         });
       });

@@ -1,2 +1,12 @@
 export const SET_CARDS_VISIBLE = "SET_CARDS_VISIBLE";
-export const GET_CARDS_VISIBLE = "GET_CARDS_VISIBLE";
+export const SET_PLACES = "SET_PLACES";
+export const SET_CITY = "SET_CITY";
+export const SET_COUNTRY = "SET_COUNTRY";
+export const SET_IMAGE_URL = "SET_IMAGE_URL";
+export const SET_PLACE_SELECTED = "SET_PLACE_SELECTED";
+export const GET_COORDINATES = "GET_COORDINATES";
+export const GET_PLACE_INFO = "GET_PLACE_INFO";
+export const REFRESH_CARDS = "REFRESH_CARDS";
+export const REFRESH_DONE = "REFRESH_DONE";
+export const DELETE_TRIP = "DELETE_TRIP";
+export const DELETE_DONE = "DELETE_DONE";

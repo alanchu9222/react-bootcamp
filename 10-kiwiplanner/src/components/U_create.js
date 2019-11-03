@@ -1,3 +1,6 @@
+import { connect } from "react-redux";
+import { refreshCards } from "../actions";
+
 import React, { Component } from "react";
 import PickCountry from "./U_pickcountry";
 import PickCity from "./U_pickcity";
@@ -64,7 +67,7 @@ class U_create extends Component {
   resetCreateForm = () => {
     this.pickCountry.current.reset();
     this.pickCity.current.reset();
-    this.setState({poi1:"",poi2:"",poi3:"",poi4:""})
+    this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
     this.setState(initialState);
   };
 
@@ -108,10 +111,11 @@ class U_create extends Component {
   capitalize = s => {
     if (typeof s !== "string") return "";
     //return s.charAt(0).toUpperCase() + s.slice(1);
-    return s.toLowerCase()
-    .split(' ')
-    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-    .join(' ');
+    return s
+      .toLowerCase()
+      .split(" ")
+      .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(" ");
   };
   handlePlaceChange = event => {
     this.setState({ [event.target.name]: this.capitalize(event.target.value) });
@@ -161,11 +165,16 @@ class U_create extends Component {
         this.setState({ city: "", country: "" });
         // close the create modal & reset form
         const modal = document.querySelector("#modal-create");
-        this.setState({poi1:"",poi2:"",poi3:"",poi4:""})
+        this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
 
         M.Modal.getInstance(modal).close();
 
-        this.props.refresh();
+        // 1. Refresh the UI - cardsUpdated: TravelCards()
+        this.props.refreshCards();
+        // 2. Get Coordinates for this location
+        // 3. Store Coordinates for this location
+
+        //this.props.refresh();
         //        this.createForm.reset();
       })
       .catch(err => {
@@ -264,4 +273,11 @@ class U_create extends Component {
   }
 }
 
-export default U_create;
+//export default U_create;
+const mapStateToProps = state => {
+  return { cards: state.cards };
+};
+export default connect(
+  mapStateToProps,
+  { refreshCards }
+)(U_create);

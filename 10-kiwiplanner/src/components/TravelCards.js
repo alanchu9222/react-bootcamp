@@ -1,5 +1,14 @@
 import { connect } from "react-redux";
-import { setCardsVisible } from "../actions";
+import {
+  setCardsVisible,
+  setCity,
+  setCountry,
+  setMenuPlaces,
+  setPlaceSelected,
+  setImageUrl,
+  refreshCardsDone,
+  deleteTrip
+} from "../actions";
 
 import React, { Component } from "react";
 import Tripcard from "./Tripcard";
@@ -21,21 +30,27 @@ class TravelCards extends Component {
     this.setState({ cardsUpdated: false });
   };
   handleCardClick = city => {
-    const temp = [];
-    temp.push(city);
+    const places = [];
+    places.push(city);
     const destRecord = this.state.travelPlan.find(record => {
       return record.city === city.trim();
     });
     if (destRecord) {
       // If the field exist then push it into the MenuOptions
-      destRecord.place1 && temp.push(destRecord.place1);
-      destRecord.place2 && temp.push(destRecord.place2);
-      destRecord.place3 && temp.push(destRecord.place3);
-      destRecord.place4 && temp.push(destRecord.place4);
+      destRecord.place1 && places.push(destRecord.place1);
+      destRecord.place2 && places.push(destRecord.place2);
+      destRecord.place3 && places.push(destRecord.place3);
+      destRecord.place4 && places.push(destRecord.place4);
     }
-    this.setState({ city: city, country: destRecord.country });
-    this.props.setMenuOptions(temp, destRecord.country, destRecord.imageUrl);
+    this.props.setCity(city);
+    this.props.setCountry(destRecord.country);
+    this.props.setPlaces(places);
+    this.props.setPlaceSelected(city);
+    this.props.setImageUrl(destRecord.imageUrl);
     this.props.setCardsVisible(false);
+
+    this.setState({ city: city, country: destRecord.country });
+    this.props.setMenuOptions(places, destRecord.country, destRecord.imageUrl);
   };
   handleCardDelete = city => {
     const temp = [];
@@ -45,7 +60,8 @@ class TravelCards extends Component {
     });
     if (destRecord) {
       // If the field exist then push it into the MenuOptions
-      this.props.performDelete(destRecord);
+      //this.props.performDelete(destRecord);
+      this.props.deleteTrip(destRecord);
     }
   };
   handleCardEdit = city => {
@@ -66,7 +82,11 @@ class TravelCards extends Component {
   };
 
   // This gets called when the cards have been updated (delete or update events)
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.cards.isRefreshed !== this.props.cards.isRefreshed) {
+      this.setState({ cardsUpdated: false });
+    }
+
     if (this.props.user) {
       if (!this.state.cardsUpdated) {
         this.props.db
@@ -105,6 +125,9 @@ class TravelCards extends Component {
 
                 this.setState({ travelPlan: tripArray });
                 this.setState({ cardsUpdated: true });
+
+                this.props.refreshCardsDone();
+
                 // Check that the current selected city still exists in the database
                 // (maybe it just got deleted)
                 let city_record = obj => {
@@ -170,5 +193,14 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { setCardsVisible: setCardsVisible }
+  {
+    setCardsVisible,
+    setCity,
+    setCountry,
+    setMenuPlaces,
+    setPlaceSelected,
+    setImageUrl,
+    refreshCardsDone,
+    deleteTrip
+  }
 )(TravelCards);
