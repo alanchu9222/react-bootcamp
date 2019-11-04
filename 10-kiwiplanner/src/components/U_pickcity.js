@@ -5,8 +5,6 @@ import "./U_pickcity.css";
 import { getCities } from "./dataService";
 import { Select, MenuItem, InputLabel } from "@material-ui/core";
 
-import "./U_pickcity.css";
-
 export class PickCity extends Component {
   constructor(props) {
     super(props);

@@ -255,7 +255,6 @@ class NavBar extends Component {
           minStartDate={this.props.minStartDate}
           excludeDates={this.props.excludeDates}
           tripDates={this.props.tripDates}
-          //refresh={this.props.refresh}
         />
         {/* // ---------------------------------------------------------------------
         // Sidenav */}

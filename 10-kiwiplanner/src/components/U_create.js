@@ -2,8 +2,6 @@ import { connect } from "react-redux";
 import { refreshCards, setTripId } from "../actions";
 
 import unsplash from "../apis/unsplash";
-// import geolocationApi from "../apis/geolocation";
-// import { LOCATIONIQ_KEY } from "../apis/apikeys";
 
 import React, { Component } from "react";
 import PickCountry from "./U_pickcountry";
@@ -154,37 +152,15 @@ class U_create extends Component {
     }
   };
 
-  // getCoordinates = async (location, country, docRef) => {
-  //   if (location.trim().length === 0) return;
-  //   try {
-  //     const resp = await geolocationApi.get(
-  //       `${LOCATIONIQ_KEY}&q=${location}%20${country}&format=json`
-  //     );
-  //     const newkey = `${location}-${country}`;
-  //     let newcoordinates = this.state.coordinates;
-  //     newcoordinates[newkey] = {
-  //       latitude: resp.data[0].lat,
-  //       longitude: resp.data[0].lon
-  //     };
-  //     docRef.update({
-  //       coordinates: newcoordinates
-  //     });
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
 
   handleSubmit = e => {
     e.preventDefault();
-    // if (!this.state.city || !this.state.country) {
-    //   this.setState({ city: "", country: "" });
-    //   this.resetCreateForm();
-    //   this.pickCity.current.setDestination("");
-    //   // Inform user, input is not valid
-    //   this.selectSimpleModal();
-    //   return;
-    // }
-    // Update database with the latest weather information
+    if(this.state.city.length === 0 || this.state.country.length === 0) {
+      const modal = document.querySelector("#modal-create");
+      this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
+      M.Modal.getInstance(modal).close();
+      return;
+    } 
     this.props.firebase.db
       .collection("trips")
       .add({
@@ -246,74 +222,79 @@ class U_create extends Component {
             id="create-form"
             onSubmit={this.handleSubmit}
           >
+            <div className = "create-grid-container">
             <PickDate
+              className="pick-date"
               setDates={this.setDates}
               minStartDate={this.props.minStartDate}
               excludeDates={this.props.excludeDates}
               ref={this.pickDate}
             />
-            <div className="b1">
+
+            <div className="pick-country">
               <PickCountry
                 ref={this.pickCountry}
                 setDestination={this.setDestinationCountry}
               />
             </div>
-            <div className="b2">
+            <div className="pick-city">
               <PickCity
                 ref={this.pickCity}
                 country={this.state.country}
                 setDestination={this.setDestinationCity}
               />
             </div>
-            <div className="flex-container">
-              <div className="input-field">
+            {/* <div className="flex-container"> */}
+              <div className="input-field poi1-box">
                 <textarea
                   id="create_poi1"
-                  className="materialize-textarea"
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi1"
                 />
 
                 <label htmlFor="create_poi1">Place of Interest 1</label>
               </div>
-              <div className="spacer" />
+              {/* <div className="spacer" /> */}
 
-              <div className="input-field">
+              <div className="input-field poi2-box">
                 <textarea
                   id="create_poi2"
-                  className="materialize-textarea"
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi2"
                 />
                 <label htmlFor="create_poi2">Place of Interest 2</label>
               </div>
-              <div className="spacer" />
+              {/* <div className="spacer" /> */}
 
-              <div className="input-field">
+              <div className="input-field poi3-box">
                 <textarea
                   id="create_poi3"
-                  className="materialize-textarea"
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi3"
                 />
                 <label htmlFor="create_poi3">Place of Interest 3</label>
               </div>
-              <div className="spacer" />
+              {/* <div className="spacer" /> */}
 
-              <div className="input-field">
+              <div className="input-field poi4-box">
                 <textarea
-                  id="create_poi4"
-                  className="materialize-textarea"
+                  id="create_poi4 "
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi4"
                 />
                 <label htmlFor="create_poi4">Place of Interest 4</label>
-              </div>
+              {/* </div> */}
             </div>
 
-            <button className="button btn yellow darken-2 z-depth-1 waves-effect waves-light">
+            <button className="button btn yellow darken-2 z-depth-1 waves-effect waves-light button-box">
               Submit
             </button>
+
+            </div>
           </form>
         </div>
       </div>

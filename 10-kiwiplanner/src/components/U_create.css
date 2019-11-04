@@ -1,32 +1,23 @@
-.flex-container {
-  display: flex;
-  flex-wrap: wrap;
+.create-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  
+  grid-gap: 10px;
 }
-.flex-container > .input-field {
-  width: 40%;
-  /* margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important; */
-}
-.flex-container > .spacer {
-  width: 10%;
-}
+
+.pick-date {  grid-column: 1/ span 2;  }
+.pick-country {  grid-column: 1;   width: 100%;
+  margin-left: 10px;}
+.pick-city {  grid-column: 2;   width: 100%;
+  margin-left: 10px;}
+.poi1-box {  grid-column: 1; margin-left: 10px;}
+.poi2-box {  grid-column: 2; margin-left: 10px;}
+.poi3-box {  grid-column: 1; margin-left: 10px;}
+.poi4-box {  grid-column: 2; margin-left: 10px;}
+.button-box {  grid-column: 1; margin-left: 10px;}
+.input-field { margin-bottom: 0!important;}
+
 .span {
   display: inline-block;
-}
-
-.button {
-  margin: 10px;
-}
-
-.b1 {
-  display: inline-block;
-  width: 50%;
-  margin: auto;
-}
-.b2 {
-  display: inline-block;
-  width: 50%;
-  margin: auto;
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
