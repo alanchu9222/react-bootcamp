@@ -3,10 +3,11 @@ import {
   setCardsVisible,
   setCity,
   setCountry,
-  setMenuPlaces,
+  setPlacesMenu,
   setPlaceSelected,
-  setImageUrl,
+  setPlaceImageUrl,
   refreshCardsDone,
+  loadDataLocal,
   deleteTrip
 } from "../actions";
 
@@ -44,13 +45,25 @@ class TravelCards extends Component {
     }
     this.props.setCity(city);
     this.props.setCountry(destRecord.country);
-    this.props.setMenuPlaces(places);
-    this.props.setPlaceSelected(city);
-    this.props.setImageUrl(destRecord.imageUrl);
+    this.props.setPlacesMenu(places);
+    this.props.setPlaceImageUrl(destRecord.imageUrl);
     this.props.setCardsVisible(false);
-
     this.setState({ city: city, country: destRecord.country });
-    this.props.setMenuOptions(places, destRecord.country, destRecord.imageUrl);
+    this.props.setPlaceSelected(city);
+    this.props.loadDataLocal(city, destRecord.country);
+
+    const searchKey = city + "-" + destRecord.country;
+    /* Check that the city has local data - if none then load from external API */
+    if (!this.props.places.placesInLocalStore.includes(searchKey)) {
+      //     this.props.loadDataExternal(city, destRecord.country);
+    }
+
+    //    this.props.setMenuOptions(places, destRecord.country, destRecord.imageUrl);
+    /*
+(1) Set menu options
+(2) Reload the data
+(3) Render the reloaded data
+*/
   };
   handleCardDelete = city => {
     const temp = [];
@@ -189,7 +202,7 @@ class TravelCards extends Component {
 
 //export default NavBar;
 const mapStateToProps = state => {
-  return { cards: state.cards };
+  return { cards: state.cards, places: state.places };
 };
 export default connect(
   mapStateToProps,
@@ -197,10 +210,11 @@ export default connect(
     setCardsVisible,
     setCity,
     setCountry,
-    setMenuPlaces,
+    setPlacesMenu,
     setPlaceSelected,
-    setImageUrl,
+    setPlaceImageUrl,
     refreshCardsDone,
+    loadDataLocal,
     deleteTrip
   }
 )(TravelCards);

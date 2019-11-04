@@ -1,10 +1,8 @@
 import { connect } from "react-redux";
 import { refreshCards } from "../actions";
-import axios from "axios";
 
-import geolocationApi from "../apis/geolocation";
 import unsplash from "../apis/unsplash";
-
+import geolocationApi from "../apis/geolocation";
 import { LOCATIONIQ_KEY } from "../apis/apikeys";
 
 import React, { Component } from "react";

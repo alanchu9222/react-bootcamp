@@ -24,7 +24,7 @@ function CityTemperature(props) {
   try {
     temp = cityRecord[props.month.slice(0, 3)];
   } catch {
-    console.log("Delay getting temperature for  " + props.city);
+    //console.log("Delay getting temperature for  " + props.city);
   }
   let ficon = temp < 5 ? faSnowflake : faCloudSun;
   if (temp > 35) ficon = faTemperatureHigh;

@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setCardsVisible } from "./actions";
+import { setCardsVisible, loadDataExternal } from "./actions";
 
 import React from "react";
 import NavBar from "./components/NavBar";
@@ -150,6 +150,8 @@ class App extends React.Component {
     });
     // Card click detected
     // Get local info for this place
+//    this.props.loadDataExternal();
+
     this.refs.travelPlan.setPlace(list[0], country);
   };
 
@@ -238,7 +240,7 @@ class App extends React.Component {
 
           <TravelCards
             ref={this.travelCards}
-            setMenuOptions={this.setMenuOptions}
+            //setMenuOptions={this.setMenuOptions}
             setCountry={this.setCountry}
             setTripDates={this.setTripDates}
             user={this.state.user}
@@ -271,5 +273,5 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { setCardsVisible: setCardsVisible }
+  { setCardsVisible, loadDataExternal }
 )(App);

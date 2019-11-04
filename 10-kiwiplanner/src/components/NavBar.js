@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setCardsVisible } from "../actions";
+import { setCardsVisible, setPlaceSelected, loadDataLocal } from "../actions";
 
 import React, { Component } from "react";
 import Login from "./U_login";
@@ -52,20 +52,26 @@ class NavBar extends Component {
   initDatePicker = minStartDate => {
     //    this.createModal.current.initDatePicker(minStartDate);
   };
-  componentDidUpdate() {
-    if (!this.props.menuOptions) {
-      return;
-    } else if (!this.state.menuOptions) {
-      //this.setState({ menuOptions: this.props.menuOptions });
-      //alert("Setting Up MenuOptions");
-    } else if (this.state.menuOptions[0] !== this.props.menuOptions[0]) {
-      this.setState({ menuOptions: this.props.menuOptions });
-    } else if (
-      this.state.menuOptions.length !== this.props.menuOptions.length
-    ) {
-      // Above may escape detection if destinations have same point of interest #1
-      this.setState({ menuOptions: this.props.menuOptions });
+  componentDidUpdate(prevProps) {
+    if(prevProps.menu.places !== this.props.menu.places){
+      //alert("CHANGE MENU!!! "+this.props.menu.places);
+      this.setState({ menuOptions: this.props.menu.places });      
     }
+
+
+    // if (!this.props.menuOptions) {
+    //   return;
+    // } else if (!this.state.menuOptions) {
+    //   //this.setState({ menuOptions: this.props.menuOptions });
+    //   //alert("Setting Up MenuOptions");
+    // } else if (this.state.menuOptions[0] !== this.props.menuOptions[0]) {
+    //   this.setState({ menuOptions: this.props.menuOptions });
+    // } else if (
+    //   this.state.menuOptions.length !== this.props.menuOptions.length
+    // ) {
+    //   // Above may escape detection if destinations have same point of interest #1
+    //   this.setState({ menuOptions: this.props.menuOptions });
+    // }
   }
 
   componentDidMount() {
@@ -87,7 +93,10 @@ class NavBar extends Component {
   };
 
   handlePlaceClick = event => {
-    this.props.setPlace(event.currentTarget.dataset.place);
+//    this.props.setPlace(event.currentTarget.dataset.place);
+    this.props.setPlaceSelected(event.currentTarget.dataset.place);
+    this.props.loadDataLocal(event.currentTarget.dataset.place, this.props.places.country);
+
     this.handleSideMenuClick();
     this.props.setCardsVisible(false);
   };
@@ -298,9 +307,9 @@ class NavBar extends Component {
 
 //export default NavBar;
 const mapStateToProps = state => {
-  return { cards: state.cards };
+  return { cards: state.cards, menu: state.menu, places: state.places };
 };
 export default connect(
   mapStateToProps,
-  { setCardsVisible: setCardsVisible }
+  { setCardsVisible, setPlaceSelected, loadDataLocal }
 )(NavBar);

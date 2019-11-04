@@ -1,7 +1,13 @@
+import { connect } from "react-redux";
+import {  loadDataExternal } from "../actions";
+
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { food, culture, monuments, hotels, nature } from "../data/images";
+
+import tomtomApi from "../apis/tomtom";
+import { TOMTOM_KEY } from "../apis/apikeys";
 
 import axios from "axios";
 import "./TravelPlan.css";
@@ -104,6 +110,7 @@ class TravelPlan extends Component {
     // Append the city name to the Category Title
     const title =
       Object.keys(searchList[0])[0] + " - " + Object.values(searchList[0])[1];
+    console.log(title);
     searchList.shift();
     const placeInfo = [];
     axios
@@ -274,7 +281,9 @@ class TravelPlan extends Component {
             <h2 className="grid-header disable-select">
               {this.state.city} {this.statecountry}
             </h2>
-            {this.state.ready && this.state.list.map(this.showTravelPanels)}
+            {/* {this.state.ready && this.state.list.map(this.showTravelPanels)} */}
+            {this.props.places.currentData && this.props.places.currentData.map(this.showTravelPanels)}
+
           </div>
         }
         {/* {this.props.visible && (
@@ -287,4 +296,11 @@ class TravelPlan extends Component {
   }
 }
 
-export default TravelPlan;
+//export default TravelPlan;
+const mapStateToProps = state => {
+  return { cards: state.cards, places:state.places };
+};
+export default connect(
+  mapStateToProps,
+  { loadDataExternal }
+)(TravelPlan);

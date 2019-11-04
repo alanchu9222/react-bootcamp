@@ -1,5 +1,5 @@
 export const SET_CARDS_VISIBLE = "SET_CARDS_VISIBLE";
-export const SET_PLACES = "SET_PLACES";
+export const SET_PLACES_MENU = "SET_PLACES_MENU";
 export const SET_CITY = "SET_CITY";
 export const SET_COUNTRY = "SET_COUNTRY";
 export const SET_IMAGE_URL = "SET_IMAGE_URL";
@@ -10,3 +10,5 @@ export const REFRESH_CARDS = "REFRESH_CARDS";
 export const REFRESH_DONE = "REFRESH_DONE";
 export const DELETE_TRIP = "DELETE_TRIP";
 export const DELETE_DONE = "DELETE_DONE";
+export const LOAD_DATA_LOCALSTORE = "LOAD_DATA_LOCALSTORE";
+export const LOAD_DATA_EXTERNAL = "LOAD_DATA_EXTERNAL";

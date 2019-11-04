@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import {
   refreshCards,
-  setMenuPlaces,
+  setPlacesMenu,
   deleteTrip,
   deleteDone
 } from "../actions";
@@ -38,7 +38,7 @@ class U_delete extends Component {
       .then(result => {
         // 1. Refresh the UI - cardsUpdated: TravelCards()
         this.props.refreshCards();
-        this.props.setMenuPlaces([]);
+        this.props.setPlacesMenu([]);
         //this.props.deleteCompleted(true);
       })
       .catch(err => {
@@ -107,5 +107,5 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { refreshCards, setMenuPlaces, deleteTrip, deleteDone }
+  { refreshCards, setPlacesMenu, deleteTrip, deleteDone }
 )(U_delete);
