@@ -1,5 +1,10 @@
 import { connect } from "react-redux";
-import { setCardsVisible, loadDataExternal, placesInitialise, saveDataLocalStorage } from "./actions";
+import {
+  setCardsVisible,
+  loadDataExternal,
+  placesInitialise,
+  saveDataLocalStorage
+} from "./actions";
 
 import React from "react";
 import NavBar from "./components/NavBar";
@@ -44,10 +49,10 @@ class App extends React.Component {
     minStartDate: "",
     cardsVisible: true
   };
-  setCardsVisible = setting => {
-    //   this.setState({ cardsVisible: setting });
-    this.props.setCardsVisible(setting);
-  };
+  // setCardsVisible = setting => {
+  //   //   this.setState({ cardsVisible: setting });
+  //   this.props.setCardsVisible(setting);
+  // };
 
   setTripDates = dates => {
     // Each date element is a pair of startdate and enddate objects
@@ -129,31 +134,31 @@ class App extends React.Component {
   setUser = user => {
     this.setState({ user: user });
   };
-  setPlace = city => {
-    this.setState({ citySelected: city });
-    // Menu Click detected
-    // Get local info for this place
-    this.refs.travelPlan.setPlace(city, this.state.countrySelected);
-  };
+  // setPlace = city => {
+  //   this.setState({ citySelected: city });
+  //   // Menu Click detected
+  //   // Get local info for this place
+  //   this.refs.travelPlan.setPlace(city, this.state.countrySelected);
+  // };
 
   setIsLoggedIn = isLoggedIn => {
     this.setState({ isLoggedIn: isLoggedIn });
   };
 
-  setMenuOptions = (list, country, imageUrl) => {
-    // A list of locations to be added to the navbar and sidebar
-    this.setState({
-      menuOptions: list,
-      imageUrl: imageUrl,
-      citySelected: list[0],
-      countrySelected: country
-    });
-    // Card click detected
-    // Get local info for this place
-//    this.props.loadDataExternal();
+  // setMenuOptions = (list, country, imageUrl) => {
+  //   // A list of locations to be added to the navbar and sidebar
+  //   this.setState({
+  //     menuOptions: list,
+  //     imageUrl: imageUrl,
+  //     citySelected: list[0],
+  //     countrySelected: country
+  //   });
+  //   // Card click detected
+  //   // Get local info for this place
+  //   //    this.props.loadDataExternal();
 
-    this.refs.travelPlan.setPlace(list[0], country);
-  };
+  //   this.refs.travelPlan.setPlace(list[0], country);
+  // };
 
   setRefresh = () => {
     this.travelCards.current.updateCards();
@@ -190,8 +195,8 @@ class App extends React.Component {
     // The ref must be called with the "current" attribute!!!
     this.modalUpdate.current.setPlaceUpdate(tripRecord);
   };
-  
-  componentDidMount(){
+
+  componentDidMount() {
     this.props.placesInitialise();
   }
 
@@ -199,10 +204,12 @@ class App extends React.Component {
     if (this.state.refresh === true) {
       this.setState({ refresh: false });
     }
-//    SAVE_LOCALSTORAGE - if a key is provided, then save the local storage
+    //    SAVE_LOCALSTORAGE - if a key is provided, then save the local storage
     if (this.props.places.updateLocalStorage) {
-      alert("saving to local storage "+ this.props.places.updateLocalStorage);
-      this.props.saveDataLocalStorage(this.props.places.updateLocalStorage, this.props.places.currentData);
+      this.props.saveDataLocalStorage(
+        this.props.places.updateLocalStorage,
+        this.props.places.currentData
+      );
     }
   }
   render() {
@@ -213,7 +220,6 @@ class App extends React.Component {
           setState={this.updateAuthState}
           setFlashMessage={this.setFlashMessage}
           cardsVisible={this.state.cardsVisible}
-          // setCardsVisible={this.setCardsVisible}
           isLoggedIn={this.state.isLoggedIn}
           setIsLoggedIn={this.setIsLoggedIn}
           menuOptions={this.state.menuOptions}
@@ -224,7 +230,7 @@ class App extends React.Component {
           minStartDate={this.state.minStartDate}
           tripDates={this.state.tripDates}
           setUser={this.setUser}
-          setPlace={this.setPlace}
+          // setPlace={this.setPlace}
           refresh={this.setRefresh}
         />
 
@@ -249,26 +255,20 @@ class App extends React.Component {
 
           <TravelCards
             ref={this.travelCards}
-            //setMenuOptions={this.setMenuOptions}
             setCountry={this.setCountry}
             setTripDates={this.setTripDates}
             user={this.state.user}
             isLoggedIn={this.state.isLoggedIn}
             db={this.db}
-            //performDelete={this.deleteTrip}
             performUpdate={this.updateTrip}
           />
           <TravelPlan
             className="travel-plan"
             ref="travelPlan"
-            //visible={!this.state.cardsVisible}
             user={this.state.user}
             auth={this.auth}
             db={this.db}
           />
-
-          {/* {this.props.cards.cardsVisible && ( */}
-          {/* )} */}
         </div>
       </div>
     );
