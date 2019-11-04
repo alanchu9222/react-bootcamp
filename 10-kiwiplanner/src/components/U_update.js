@@ -1,3 +1,10 @@
+import { connect } from "react-redux";
+import {
+  setPlacesMenu,
+  updateDone,
+  refreshCards
+} from "../actions";
+
 import React, { Component } from "react";
 import "./U_update.css";
 import PickDate from "./U_pickdate";
@@ -16,7 +23,6 @@ class U_update extends Component {
       tripIdToUpdate: "",
       destinationValue: "",
       modalUpdate: null,
-      //      alertBox: null,
       dataReady: false,
       tripData: "",
       poi1: "",
@@ -47,19 +53,22 @@ class U_update extends Component {
   capitalize = s => {
     if (typeof s !== "string") return "";
     //return s.charAt(0).toUpperCase() + s.slice(1);
-    return s.toLowerCase()
-    .split(' ')
-    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-    .join(' ');
+    return s
+      .toLowerCase()
+      .split(" ")
+      .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(" ");
   };
+  componentDidUpdate() {
+    if (this.props.cards.tripToUpdate !== undefined) {
+      this.setPlaceUpdate(this.props.cards.tripToUpdate);
+      this.props.updateDone();
+    }
+  }
+
   componentDidMount() {
     const elems = document.querySelectorAll(".modal");
     M.Modal.init(elems, { dismissable: true });
-
-    // const alertBox = document.querySelector("#modal2");
-    // const instance = M.Modal.getInstance(alertBox);
-    // this.setState({ alertBox: instance });
-
     const modalUpdate = document.querySelector("#modal-update");
     const instance2 = M.Modal.getInstance(modalUpdate);
     this.setState({ modalUpdate: instance2 });
@@ -79,7 +88,7 @@ class U_update extends Component {
     e.preventDefault();
 
     // Update database with the latest weather information
-    this.props.db
+    this.props.firebase.db
       .collection("trips")
       .doc(this.state.tripIdToUpdate)
       .update({
@@ -95,17 +104,50 @@ class U_update extends Component {
       .then(() => {
         console.log(
           "Successfully updated record for " +
-            this.state.city +
+            this.state.tripData.city +
             " " +
-            this.state.country
+            this.state.tripData.country
         );
+        const placesList = [
+          this.state.tripData.city,
+          this.state.poi1,
+          this.state.poi2,
+          this.state.poi3,
+          this.state.poi4
+        ];
+
+        this.props.refreshCards(
+          this.props.firebase.db,
+          this.props.cards.trip_id_selected
+        );
+
+        // ACDEBUG - to use redux to update-coordinates - must provide doc-id!!!
+        // this.state.tripIdToUpdate
+
+        // this.getCoordinates(this.state.city, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi1, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi2, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi3, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi4, this.state.country, docRef);
+
         this.setState({ city: "", country: "" });
         this.state.modalUpdate.close();
-        this.props.refresh();
-        let menuOptions= [this.state.poi1,this.state.poi2,this.state.poi3,this.state.poi4].filter(item=>item.length>0);
-        this.props.updateCompleted(menuOptions);
-        this.setState({poi1:"",poi2:"",poi3:"",poi4:""})
-        
+        let menuOptions = [
+          this.state.tripData.city,
+          this.state.poi1,
+          this.state.poi2,
+          this.state.poi3,
+          this.state.poi4
+        ].filter(item => item.length > 0);
+        this.props.setPlacesMenu(menuOptions);
+
+        //this.props.updateCompleted(menuOptions);
+        //
+        //  update coordinates and overwrite the coordinates found in
+        //  cards.tripToUpdate
+        //
+        this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
+
         //this.createForm.reset();
       })
       .catch(err => {
@@ -209,4 +251,15 @@ class U_update extends Component {
   }
 }
 
-export default U_update;
+//export default U_update;
+const mapStateToProps = state => {
+  return { cards: state.cards, places: state.places, firebase: state.firebase };
+};
+export default connect(
+  mapStateToProps,
+  {
+    refreshCards,
+    setPlacesMenu,
+    updateDone
+  }
+)(U_update);

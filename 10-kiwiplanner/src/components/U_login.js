@@ -1,3 +1,6 @@
+import { connect } from "react-redux";
+import { setIsLoggedIn } from "../actions";
+
 import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
@@ -38,21 +41,22 @@ class U_login extends Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.props.sideMenu) {
-      alert("closing sidemenu");
       this.props.sideMenu.close();
     }
     // get user info
     const email = this.state.email;
     const password = this.state.password;
     this.setState({ spinner: "spinner" });
+    console.log("LOG IN USER");
     // log the user in
-    this.props.auth
+    this.props.firebase.auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ spinner: "" });
 
         // close the signup modal & reset form
         const modal = document.querySelector("#modal-login");
+        //  ACDEBUG - islogged in - to move to redux
         this.props.setIsLoggedIn(true);
         // CAN WE SET THE VALUE BY SUPPLYING VALUE INTP THE BRACES?
         this.props.setUser(email);
@@ -115,4 +119,11 @@ class U_login extends Component {
   }
 }
 
-export default U_login;
+//export default U_login;
+const mapStateToProps = state => {
+  return { firebase: state.firebase };
+};
+export default connect(
+  mapStateToProps,
+  { setIsLoggedIn }
+)(U_login);

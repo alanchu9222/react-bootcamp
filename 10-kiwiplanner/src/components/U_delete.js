@@ -15,7 +15,7 @@ class U_delete extends Component {
     super(props);
     this.state = { modalDelete: "", message: "" };
   }
-  // The parent will trigger a delete process form this method
+  // The parent will trigger a delete process from this method
   setPlaceDelete = trip => {
     this.setState({
       tripIdToDelete: trip.id,
@@ -31,13 +31,16 @@ class U_delete extends Component {
   };
 
   deleteConfirmed = () => {
-    this.props.db
+    this.props.firebase.db
       .collection("trips")
       .doc(this.state.tripIdToDelete)
       .delete()
       .then(result => {
         // 1. Refresh the UI - cardsUpdated: TravelCards()
-        this.props.refreshCards();
+        this.props.refreshCards(
+          this.props.firebase.db,
+          ""
+        );
         this.props.setPlacesMenu([]);
         //this.props.deleteCompleted(true);
       })
@@ -79,21 +82,6 @@ class U_delete extends Component {
             >
               Ok
             </button>
-
-            {/* <a
-              href="#!"
-              onClick={this.deleteCancelled}
-              className="modal-close waves-effect waves-green btn-flat"
-            >
-              Cancel
-            </a>
-            <a
-              href="#!"
-              onClick={this.deleteConfirmed}
-              className="modal-close waves-effect waves-green btn-flat"
-            >
-              Ok
-            </a> */}
           </div>
         </div>
       </div>
@@ -103,7 +91,7 @@ class U_delete extends Component {
 
 //export default U_delete;
 const mapStateToProps = state => {
-  return { cards: state.cards };
+  return { cards: state.cards, firebase: state.firebase };
 };
 export default connect(
   mapStateToProps,

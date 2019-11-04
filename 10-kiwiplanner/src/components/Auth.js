@@ -1,3 +1,6 @@
+import { connect } from "react-redux";
+import {} from "./actions";
+
 import React, { Component } from "react";
 import M from "materialize-css";
 
@@ -20,12 +23,15 @@ class Auth extends Component {
       const password = loginForm["login-password"].value;
 
       // log the user in
-      this.props.auth.signInWithEmailAndPassword(email, password).then(cred => {
-        // close the signup modal & reset form
-        const modal = document.querySelector("#modal-login");
-        M.Modal.getInstance(modal).close();
-        loginForm.reset();
-      });
+      //      this.props.auth.signInWithEmailAndPassword(email, password).then(cred => {
+      this.props.firebase.auth
+        .signInWithEmailAndPassword(email, password)
+        .then(cred => {
+          // close the signup modal & reset form
+          const modal = document.querySelector("#modal-login");
+          M.Modal.getInstance(modal).close();
+          loginForm.reset();
+        });
     });
   }
 
@@ -58,4 +64,12 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+//export default Auth;
+
+const mapStateToProps = state => {
+  return { firebase: state.firebase };
+};
+export default connect(
+  mapStateToProps,
+  {}
+)(Auth);

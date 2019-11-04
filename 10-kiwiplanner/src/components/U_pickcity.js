@@ -35,7 +35,6 @@ export class PickCity extends Component {
 
   shortlistCities = country => {
     const countrySelected = country.slice(0, 10);
-    // alert("countrySelected >>>"+this.state.data+"<<<");
     let shortlist = this.state.data.filter(
       city => city.country === countrySelected
     );

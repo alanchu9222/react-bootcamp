@@ -1,5 +1,11 @@
 import { connect } from "react-redux";
-import { setCardsVisible, setPlaceSelected, loadDataLocal } from "../actions";
+import {
+  setCardsVisible,
+  setPlaceSelected,
+  loadDataLocal,
+  loadDataExternal,
+  setIsLoggedIn
+} from "../actions";
 
 import React, { Component } from "react";
 import Login from "./U_login";
@@ -13,8 +19,9 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.createModal = React.createRef();
+    //  ACDEBUG - islogged in - to move to redux
     this.state = {
-      isLoggedIn: false,
+      //isLoggedIn: false,
       menuOptions: [],
       sideMenu: ""
     };
@@ -53,36 +60,16 @@ class NavBar extends Component {
     //    this.createModal.current.initDatePicker(minStartDate);
   };
   componentDidUpdate(prevProps) {
-    if(prevProps.menu.places !== this.props.menu.places){
-      //alert("CHANGE MENU!!! "+this.props.menu.places);
-      this.setState({ menuOptions: this.props.menu.places });      
+    if (prevProps.menu.places !== this.props.menu.places) {
+      this.setState({ menuOptions: this.props.menu.places });
     }
-
-
-    // if (!this.props.menuOptions) {
-    //   return;
-    // } else if (!this.state.menuOptions) {
-    //   //this.setState({ menuOptions: this.props.menuOptions });
-    //   //alert("Setting Up MenuOptions");
-    // } else if (this.state.menuOptions[0] !== this.props.menuOptions[0]) {
-    //   this.setState({ menuOptions: this.props.menuOptions });
-    // } else if (
-    //   this.state.menuOptions.length !== this.props.menuOptions.length
-    // ) {
-    //   // Above may escape detection if destinations have same point of interest #1
-    //   this.setState({ menuOptions: this.props.menuOptions });
-    // }
   }
 
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
       const sideNav = document.querySelector(".sidenav");
       const sideMenu = M.Sidenav.init(sideNav, {});
-      //      alert("this sidemenu has been initialized");
       this.setState = { sideMenu: M.Modal.getInstance(sideMenu) };
-      // const sm = document.querySelector("#mobile-nav");
-      // instance = M.Sidenav.getInstance(sm);
-      // instance.close();
     });
   }
   handleSideMenuClick = event => {
@@ -93,9 +80,41 @@ class NavBar extends Component {
   };
 
   handlePlaceClick = event => {
-//    this.props.setPlace(event.currentTarget.dataset.place);
+    alert("navbar place click " + event.currentTarget.dataset.place);
+
+    //    this.props.setPlace(event.currentTarget.dataset.place);
     this.props.setPlaceSelected(event.currentTarget.dataset.place);
-    this.props.loadDataLocal(event.currentTarget.dataset.place, this.props.places.country);
+    this.props.loadDataLocal(
+      event.currentTarget.dataset.place,
+      this.props.places.country_selected
+    );
+    const searchKey =
+      event.currentTarget.dataset.place +
+      "-" +
+      this.props.places.country_selected;
+    /* Check that the city has local data - if none then load from external API */
+    // ACDEBUG - TO BE CONTINUED - need to store additional coordinates for each poi
+    // Two cases: (1) on creation (2) on update
+    // This means - on selection, only data load is required. no need to get coordinates.
+    // const trip = this.props.cards.tripData.find(
+    //   trip => trip.id === this.props.cards.trip_id_selected
+    // );
+    // const lat = trip.coordinates.latitude;
+    // const lon = trip.coordinates.longitude;
+
+    if (!this.props.places.placesInLocalStore.includes(searchKey)) {
+      console.log("---------------------------------------------------------------------------")
+
+      console.log("Loading external data -- country_selected:"+this.props.places.country_selected)
+      this.props.loadDataExternal(
+        event.currentTarget.dataset.place,
+        this.props.places.country_selected
+      );
+    }
+
+    // Here - an external data load can happen with the lat-lon data available
+    // the UI will render accordingly when the data becomes available
+    // if not - it should be easy to switch on the information
 
     this.handleSideMenuClick();
     this.props.setCardsVisible(false);
@@ -169,7 +188,8 @@ class NavBar extends Component {
   };
   currentMenuItems = () => {
     // Current menu item depends on the state of authentication
-    const mode = this.props.isLoggedIn ? "logged-in" : "logged-out";
+    //  ACDEBUG - islogged in - to move to redux
+    const mode = this.props.firebase.isLoggedIn ? "logged-in" : "logged-out";
     let menuItems = this.props.menuItems.filter(
       item => item.show_when === mode
     );
@@ -181,8 +201,10 @@ class NavBar extends Component {
   };
   // handle logout
   handleLogout = () => {
-    this.props.auth.signOut();
+    //this.props.auth.signOut();
+    this.props.firebase.auth.signOut();
     this.setState({ menuOptions: [] });
+    //  ACDEBUG - islogged in - to move to redux
     this.props.setIsLoggedIn(false);
     this.props.setUser("");
   };
@@ -205,7 +227,7 @@ class NavBar extends Component {
                 id="nav-mobile"
                 className="menuTop right hide-on-med-and-down"
               >
-                {this.props.isLoggedIn && (
+                {this.props.firebase.isLoggedIn && (
                   <li>
                     <div
                       onClick={() => {
@@ -218,11 +240,10 @@ class NavBar extends Component {
                     </div>
                   </li>
                 )}
-
-                {this.props.isLoggedIn &&
+                {this.props.firebase.isLoggedIn &&
                   this.state.menuOptions.map(this.showMenuPlace)}
                 {this.currentMenuItems().map(this.showMenuItem)}
-                {this.props.isLoggedIn && (
+                {this.props.firebase.isLoggedIn && (
                   <li>
                     <div
                       onClick={this.handleLogout}
@@ -240,33 +261,33 @@ class NavBar extends Component {
         {/* // ---------------------------------------------------------------------
         // Modals */}
         <Login
-          setIsLoggedIn={this.props.setIsLoggedIn}
+          //setIsLoggedIn={this.props.setIsLoggedIn}
           setUser={this.props.setUser}
           id="modal-login"
-          auth={this.props.auth}
+          //auth={this.props.auth}
           user={this.props.user}
         />
         <SignUp
-          setIsLoggedIn={this.props.setIsLoggedIn}
+          //setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-signup"
-          auth={this.props.auth}
+          //auth={this.props.auth}
         />
         <Create
           ref={this.createModal}
           setFlashMessage={this.props.setFlashMessage}
-          setIsLoggedIn={this.props.setIsLoggedIn}
+          //setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-create"
           minStartDate={this.props.minStartDate}
           excludeDates={this.props.excludeDates}
           tripDates={this.props.tripDates}
-          refresh={this.props.refresh}
-          db={this.props.db}
+          //refresh={this.props.refresh}
+          //db={this.props.db}
         />
         {/* // ---------------------------------------------------------------------
         // Sidenav */}
         <ul className="sidenav" id="mobile-nav">
           {this.props.imageUrl && this.showImage(this.props.imageUrl)}
-          {this.props.isLoggedIn && (
+          {this.props.firebase.isLoggedIn && (
             <li>
               <div
                 onClick={() => {
@@ -284,11 +305,10 @@ class NavBar extends Component {
               </div>
             </li>
           )}
-
-          {this.props.isLoggedIn &&
+          {this.props.firebase.isLoggedIn &&
             this.state.menuOptions.map(this.showMenuPlaceSide)}
           {this.currentMenuItems().map(this.showSideMenuItem)}
-          {this.props.isLoggedIn && (
+          {this.props.firebase.isLoggedIn && (
             <li>
               <div
                 className="z-depth-0 teal-text waves-effect waves-light nav-button side-button"
@@ -307,9 +327,20 @@ class NavBar extends Component {
 
 //export default NavBar;
 const mapStateToProps = state => {
-  return { cards: state.cards, menu: state.menu, places: state.places };
+  return {
+    cards: state.cards,
+    menu: state.menu,
+    places: state.places,
+    firebase: state.firebase
+  };
 };
 export default connect(
   mapStateToProps,
-  { setCardsVisible, setPlaceSelected, loadDataLocal }
+  {
+    setCardsVisible,
+    setPlaceSelected,
+    loadDataLocal,
+    loadDataExternal,
+    setIsLoggedIn
+  }
 )(NavBar);

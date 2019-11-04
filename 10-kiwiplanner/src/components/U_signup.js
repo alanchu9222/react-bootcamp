@@ -1,3 +1,6 @@
+import { connect } from "react-redux";
+import { setIsLoggedIn } from "../actions";
+
 import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
@@ -40,7 +43,7 @@ class U_signup extends Component {
     this.setState({ spinner: "spinner" });
 
     // Signup user
-    this.props.auth
+    this.props.firebase.auth
       .createUserWithEmailAndPassword(email, password)
       .then(cred => {
         this.setState({ spinner: "" });
@@ -48,6 +51,7 @@ class U_signup extends Component {
         // close the signup modal & reset form
         this.setState({ email: "", password: "" });
         const modal = document.querySelector("#modal-signup");
+        //  ACDEBUG - islogged in - to move to redux
         this.props.setIsLoggedIn(false);
         M.Modal.getInstance(modal).close();
         this.signupForm.current.reset();
@@ -112,4 +116,12 @@ class U_signup extends Component {
   }
 }
 
-export default U_signup;
+//export default U_signup;
+
+const mapStateToProps = state => {
+  return { firebase: state.firebase };
+};
+export default connect(
+  mapStateToProps,
+  { setIsLoggedIn }
+)(U_signup);

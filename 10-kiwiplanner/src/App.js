@@ -3,7 +3,8 @@ import {
   setCardsVisible,
   loadDataExternal,
   placesInitialise,
-  saveDataLocalStorage
+  saveDataLocalStorage,
+  initialiseFirebase
 } from "./actions";
 
 import React from "react";
@@ -13,31 +14,37 @@ import TravelCards from "./components/TravelCards";
 import Instructions from "./components/Instructions";
 
 import { DB_CONFIG } from "./config/config";
-
 import app from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+
 import Flash from "./components/Flash";
 import Update from "./components/U_update";
 import Delete from "./components/U_delete";
 import "./components/Flash.css";
-import "firebase/auth";
-import "firebase/firestore";
 import "./App.css";
-
+// ACDEBUG- add db and auth into firestore
 class App extends React.Component {
   constructor(props) {
     super(props);
     app.initializeApp(DB_CONFIG);
     this.db = app.firestore();
     this.auth = app.auth();
+    console.log("APP INIT NOW");
+    this.props.initialiseFirebase(this.db, this.auth);
+    // const App = app.initializeApp(DB_CONFIG);
+    // this.props.initialiseAuth(this.db);
+    // this.props.initialiseDb(this.auth);
     this.navBar = React.createRef();
     this.modalDelete = React.createRef();
     this.modalUpdate = React.createRef();
     this.travelCards = React.createRef();
-    this.travelPlan = React.createRef();
+    //this.travelPlan = React.createRef();
   }
   state = {
     user: "",
-    isLoggedIn: false,
+    //  ACDEBUG - islogged in - to move to redux
+    //isLoggedIn: false,
     auth: null,
     db: null,
     flashMessage: "Welcome to the Local Travel Guide - please log in to begin",
@@ -141,9 +148,10 @@ class App extends React.Component {
   //   this.refs.travelPlan.setPlace(city, this.state.countrySelected);
   // };
 
-  setIsLoggedIn = isLoggedIn => {
-    this.setState({ isLoggedIn: isLoggedIn });
-  };
+  //  ACDEBUG - islogged in - to move to redux
+  // setIsLoggedIn = isLoggedIn => {
+  //   this.setState({ isLoggedIn: isLoggedIn });
+  // };
 
   // setMenuOptions = (list, country, imageUrl) => {
   //   // A list of locations to be added to the navbar and sidebar
@@ -160,10 +168,10 @@ class App extends React.Component {
   //   this.refs.travelPlan.setPlace(list[0], country);
   // };
 
-  setRefresh = () => {
-    this.travelCards.current.updateCards();
-    this.setState({ refresh: true });
-  };
+  // setRefresh = () => {
+  //   this.travelCards.current.updateCards();
+  //   this.setState({ refresh: true });
+  // };
   setFlashMessage = message => {
     this.setState({ flashMessage: message });
   };
@@ -180,21 +188,22 @@ class App extends React.Component {
     }
   };
 
-  updateCompleted = poiList => {
-    this.setState({ menuOptions: poiList });
-  };
+  // updateCompleted = poiList => {
+  //   this.setState({ menuOptions: poiList });
+  // };
 
   // This will trigger the delete process
-  deleteTrip = tripRecord => {
-    // The ref must be called with the "current" attribute!!!
-    this.modalDelete.current.setPlaceDelete(tripRecord);
-    //this.setState({ deleteInProgress: true });
-  };
+  // deleteTrip = tripRecord => {
+  //   alert("delete trip!");
+  //   // The ref must be called with the "current" attribute!!!
+  //   this.modalDelete.current.setPlaceDelete(tripRecord);
+  //   //this.setState({ deleteInProgress: true });
+  // };
   // This will trigger the update process
-  updateTrip = tripRecord => {
-    // The ref must be called with the "current" attribute!!!
-    this.modalUpdate.current.setPlaceUpdate(tripRecord);
-  };
+  // updateTrip = tripRecord => {
+  //   // The ref must be called with the "current" attribute!!!
+  //   this.modalUpdate.current.setPlaceUpdate(tripRecord);
+  // };
 
   componentDidMount() {
     this.props.placesInitialise();
@@ -220,8 +229,8 @@ class App extends React.Component {
           setState={this.updateAuthState}
           setFlashMessage={this.setFlashMessage}
           cardsVisible={this.state.cardsVisible}
-          isLoggedIn={this.state.isLoggedIn}
-          setIsLoggedIn={this.setIsLoggedIn}
+          //isLoggedIn={this.state.isLoggedIn}
+          //setIsLoggedIn={this.setIsLoggedIn}
           menuOptions={this.state.menuOptions}
           imageUrl={this.state.imageUrl}
           auth={this.auth}
@@ -231,16 +240,13 @@ class App extends React.Component {
           tripDates={this.state.tripDates}
           setUser={this.setUser}
           // setPlace={this.setPlace}
-          refresh={this.setRefresh}
+          //refresh={this.setRefresh}
         />
-
         <Flash message={this.state.flashMessage} />
-
-        <div className={this.state.isLoggedIn ? "hide" : "show"}>
+        <div className={this.props.firebase.isLoggedIn ? "hide" : "show"}>
           <Instructions />
         </div>
-
-        <div className={this.state.isLoggedIn ? "show" : "hide"}>
+        <div className={this.props.firebase.isLoggedIn ? "show" : "hide"}>
           <Delete
             ref={this.modalDelete}
             db={this.db}
@@ -249,18 +255,18 @@ class App extends React.Component {
           <Update
             ref={this.modalUpdate}
             db={this.db}
-            refresh={this.setRefresh}
-            updateCompleted={this.updateCompleted}
+            //refresh={this.setRefresh}
+            //updateCompleted={this.updateCompleted}
           />
 
           <TravelCards
             ref={this.travelCards}
-            setCountry={this.setCountry}
+            // setCountry={this.setCountry}
             setTripDates={this.setTripDates}
             user={this.state.user}
-            isLoggedIn={this.state.isLoggedIn}
+            //isLoggedIn={this.state.isLoggedIn}
             db={this.db}
-            performUpdate={this.updateTrip}
+            //performUpdate={this.updateTrip}
           />
           <TravelPlan
             className="travel-plan"
@@ -278,9 +284,15 @@ class App extends React.Component {
 //export default App;
 
 const mapStateToProps = state => {
-  return { cards: state.cards, places: state.places };
+  return { cards: state.cards, places: state.places, firebase: state.firebase };
 };
 export default connect(
   mapStateToProps,
-  { setCardsVisible, loadDataExternal, placesInitialise, saveDataLocalStorage }
+  {
+    setCardsVisible,
+    loadDataExternal,
+    placesInitialise,
+    saveDataLocalStorage,
+    initialiseFirebase
+  }
 )(App);

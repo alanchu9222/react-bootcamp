@@ -5,14 +5,7 @@ import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { food, culture, monuments, hotels, nature } from "../data/images";
-
-import tomtomApi from "../apis/tomtom";
-import { TOMTOM_KEY } from "../apis/apikeys";
-
-import axios from "axios";
 import "./TravelPlan.css";
-
-import M from "materialize-css";
 
 class TravelPlan extends Component {
   constructor(props) {
@@ -30,7 +23,6 @@ class TravelPlan extends Component {
     searchInProgress: false,
     list: []
   };
-
 
   showListItem = menuItem => {
     if (menuItem.url && menuItem.phone) {
@@ -108,7 +100,7 @@ class TravelPlan extends Component {
         {!this.props.cards.cardsVisible && (
           <div className="grid-container">
             <h2 className="grid-header disable-select">
-              {this.state.city} {this.statecountry}
+              {this.state.city} {this.state.country}
             </h2>
             {this.props.places.currentData &&
               this.props.places.currentData.map(this.showTravelPanels)}

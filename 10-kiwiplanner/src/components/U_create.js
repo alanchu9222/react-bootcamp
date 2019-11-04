@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
-import { refreshCards } from "../actions";
+import { refreshCards, setTripId } from "../actions";
 
 import unsplash from "../apis/unsplash";
-import geolocationApi from "../apis/geolocation";
-import { LOCATIONIQ_KEY } from "../apis/apikeys";
+// import geolocationApi from "../apis/geolocation";
+// import { LOCATIONIQ_KEY } from "../apis/apikeys";
 
 import React, { Component } from "react";
 import PickCountry from "./U_pickcountry";
@@ -21,7 +21,6 @@ const initialState = {
   dataReady: false,
   imageFound: false,
   countrySearch: false,
-
   city: "",
   country: "",
   poi1: "",
@@ -32,7 +31,7 @@ const initialState = {
   dateEnd: "",
   imgUrl: defaultImage,
   places: [],
-  coordinates: []
+  coordinates: {}
 };
 
 class U_create extends Component {
@@ -125,7 +124,6 @@ class U_create extends Component {
     this.setState({ [event.target.name]: this.capitalize(event.target.value) });
   };
   showDates = () => {
-    alert("now showing dates");
     console.log(this.props.tripDates);
   };
   formatString = text => {
@@ -135,37 +133,46 @@ class U_create extends Component {
   };
 
   getImageUrl = async (city, docRef) => {
-    const searchString = "https://api.unsplash.com/search/photos?per_page=1&order_by='popular'";
-    const response = await unsplash.get(searchString, {params: { query: city }});
+    const searchString =
+      "https://api.unsplash.com/search/photos?per_page=1&order_by='popular'";
+    const response = await unsplash.get(searchString, {
+      params: { query: city }
+    });
     try {
       docRef.update({ imageUrl: response.data.results[0].urls.small });
     } catch (error) {
       // Nothing found for city, try country instead
-      const response2 = await unsplash.get(searchString, {params: { query: city }});
+      const response2 = await unsplash.get(searchString, {
+        params: { query: city }
+      });
       try {
         docRef.update({ imgUrl: response2.data.results[0].urls.small });
       } catch (error) {
-        // Nothing found again: use default image 
+        // Nothing found again: use default image
         docRef.update({ imgUrl: defaultImage });
-      }        
+      }
     }
   };
 
-  getCoordinates = async (city, country, docRef) => {
-
-    try {
-      const resp = await geolocationApi.get(
-        `${LOCATIONIQ_KEY}&q=${city}%20${country}&format=json`
-      );
-
-      docRef.update({
-        lat: resp.data[0].lat,
-        lon: resp.data[0].lon
-      });
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+  // getCoordinates = async (location, country, docRef) => {
+  //   if (location.trim().length === 0) return;
+  //   try {
+  //     const resp = await geolocationApi.get(
+  //       `${LOCATIONIQ_KEY}&q=${location}%20${country}&format=json`
+  //     );
+  //     const newkey = `${location}-${country}`;
+  //     let newcoordinates = this.state.coordinates;
+  //     newcoordinates[newkey] = {
+  //       latitude: resp.data[0].lat,
+  //       longitude: resp.data[0].lon
+  //     };
+  //     docRef.update({
+  //       coordinates: newcoordinates
+  //     });
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -178,7 +185,7 @@ class U_create extends Component {
     //   return;
     // }
     // Update database with the latest weather information
-    this.props.db
+    this.props.firebase.db
       .collection("trips")
       .add({
         city: this.state.city,
@@ -194,9 +201,25 @@ class U_create extends Component {
       .then(result => {
         console.log("Create record successful");
 
-        var docRef = this.props.db.collection("trips").doc(result.id);
+        const docRef = this.props.firebase.db
+          .collection("trips")
+          .doc(result.id);
+        const placesList = [
+          this.state.city,
+          this.state.poi1,
+          this.state.poi2,
+          this.state.poi3,
+          this.state.poi4
+        ];
+        // Select the new card
+        this.props.setTripId(result.id);
+        // ACDEBUG - to use redux to update-coordinates - must provide doc-id!!!
+        // this.getCoordinates(this.state.city, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi1, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi2, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi3, this.state.country, docRef);
+        // this.getCoordinates(this.state.poi4, this.state.country, docRef);
 
-        this.getCoordinates(this.state.city, this.state.country, docRef);
         this.getImageUrl(this.state.city, docRef);
 
         console.log(
@@ -210,22 +233,14 @@ class U_create extends Component {
         // close the create modal & reset form
         const modal = document.querySelector("#modal-create");
         this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
-
         M.Modal.getInstance(modal).close();
-
-        // 1. Refresh the UI - cardsUpdated: TravelCards()
-        this.props.refreshCards();
-        // 2. Get Coordinates for this location - Async operation - store on return
-        //       this.getCoordinates(this.state.city, this.state.country, docRef );
-        // 3. Get Image Url for this location - Async operation - store on return
-        //this.getImageUrl(this.state.city, docRef);
-
-        //this.props.refresh();
-        //        this.createForm.reset();
+        this.props.refreshCards(
+          this.props.firebase.db,
+          this.props.cards.trip_id_selected
+        );
       })
       .catch(err => {
-        console.log(err.message);
-        alert("Error saving document " + err.message);
+        console.log("Error saving document " + err.message);
       });
   };
 
@@ -321,9 +336,9 @@ class U_create extends Component {
 
 //export default U_create;
 const mapStateToProps = state => {
-  return { cards: state.cards };
+  return { cards: state.cards, firebase: state.firebase };
 };
 export default connect(
   mapStateToProps,
-  { refreshCards }
+  { refreshCards, setTripId }
 )(U_create);
