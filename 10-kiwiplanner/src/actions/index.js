@@ -13,7 +13,10 @@ import {
   REFRESH_DONE,
   DELETE_TRIP,
   LOAD_DATA_EXTERNAL,
-  LOAD_DATA_LOCALSTORE
+  LOAD_DATA_LOCALSTORE,
+  SAVE_LOCALSTORAGE_DONE,
+  INITIALISE_PLACES,
+  RESET_PLACE_DATA
 } from "./types";
 
 // searchImage = async term => {
@@ -30,37 +33,114 @@ import {
 //   { "CAFE ": "cafe", city: this.state.city },
 //   { "RECREATION ": "recreation", city: this.state.city }
 
-export const loadDataExternal = (
-  city,
-  country,
-  query,
-  lat,
-  lon
-) => async dispatch => {
-  alert("LOAD LOCATION DATA!");
-
+const searchCriteria = [
+  { title: "LOCAL ATTRACTIONS", searchKey: "attractions" },
+  { title: "ACCOMODATIONS", searchKey: "hotel_motel" },
+  { title: "FOOD", searchKey: "restaurants" },
+  { title: "CAFE", searchKey: "cafe" },
+  { title: "RECREATION", searchKey: "recreation" }
+];
+export const loadDataExternal = (city, country, lat, lon) => async dispatch => {
   //   If the required data is found in local store, skip the API fetch
   // const testcity = "melbourne";
   // const testcountry = "australia";
 
-  alert("Searching tom tom record!");
-  const testquery = "cafe";
-  const testlat = -37.81;
-  const testlon = 144.96;
-  console.log(
-    `https://api.tomtom.com/search/2/search/${testquery}.json?key=${TOMTOM_KEY}&lon=${testlon}&lat=${testlat}`
-  );
+  //  alert("Searching tom tom record!");
+  // const testlat = -37.81;
+  // const testlon = 144.96;
+  // console.log(
+  //   `https://api.tomtom.com/search/2/search/${testquery}.json?key=${TOMTOM_KEY}&lon=${testlon}&lat=${testlat}`
+  // );
+  // console.log(
+  //   `https://api.tomtom.com/search/2/search/${testquery}.json?key=${TOMTOM_KEY}&lon=${lon}&lat=${lat}`
+  // );
+  dispatch({ type: RESET_PLACE_DATA });
+  const responses = [];
+  searchCriteria.forEach(async crit => {
+    const response = await tomtom.get(
+      `/search/2/search/${crit.searchKey}.json?key=${TOMTOM_KEY}&lat=${lat}&lon=${lon}`
+    );
+    //    alert("found tom tom record for "+crit.searchKey);
+    //    responses.push(response.data.results);
+    //    console.log("Here are the responses "+[...responses]);
 
-  const response = await tomtom.get(
-    `/search/2/search/${testquery}.json?key=${TOMTOM_KEY}&lat=${testlat}&lon=${testlon}`
-  );
+    console.log("Filtering data --------------------------");
+
+    let content = [];
+    // Filter the contents - to extract only name, phone number and url
+    response.data.results.forEach(item => {
+      let url = "";
+      let phone = "";
+
+      console.log("POI Object");
+      console.log(item.poi);
+      // console.log(Object.keys(item.poi));
+      // console.log("Item Object");
+      // console.log(item);
+      // console.log(Object.keys(item.poi));
+
+      //if (item.poi.url) {
+      try {
+        url =
+          item.poi.url.substring(0, 4) === "http"
+            ? item.poi.url
+            : "http://" + item.poi.url;
+      } catch {
+        url = "";
+      }
+      try {
+        phone = item.poi.phone;
+      } catch (err) {
+        phone = "";
+      }
+      try {
+        const myitem = {
+          name: item.poi.name,
+          phone: phone,
+          url: url
+        };
+        content.push(myitem);
+      } catch (err) {
+        console.log(err.message);
+      }
+    });
+    const document = {
+      title: crit.title + "-" + city,
+      content: content
+    };
+    const payload = {
+      document: document,
+      localStorageKey: city + "-" + country
+    };
+    dispatch({ type: LOAD_DATA_EXTERNAL, payload: payload });
+  });
+
+  // const response = await tomtom.get(
+  //   `/search/2/search/${testquery}.json?key=${TOMTOM_KEY}&lat=${lat}&lon=${lon}`
+  // );
   //    const response = await axios.get("https://api.tomtom.com/search/2/search/cafe.json?key=nWLvkbwKuylT208jAh7FEOR9JFAxzg0I&lon=144.96&lat=-37.81")
-  console.log(response.data.results);
-  alert("found tom tom record!");
-  dispatch({ type: LOAD_DATA_EXTERNAL, payload: response.data.results });
+  //  console.log(response.data.results);
+  //  alert("found tom tom record!");
+  //  dispatch({ type: LOAD_DATA_EXTERNAL });
 };
 
 // https://api.tomtom.com/search/2/search/cafe.json?key=nWLvkbwKuylT208jAh7FEOR9JFAxzg0I&lon=144.96&lat=-37.81
+
+export const placesInitialise = () => {
+  let keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    keys.push(localStorage.key(i));
+  }
+  const payload = {
+    keys
+  };
+  return { type: INITIALISE_PLACES, payload: payload };
+};
+
+export const saveDataLocalStorage = (key, placeData) => {
+  localStorage.setItem(key, JSON.stringify(placeData));
+  return { type: SAVE_LOCALSTORAGE_DONE };
+};
 
 export const loadDataLocal = (city, country) => {
   let hasLocalData = false;
@@ -75,9 +155,12 @@ export const loadDataLocal = (city, country) => {
     localData = [];
     hasLocalData = false;
   }
-
+  let keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    keys.push(localStorage.key(i));
+  }
   const payload = {
-    searchKey,
+    keys,
     hasLocalData,
     localData
   };

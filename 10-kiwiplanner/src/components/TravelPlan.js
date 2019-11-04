@@ -110,7 +110,7 @@ class TravelPlan extends Component {
     // Append the city name to the Category Title
     const title =
       Object.keys(searchList[0])[0] + " - " + Object.values(searchList[0])[1];
-    console.log(title);
+    console.log("Searching for a place with title:"+title);
     searchList.shift();
     const placeInfo = [];
     axios

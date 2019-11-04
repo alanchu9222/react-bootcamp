@@ -8,6 +8,7 @@ import {
   setPlaceImageUrl,
   refreshCardsDone,
   loadDataLocal,
+  loadDataExternal,
   deleteTrip
 } from "../actions";
 
@@ -30,12 +31,17 @@ class TravelCards extends Component {
     // Cards not updated will trigger a re-render of the cards
     this.setState({ cardsUpdated: false });
   };
+  // User selects a card
   handleCardClick = city => {
     const places = [];
     places.push(city);
     const destRecord = this.state.travelPlan.find(record => {
       return record.city === city.trim();
     });
+
+    console.log("Record acquired for "+city)
+    console.log(destRecord)
+
     if (destRecord) {
       // If the field exist then push it into the MenuOptions
       destRecord.place1 && places.push(destRecord.place1);
@@ -51,11 +57,11 @@ class TravelCards extends Component {
     this.setState({ city: city, country: destRecord.country });
     this.props.setPlaceSelected(city);
     this.props.loadDataLocal(city, destRecord.country);
-
+    console.log("Places in data storage:"+this.props.places.placesInLocalStore)
     const searchKey = city + "-" + destRecord.country;
     /* Check that the city has local data - if none then load from external API */
     if (!this.props.places.placesInLocalStore.includes(searchKey)) {
-      //     this.props.loadDataExternal(city, destRecord.country);
+      this.props.loadDataExternal(city, destRecord.country, destRecord.lat, destRecord.lon);
     }
 
     //    this.props.setMenuOptions(places, destRecord.country, destRecord.imageUrl);
@@ -96,6 +102,7 @@ class TravelCards extends Component {
 
   // This gets called when the cards have been updated (delete or update events)
   componentDidUpdate(prevProps) {
+
     if (prevProps.cards.isRefreshed !== this.props.cards.isRefreshed) {
       this.setState({ cardsUpdated: false });
     }
@@ -126,7 +133,9 @@ class TravelCards extends Component {
                     place2: trip.place2,
                     place3: trip.place3,
                     place4: trip.place4,
-                    imageUrl: trip.imageUrl
+                    imageUrl: trip.imageUrl,
+                    lat: trip.lat, 
+                    lon: trip.lon
                   };
                   tripDates.push({
                     start: this.dateObject(trip.dateStart.seconds),
@@ -215,6 +224,7 @@ export default connect(
     setPlaceImageUrl,
     refreshCardsDone,
     loadDataLocal,
+    loadDataExternal,
     deleteTrip
   }
 )(TravelCards);

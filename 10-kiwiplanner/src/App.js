@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setCardsVisible, loadDataExternal } from "./actions";
+import { setCardsVisible, loadDataExternal, placesInitialise, saveDataLocalStorage } from "./actions";
 
 import React from "react";
 import NavBar from "./components/NavBar";
@@ -190,10 +190,19 @@ class App extends React.Component {
     // The ref must be called with the "current" attribute!!!
     this.modalUpdate.current.setPlaceUpdate(tripRecord);
   };
+  
+  componentDidMount(){
+    this.props.placesInitialise();
+  }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.state.refresh === true) {
       this.setState({ refresh: false });
+    }
+//    SAVE_LOCALSTORAGE - if a key is provided, then save the local storage
+    if (this.props.places.updateLocalStorage) {
+      alert("saving to local storage "+ this.props.places.updateLocalStorage);
+      this.props.saveDataLocalStorage(this.props.places.updateLocalStorage, this.props.places.currentData);
     }
   }
   render() {
@@ -269,9 +278,9 @@ class App extends React.Component {
 //export default App;
 
 const mapStateToProps = state => {
-  return { cards: state.cards };
+  return { cards: state.cards, places: state.places };
 };
 export default connect(
   mapStateToProps,
-  { setCardsVisible, loadDataExternal }
+  { setCardsVisible, loadDataExternal, placesInitialise, saveDataLocalStorage }
 )(App);
