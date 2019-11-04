@@ -204,11 +204,9 @@ export const loadDataLocal = (city, country) => {
 
   let foundLocalRecord = JSON.parse(localStorage.getItem(searchKey));
   if (foundLocalRecord) {
-    console.log("Found local data for " + city + "-" + country);
     localData = foundLocalRecord;
     hasLocalData = true;
   } else {
-    console.log("Local data NOT found for " + city + "-" + country);
     localData = [];
     hasLocalData = false;
   }
@@ -259,17 +257,14 @@ export const setPlacesMenu = places => {
   return { type: SET_PLACES_MENU, payload: places };
 };
 
-export const setPlaceSelected = place => {
-  return { type: SET_PLACE_SELECTED, payload: place };
+export const setPlaceSelected = (place, country) => {
+  const payload = {place:place, country:country};
+  return { type: SET_PLACE_SELECTED, payload: payload };
 };
 
 export const setTripId = id => {
   return { type: SET_TRIP_ID, payload: id };
 };
-
-// export const setCity = city => {
-//   return { type: SET_CITY, payload: city };
-// };
 
 export const setCountry = country => {
   return { type: SET_COUNTRY, payload: country };

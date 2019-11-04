@@ -42,10 +42,9 @@ class U_delete extends Component {
           ""
         );
         this.props.setPlacesMenu([]);
-        //this.props.deleteCompleted(true);
       })
       .catch(err => {
-        //this.props.deleteCompleted(false);
+        console.log(err.message);
       });
     this.state.modalDelete.close();
   };

@@ -29,12 +29,8 @@ class App extends React.Component {
     app.initializeApp(DB_CONFIG);
     this.db = app.firestore();
     this.auth = app.auth();
-    console.log("APP INIT NOW");
     this.props.initialiseFirebase(this.db, this.auth);
     this.navBar = React.createRef();
-    this.modalDelete = React.createRef();
-    this.modalUpdate = React.createRef();
-    this.travelCards = React.createRef();
   }
   state = {
     user: "",
@@ -43,7 +39,6 @@ class App extends React.Component {
     flashMessage: "Welcome to the Local Travel Guide - please log in to begin",
     menuOptions: [],
     tripDates: [],
-    citySelected: "",
     countrySelected: "",
     excludeDates: [],
     minStartDate: "",
@@ -134,18 +129,6 @@ class App extends React.Component {
     this.setState({ flashMessage: message });
   };
 
-  deleteCompleted = result => {
-    // This will trigger the trips displayed to be updated
-    //this.setState({ deleteInProgress: false });
-    if (result) {
-      console.log("Delete succesful");
-      this.travelCards.current.updateCards();
-      this.setState({ menuOptions: [] });
-    } else {
-      console.log("Delete failed");
-    }
-  };
-
   componentDidMount() {
     this.props.placesInitialise();
   }
@@ -172,8 +155,8 @@ class App extends React.Component {
           cardsVisible={this.state.cardsVisible}
           menuOptions={this.state.menuOptions}
           imageUrl={this.state.imageUrl}
-          auth={this.auth}
-          db={this.db}
+          //auth={this.auth}
+          //db={this.db}
           excludeDates={this.state.excludeDates}
           minStartDate={this.state.minStartDate}
           tripDates={this.state.tripDates}
@@ -186,31 +169,17 @@ class App extends React.Component {
           <Instructions />
         </div>
         <div className={this.props.firebase.isLoggedIn ? "show" : "hide"}>
-          <Delete
-            ref={this.modalDelete}
-            db={this.db}
-            deleteCompleted={this.deleteCompleted}
-          />
-          <Update
-            ref={this.modalUpdate}
-            db={this.db}
-            //refresh={this.setRefresh}
-            //updateCompleted={this.updateCompleted}
-          />
+          <Delete/>
+          <Update/>
 
           <TravelCards
-            ref={this.travelCards}
-            // setCountry={this.setCountry}
             setTripDates={this.setTripDates}
             user={this.state.user}
-            db={this.db}
           />
           <TravelPlan
             className="travel-plan"
             ref="travelPlan"
             user={this.state.user}
-            auth={this.auth}
-            db={this.db}
           />
         </div>
       </div>

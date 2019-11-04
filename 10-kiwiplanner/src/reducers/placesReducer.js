@@ -19,12 +19,10 @@ const INITIAL_STATE_PLACES = {
 
 export default (state = INITIAL_STATE_PLACES, action) => {
   switch (action.type) {
-    // case SET_CITY:
-    //   return { ...state, city_selected: action.payload };
     case SET_COUNTRY:
       return { ...state, country_selected: action.payload };
     case SET_PLACE_SELECTED:
-      return { ...state, place_selected: action.payload };
+      return { ...state, place_selected: action.payload.place, country_selected: action.payload.country };
     case SET_IMAGE_URL:
       return { ...state, image_url: action.payload };
     case INITIALISE_PLACES:

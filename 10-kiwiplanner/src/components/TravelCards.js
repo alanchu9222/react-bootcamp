@@ -57,7 +57,8 @@ class TravelCards extends Component {
     this.props.setPlaceImageUrl(destRecord.imageUrl);
     this.props.setCardsVisible(false);
     this.setState({ city: city, country: destRecord.country });
-    this.props.setPlaceSelected(city);
+    console.log("Travel card clicked")
+    this.props.setPlaceSelected(city, destRecord.country);
     this.props.loadDataLocal(city, destRecord.country);
     const searchKey = city + "-" + destRecord.country;
     /* Check that the city has local data - if none then load from external API */
@@ -123,7 +124,6 @@ class TravelCards extends Component {
         <div className="CardDeck">
           <div className="Trip-cards">
             {this.props.cards.cardsVisible &&
-              // this.state.travelPlan.map(p => (
               this.props.cards.tripData.map(p => (
                 <Tripcard
                   key={p.country + p.city}

@@ -100,7 +100,7 @@ class TravelPlan extends Component {
         {!this.props.cards.cardsVisible && (
           <div className="grid-container">
             <h2 className="grid-header disable-select">
-              {this.state.city} {this.state.country}
+              {this.props.places.place_selected} {this.props.places.country_selected}
             </h2>
             {this.props.places.currentData &&
               this.props.places.currentData.map(this.showTravelPanels)}

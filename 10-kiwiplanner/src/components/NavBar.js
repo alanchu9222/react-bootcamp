@@ -79,8 +79,8 @@ class NavBar extends Component {
 
   handlePlaceClick = event => {
 
-    //    this.props.setPlace(event.currentTarget.dataset.place);
-    this.props.setPlaceSelected(event.currentTarget.dataset.place);
+    const trip = this.props.cards.tripData.find(trip=> trip.id === this.props.cards.trip_id_selected);
+    this.props.setPlaceSelected(event.currentTarget.dataset.place, trip.country);
     this.props.loadDataLocal(
       event.currentTarget.dataset.place,
       this.props.places.country_selected
@@ -168,15 +168,20 @@ class NavBar extends Component {
     );
   };
   currentMenuItems = () => {
+    
     // Current menu item depends on the state of authentication
     const mode = this.props.firebase.isLoggedIn ? "logged-in" : "logged-out";
     let menuItems = this.props.menuItems.filter(
       item => item.show_when === mode
     );
-    if (!this.props.cardsVisible) {
+
+    if (!this.props.cards.cardsVisible) {      
       menuItems = menuItems.filter(item => item.remove_when_nocards === false);
     }
     //    cardsVisible
+    //ACDEBUG
+    console.log("---------------------------------------------")
+    console.log("Menu items length:"+menuItems.length)
     return menuItems;
   };
   // handle logout
@@ -218,7 +223,7 @@ class NavBar extends Component {
                     </div>
                   </li>
                 )}
-                {this.props.firebase.isLoggedIn &&
+                {this.props.firebase.isLoggedIn && !this.props.cards.cardsVisible &&
                   this.state.menuOptions.map(this.showMenuPlace)}
                 {this.currentMenuItems().map(this.showMenuItem)}
                 {this.props.firebase.isLoggedIn && (
@@ -277,7 +282,7 @@ class NavBar extends Component {
               </div>
             </li>
           )}
-          {this.props.firebase.isLoggedIn &&
+          {this.props.firebase.isLoggedIn && !this.props.cards.cardsVisible &&
             this.state.menuOptions.map(this.showMenuPlaceSide)}
           {this.currentMenuItems().map(this.showSideMenuItem)}
           {this.props.firebase.isLoggedIn && (

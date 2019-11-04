@@ -124,15 +124,7 @@ class U_update extends Component {
           this.state.poi4
         ].filter(item => item.length > 0);
         this.props.setPlacesMenu(menuOptions);
-
-        //this.props.updateCompleted(menuOptions);
-        //
-        //  update coordinates and overwrite the coordinates found in
-        //  cards.tripToUpdate
-        //
         this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
-
-        //this.createForm.reset();
       })
       .catch(err => {
         alert(err.message);
