@@ -179,9 +179,6 @@ class NavBar extends Component {
       menuItems = menuItems.filter(item => item.remove_when_nocards === false);
     }
     //    cardsVisible
-    //ACDEBUG
-    console.log("---------------------------------------------")
-    console.log("Menu items length:"+menuItems.length)
     return menuItems;
   };
   // handle logout
