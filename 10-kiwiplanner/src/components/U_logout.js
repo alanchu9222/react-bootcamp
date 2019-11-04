@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { setIsLoggedIn } from "../actions";
-
+import history from "../history";
 import React, { Component } from "react";
 import M from "materialize-css";
 import "./U_logout.css";
@@ -17,6 +17,7 @@ class U_logout extends Component {
     this.props.firebase.auth.signOut();
     const modal = document.querySelector("#modal-logout");
     this.props.setIsLoggedIn(false);
+    history.push("/");
     M.Modal.getInstance(modal).close();
   };
 

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
-import { setIsLoggedIn } from "../actions";
-
+import { setIsLoggedIn, setCurrentUser } from "../actions";
+import history from "../history";
 import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
@@ -57,9 +57,11 @@ class U_login extends Component {
         // close the signup modal & reset form
         const modal = document.querySelector("#modal-login");
         this.props.setIsLoggedIn(true);
-        this.props.setUser(email);
 
+        // ACDEBUG
+        this.props.setCurrentUser(email);
         M.Modal.getInstance(modal).close();
+        history.push("/");
         this.loginForm.current.reset();
       })
       .catch(err => {
@@ -123,5 +125,5 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { setIsLoggedIn }
+  { setIsLoggedIn, setCurrentUser }
 )(U_login);

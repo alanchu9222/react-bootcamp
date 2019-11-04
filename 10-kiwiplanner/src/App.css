@@ -26,3 +26,6 @@ input {
 .instructions:hover {
   opacity: 1;
 }
+.app-main {
+  padding-bottom: 10%;
+}

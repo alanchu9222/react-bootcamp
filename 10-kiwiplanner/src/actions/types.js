@@ -1,7 +1,7 @@
 export const SET_CARDS_VISIBLE = "SET_CARDS_VISIBLE";
 export const SET_PLACES_MENU = "SET_PLACES_MENU";
 export const SET_TRIP_ID = "SET_TRIP_ID";
-// export const SET_CITY = "SET_CITY";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const SET_COUNTRY = "SET_COUNTRY";
 export const SET_IMAGE_URL = "SET_IMAGE_URL";
 export const SET_PLACE_SELECTED = "SET_PLACE_SELECTED";

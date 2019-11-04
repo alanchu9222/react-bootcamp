@@ -29,9 +29,9 @@ import {
   INITIALISE_PLACES,
   RESET_PLACE_DATA,
   ADD_COORDINATES,
+  SET_CURRENT_USER,
   INITIALISE_FIREBASE
 } from "./types";
-
 
 export const refreshCards = (db, trip_id_selected) => async dispatch => {
   // FOr asyn function, its ok to dispatch multiiple messages
@@ -87,7 +87,6 @@ export const refreshCards = (db, trip_id_selected) => async dispatch => {
     console.log(err.message);
   }
 };
-
 
 const searchCriteria = [
   { title: "LOCAL ATTRACTIONS", searchKey: "attractions" },
@@ -258,7 +257,7 @@ export const setPlacesMenu = places => {
 };
 
 export const setPlaceSelected = (place, country) => {
-  const payload = {place:place, country:country};
+  const payload = { place: place, country: country };
   return { type: SET_PLACE_SELECTED, payload: payload };
 };
 
@@ -274,6 +273,10 @@ export const setPlaceImageUrl = imageUrl => {
   return { type: SET_IMAGE_URL, payload: imageUrl };
 };
 
+export const setCurrentUser = email => {
+  return { type: SET_CURRENT_USER, payload: email };
+};
+
 export const initialiseFirebase = (db, auth) => {
   //  app.initializeApp(DB_CONFIG);
   const payload = {
@@ -282,4 +285,3 @@ export const initialiseFirebase = (db, auth) => {
   };
   return { type: INITIALISE_FIREBASE, payload: payload };
 };
-

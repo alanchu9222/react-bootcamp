@@ -6,7 +6,9 @@ import {
   saveDataLocalStorage,
   initialiseFirebase
 } from "./actions";
-import {BrowserRouter} from 'react-router-dom'
+import history from "./history";
+import { Redirect, Router, Route, Switch } from "react-router-dom";
+
 import React from "react";
 import NavBar from "./components/NavBar";
 import TravelPlan from "./components/TravelPlan";
@@ -33,25 +35,11 @@ class App extends React.Component {
     this.navBar = React.createRef();
   }
   state = {
-    user: "",
-    auth: null,
-    db: null,
     flashMessage: "Welcome to the Local Travel Guide - please log in to begin",
     tripDates: [],
-    countrySelected: "",
-    excludeDates: [],
-    minStartDate: "",
-    cardsVisible: true
+    minStartDate: ""
   };
 
-  setTripDates = dates => {
-    // Each date element is a pair of startdate and enddate objects
-    this.setState({ tripDates: dates });
-  };
-
-  setUser = user => {
-    this.setState({ user: user });
-  };
   setFlashMessage = message => {
     this.setState({ flashMessage: message });
   };
@@ -74,45 +62,40 @@ class App extends React.Component {
   }
   render() {
     return (
-      <BrowserRouter>
-      <div className="App-main">
-        <NavBar
-          ref={this.navBar}
-          setState={this.updateAuthState}
-          setFlashMessage={this.setFlashMessage}
-          cardsVisible={this.state.cardsVisible}
-          imageUrl={this.state.imageUrl}
-          excludeDates={this.state.excludeDates}
-          minStartDate={this.state.minStartDate}
-          tripDates={this.state.tripDates}
-          setUser={this.setUser}
-        />
-        <Flash message={this.state.flashMessage} />
-        <div className={this.props.firebase.isLoggedIn ? "hide" : "show"}>
-          <Instructions />
-        </div>
-        <div className={this.props.firebase.isLoggedIn ? "show" : "hide"}>
-          <Delete/>
-          <Update/>
-
-          <TravelCards
-            setTripDates={this.setTripDates}
-            user={this.state.user}
+      <Router history={history}>
+        <div className="app-main">
+          <NavBar
+            ref={this.navBar}
+            setFlashMessage={this.setFlashMessage}
+            minStartDate={this.state.minStartDate}
+            tripDates={this.state.tripDates}
+            //setUser={this.setUser}
           />
-          <TravelPlan
-            className="travel-plan"
-            ref="travelPlan"
-            user={this.state.user}
-          />
-        </div>
-      </div>
+          <Flash message={this.state.flashMessage} />
+          <div className={this.props.firebase.isLoggedIn ? "hide" : "show"}>
+            <Instructions />
+          </div>
 
-      </BrowserRouter>
+          <div className={this.props.firebase.isLoggedIn ? "show" : "hide"}>
+            <Delete />
+            <Update />
+            {/*<TravelCards/> */}
+            {/*<TravelPlan/> */}
+            <Switch>
+              <Redirect exact from="/" to="/trips" />
+              <Route exact path="/trips" component={TravelCards} />
+              <Route
+                exact
+                path="/travel-guide/show/:id"
+                component={TravelPlan}
+              />
+            </Switch>
+          </div>
+        </div>
+      </Router>
     );
   }
 }
-
-//export default App;
 
 const mapStateToProps = state => {
   return { cards: state.cards, places: state.places, firebase: state.firebase };

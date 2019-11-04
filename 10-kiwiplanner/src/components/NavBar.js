@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import {
+  setCurrentUser,
   setPlacesMenu,
   setCardsVisible,
   setPlaceSelected,
@@ -7,7 +8,7 @@ import {
   loadDataExternal,
   setIsLoggedIn
 } from "../actions";
-
+import history from "../history";
 import React, { Component } from "react";
 import Login from "./U_login";
 import Create from "./U_create";
@@ -73,30 +74,35 @@ class NavBar extends Component {
   };
 
   handlePlaceClick = event => {
-    const trip = this.props.cards.tripData.find(
-      trip => trip.id === this.props.cards.trip_id_selected
-    );
-    this.props.setPlaceSelected(
-      event.currentTarget.dataset.place,
-      trip.country
-    );
-    this.props.loadDataLocal(
-      event.currentTarget.dataset.place,
-      this.props.places.country_selected
-    );
+    // const trip = this.props.cards.tripData.find(
+    //   trip => trip.id === this.props.cards.trip_id_selected
+    // );
     const searchKey =
       event.currentTarget.dataset.place +
       "-" +
       this.props.places.country_selected;
 
-    if (!this.props.places.placesInLocalStore.includes(searchKey)) {
-      this.props.loadDataExternal(
-        event.currentTarget.dataset.place,
-        this.props.places.country_selected
-      );
-    }
+    // Do this on the travel cards component
 
+    // this.props.setPlaceSelected(
+    //   event.currentTarget.dataset.place,
+    //   trip.country
+    // );
+    // this.props.loadDataLocal(
+    //   event.currentTarget.dataset.place,
+    //   this.props.places.country_selected
+    // );
+
+    // if (!this.props.places.placesInLocalStore.includes(searchKey)) {
+    //   this.props.loadDataExternal(
+    //     event.currentTarget.dataset.place,
+    //     this.props.places.country_selected
+    //   );
+    // }
+
+    // --------------------
     this.handleSideMenuClick();
+    history.push("/travel-guide/show/" + searchKey);
     this.props.setCardsVisible(false);
   };
   showMenuItem = menuItem => {
@@ -185,7 +191,7 @@ class NavBar extends Component {
     this.props.setPlacesMenu([]);
     console.log("Logout clears places from the menuoptions");
     this.props.setIsLoggedIn(false);
-    this.props.setUser("");
+    this.props.setCurrentUser("");
   };
   render() {
     return (
@@ -210,6 +216,7 @@ class NavBar extends Component {
                   <li>
                     <div
                       onClick={() => {
+                        history.push("/");
                         this.props.setCardsVisible(true);
                       }}
                       className="nav-button z-depth-0 white-text waves-effect waves-light"
@@ -242,9 +249,8 @@ class NavBar extends Component {
         {/* // ---------------------------------------------------------------------
         // Modals */}
         <Login
-          setUser={this.props.setUser}
+          //setUser={this.props.setUser}
           id="modal-login"
-          user={this.props.user}
         />
         <SignUp id="modal-signup" />
         <Create
@@ -252,7 +258,7 @@ class NavBar extends Component {
           setFlashMessage={this.props.setFlashMessage}
           id="modal-create"
           minStartDate={this.props.minStartDate}
-          excludeDates={this.props.excludeDates}
+          //excludeDates={this.props.excludeDates}
           tripDates={this.props.tripDates}
         />
         {/* // ---------------------------------------------------------------------
@@ -269,6 +275,7 @@ class NavBar extends Component {
                   if (sidenavInstance) {
                     sidenavInstance.close();
                   }
+                  history.push("/");
                 }}
                 className="nav-button side-button z-depth-0 teal-text waves-effect waves-light"
                 id="nav-logout"
@@ -277,7 +284,6 @@ class NavBar extends Component {
               </div>
             </li>
           )}
-
 
           {this.props.firebase.isLoggedIn &&
             !this.props.cards.cardsVisible &&
@@ -312,6 +318,7 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
+    setCurrentUser,
     setPlacesMenu,
     setCardsVisible,
     setPlaceSelected,

@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import {
   setCardsVisible,
   setTripId,
-  // setCity,
   setCountry,
   setPlacesMenu,
   setPlaceSelected,
@@ -14,35 +13,24 @@ import {
   deleteTrip,
   refreshCards
 } from "../actions";
-
+import history from "../history";
 import React, { Component } from "react";
 import Tripcard from "./Tripcard";
 import "./TravelCards.css";
 
 class TravelCards extends Component {
-  state = {
-    city: "",
-    country: "",
-    cardsUpdated: false
-    //travelPlan: []
-  };
   stripYear = date => {
     const temp = date.split(" ");
     return temp[0] + " " + temp[1];
   };
-  updateCards = () => {
-    // Cards not updated will trigger a re-render of the cards
-    this.setState({ cardsUpdated: false });
-  };
   // User selects a card
-
   handleCardClick = (city, docId) => {
+    console.log("Travel card clicked");
     const places = [];
     places.push(city);
     const destRecord = this.props.cards.tripData.find(doc => {
       return doc.id === docId;
     });
-
     this.props.setTripId(docId);
     // this.props.setCity(city);
     this.props.setCountry(destRecord.country);
@@ -56,17 +44,14 @@ class TravelCards extends Component {
     this.props.setPlacesMenu(places);
     this.props.setPlaceImageUrl(destRecord.imageUrl);
     this.props.setCardsVisible(false);
-    this.setState({ city: city, country: destRecord.country });
-    console.log("Travel card clicked")
+    const searchKey = city + "-" + destRecord.country;
     this.props.setPlaceSelected(city, destRecord.country);
     this.props.loadDataLocal(city, destRecord.country);
-    const searchKey = city + "-" + destRecord.country;
     /* Check that the city has local data - if none then load from external API */
-
-    /* Must load coordinates before loading records */
     if (!this.props.places.placesInLocalStore.includes(searchKey)) {
       this.props.loadDataExternal(city, destRecord.country);
     }
+    history.push("/travel-guide/show/" + searchKey);
   };
   handleCardDelete = docId => {
     const destRecord = this.props.cards.tripData.find(record => {
@@ -156,12 +141,11 @@ export default connect(
   {
     setCardsVisible,
     setTripId,
-    // setCity,
     setCountry,
     setPlacesMenu,
-    setPlaceSelected,
     setPlaceImageUrl,
     refreshCardsDone,
+    setPlaceSelected,
     loadDataLocal,
     loadDataExternal,
     updateTrip,

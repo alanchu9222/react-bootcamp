@@ -1,20 +1,46 @@
 .create-grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;  
-  grid-gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 5px;
+  grid-column-gap: 10px;
 }
 
-.pick-date {  grid-column: 1/ span 2;  }
-.pick-country {  grid-column: 1;   width: 100%;
-  margin-left: 10px;}
-.pick-city {  grid-column: 2;   width: 100%;
-  margin-left: 10px;}
-.poi1-box {  grid-column: 1; margin-left: 10px;}
-.poi2-box {  grid-column: 2; margin-left: 10px;}
-.poi3-box {  grid-column: 1; margin-left: 10px;}
-.poi4-box {  grid-column: 2; margin-left: 10px;}
-.button-box {  grid-column: 1; margin-left: 10px;}
-.input-field { margin-bottom: 0!important;}
+.pick-date {
+  grid-column: 1 / span 2;
+}
+.pick-country {
+  grid-column: 1;
+  width: 100%;
+  margin-left: 10px;
+}
+.pick-city {
+  grid-column: 2;
+  width: 100%;
+  margin-left: 10px;
+}
+.poi1-box {
+  grid-column: 1;
+  margin-left: 10px;
+}
+.poi2-box {
+  grid-column: 2;
+  margin-left: 10px;
+}
+.poi3-box {
+  grid-column: 1;
+  margin-left: 10px;
+}
+.poi4-box {
+  grid-column: 2;
+  margin-left: 10px;
+}
+.button-box {
+  grid-column: 1;
+  margin-left: 10px;
+}
+.input-field {
+  margin-bottom: 0 !important;
+}
 
 .span {
   display: inline-block;

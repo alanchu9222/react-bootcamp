@@ -148,7 +148,7 @@ class U_update extends Component {
               trip={this.tripData}
               ref={this.pickDate}
               minStartDate={null}
-              excludeDates={[]}
+              //excludeDates={[]}
             />
             <div className="flex-container">
               <div className="form-header">

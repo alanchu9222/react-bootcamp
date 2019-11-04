@@ -227,7 +227,7 @@ class U_create extends Component {
               className="pick-date"
               setDates={this.setDates}
               minStartDate={this.props.minStartDate}
-              excludeDates={this.props.excludeDates}
+              //excludeDates={this.props.excludeDates}
               ref={this.pickDate}
             />
 
