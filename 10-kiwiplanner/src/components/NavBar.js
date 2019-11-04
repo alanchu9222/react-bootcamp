@@ -19,9 +19,7 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.createModal = React.createRef();
-    //  ACDEBUG - islogged in - to move to redux
     this.state = {
-      //isLoggedIn: false,
       menuOptions: [],
       sideMenu: ""
     };
@@ -80,7 +78,6 @@ class NavBar extends Component {
   };
 
   handlePlaceClick = event => {
-    alert("navbar place click " + event.currentTarget.dataset.place);
 
     //    this.props.setPlace(event.currentTarget.dataset.place);
     this.props.setPlaceSelected(event.currentTarget.dataset.place);
@@ -92,29 +89,13 @@ class NavBar extends Component {
       event.currentTarget.dataset.place +
       "-" +
       this.props.places.country_selected;
-    /* Check that the city has local data - if none then load from external API */
-    // ACDEBUG - TO BE CONTINUED - need to store additional coordinates for each poi
-    // Two cases: (1) on creation (2) on update
-    // This means - on selection, only data load is required. no need to get coordinates.
-    // const trip = this.props.cards.tripData.find(
-    //   trip => trip.id === this.props.cards.trip_id_selected
-    // );
-    // const lat = trip.coordinates.latitude;
-    // const lon = trip.coordinates.longitude;
 
     if (!this.props.places.placesInLocalStore.includes(searchKey)) {
-      console.log("---------------------------------------------------------------------------")
-
-      console.log("Loading external data -- country_selected:"+this.props.places.country_selected)
       this.props.loadDataExternal(
         event.currentTarget.dataset.place,
         this.props.places.country_selected
       );
     }
-
-    // Here - an external data load can happen with the lat-lon data available
-    // the UI will render accordingly when the data becomes available
-    // if not - it should be easy to switch on the information
 
     this.handleSideMenuClick();
     this.props.setCardsVisible(false);
@@ -188,7 +169,6 @@ class NavBar extends Component {
   };
   currentMenuItems = () => {
     // Current menu item depends on the state of authentication
-    //  ACDEBUG - islogged in - to move to redux
     const mode = this.props.firebase.isLoggedIn ? "logged-in" : "logged-out";
     let menuItems = this.props.menuItems.filter(
       item => item.show_when === mode
@@ -201,10 +181,8 @@ class NavBar extends Component {
   };
   // handle logout
   handleLogout = () => {
-    //this.props.auth.signOut();
     this.props.firebase.auth.signOut();
     this.setState({ menuOptions: [] });
-    //  ACDEBUG - islogged in - to move to redux
     this.props.setIsLoggedIn(false);
     this.props.setUser("");
   };
@@ -261,27 +239,21 @@ class NavBar extends Component {
         {/* // ---------------------------------------------------------------------
         // Modals */}
         <Login
-          //setIsLoggedIn={this.props.setIsLoggedIn}
           setUser={this.props.setUser}
           id="modal-login"
-          //auth={this.props.auth}
           user={this.props.user}
         />
         <SignUp
-          //setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-signup"
-          //auth={this.props.auth}
         />
         <Create
           ref={this.createModal}
           setFlashMessage={this.props.setFlashMessage}
-          //setIsLoggedIn={this.props.setIsLoggedIn}
           id="modal-create"
           minStartDate={this.props.minStartDate}
           excludeDates={this.props.excludeDates}
           tripDates={this.props.tripDates}
           //refresh={this.props.refresh}
-          //db={this.props.db}
         />
         {/* // ---------------------------------------------------------------------
         // Sidenav */}

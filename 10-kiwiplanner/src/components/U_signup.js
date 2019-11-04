@@ -51,7 +51,6 @@ class U_signup extends Component {
         // close the signup modal & reset form
         this.setState({ email: "", password: "" });
         const modal = document.querySelector("#modal-signup");
-        //  ACDEBUG - islogged in - to move to redux
         this.props.setIsLoggedIn(false);
         M.Modal.getInstance(modal).close();
         this.signupForm.current.reset();

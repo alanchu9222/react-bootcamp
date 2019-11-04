@@ -28,7 +28,7 @@ class TravelPlan extends Component {
     if (menuItem.url && menuItem.phone) {
       return (
         <li className="z-depth-0 white grey-text listItem">
-          <a href={menuItem.url} target="_blank">
+          <a href={menuItem.url} target="_blank"  rel="noopener noreferrer">
             {menuItem.name}
           </a>
           + <FontAwesomeIcon icon={faPhone} size="1x" color="grey" /> +

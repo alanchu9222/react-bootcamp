@@ -16,7 +16,6 @@ class U_logout extends Component {
     // log the user out
     this.props.firebase.auth.signOut();
     const modal = document.querySelector("#modal-logout");
-    //  ACDEBUG - islogged in - to move to redux
     this.props.setIsLoggedIn(false);
     M.Modal.getInstance(modal).close();
   };

@@ -108,27 +108,11 @@ class U_update extends Component {
             " " +
             this.state.tripData.country
         );
-        const placesList = [
-          this.state.tripData.city,
-          this.state.poi1,
-          this.state.poi2,
-          this.state.poi3,
-          this.state.poi4
-        ];
 
         this.props.refreshCards(
           this.props.firebase.db,
           this.props.cards.trip_id_selected
         );
-
-        // ACDEBUG - to use redux to update-coordinates - must provide doc-id!!!
-        // this.state.tripIdToUpdate
-
-        // this.getCoordinates(this.state.city, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi1, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi2, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi3, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi4, this.state.country, docRef);
 
         this.setState({ city: "", country: "" });
         this.state.modalUpdate.close();

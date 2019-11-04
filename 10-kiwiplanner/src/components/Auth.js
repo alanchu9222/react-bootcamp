@@ -23,7 +23,6 @@ class Auth extends Component {
       const password = loginForm["login-password"].value;
 
       // log the user in
-      //      this.props.auth.signInWithEmailAndPassword(email, password).then(cred => {
       this.props.firebase.auth
         .signInWithEmailAndPassword(email, password)
         .then(cred => {

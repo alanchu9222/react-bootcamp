@@ -28,56 +28,10 @@ import {
   SAVE_LOCALSTORAGE_DONE,
   INITIALISE_PLACES,
   RESET_PLACE_DATA,
-  RESET_COORDINATES,
   ADD_COORDINATES,
   INITIALISE_FIREBASE
 } from "./types";
 
-// ACDEBUG - this process sends multiple location-iq requests out
-//  The responses come back to the coordinates record (in the reducer)
-//  The responses also - gets updated to the database
-//  The U_updates module can detect change of coordinates data with componentdidupdate
-//  (but there is no need for that)
-// export const updateCoordinates = (locationList, country) => async dispatch => {
-//   // Clear the coordinates buffer - Because it is declared as an ASYNC function
-//   // Multiple dispatch calls can be made without blocking the code
-//   console.log("list of locations");
-//   console.log(locationList);
-
-//   dispatch({ type: RESET_COORDINATES });
-//   // Reload the coordinates - for each location/coountry pair on the list
-//   //dispatch({ type: REFRESH_COORDINATES, payload: payload });
-
-//   locationList.forEach(async location => {
-//     if (location.trim().length > 0) {
-//       // var delay = 1000; // 1 second delay
-//       // var now = new Date();
-//       // var desiredTime = new Date().setMilliseconds(now.getSeconds() + delay);
-
-//       // while (now < desiredTime) {
-//       //   now = new Date(); // update the current time
-//       // }
-//       // console.log("Delay ... 1 secs");
-
-//       console.log("Processing location:" + location);
-//       try {
-//         const resp = await locationiq.get(
-//           `${LOCATIONIQ_KEY}&q=${location}%20${country}&format=json`
-//         );
-//         const payload = {
-//           key: `${location}-${country}`,
-//           coordinates: {
-//             latitude: resp.data[0].lat,
-//             longitude: resp.data[0].lon
-//           }
-//         };
-//         dispatch({ type: ADD_COORDINATES, payload: payload });
-//       } catch (err) {
-//         console.log(err.message);
-//       }
-//     }
-//   });
-// };
 
 export const refreshCards = (db, trip_id_selected) => async dispatch => {
   // FOr asyn function, its ok to dispatch multiiple messages
@@ -134,71 +88,6 @@ export const refreshCards = (db, trip_id_selected) => async dispatch => {
   }
 };
 
-// this.props.db
-//   .collection("trips")
-//   .get()
-//   .then(
-//     snapshot => {
-//       const data = snapshot.docs;
-//       if (data.length) {
-//         let tripDates = [];
-//         let tripArray = [];
-//         data.forEach(doc => {
-//           const trip = doc.data();
-//           let tripRecord = {
-//             id: doc.id,
-//             city: trip.city,
-//             country: trip.country,
-//             temperature: trip.temperature,
-//             weather: trip.weather,
-//             weatherIcon: trip.weatherIcon,
-//             dateStart: trip.dateStart.seconds,
-//             dateEnd: trip.dateEnd.seconds,
-//             place1: trip.place1,
-//             place2: trip.place2,
-//             place3: trip.place3,
-//             place4: trip.place4,
-//             imageUrl: trip.imageUrl,
-//             coordinates: trip.coordinates
-//             // lat: trip.lat,
-//             // lon: trip.lon
-//           };
-//           tripDates.push({
-//             start: this.dateObject(trip.dateStart.seconds),
-//             end: this.dateObject(trip.dateEnd.seconds)
-//           });
-//           this.props.setTripDates(tripDates);
-//           tripArray.push(tripRecord);
-//         });
-
-//         this.setState({ travelPlan: tripArray });
-//         this.setState({ cardsUpdated: true });
-
-//         this.props.refreshCardsDone();
-
-//         // Check that the current selected city still exists in the database
-//         // (maybe it just got deleted)
-//         let city_record = obj => {
-//           return (
-//             obj.City === this.state.city && obj.Country === this.state.country
-//           );
-//         };
-//         const selectedCityFound = tripArray.find(city_record);
-//         if (!selectedCityFound) {
-//           // Assign another selected city
-//           this.setState({
-//             city: tripArray[0].city,
-//             country: tripArray[0].country
-//           });
-//           // Simulate user selection of the first card in the deck
-//           //this.handleCardClick(tripArray[0].city);
-//         }
-//       } else {
-//         console.log("No records found");
-//       }
-//     },
-//     err => console.log(err.message)
-//   );
 
 const searchCriteria = [
   { title: "LOCAL ATTRACTIONS", searchKey: "attractions" },
@@ -354,10 +243,6 @@ export const updateDone = () => {
   return { type: UPDATE_DONE };
 };
 
-//export const refreshCards = () => {
-//  return { type: REFRESH_CARDS };
-//};
-
 export const refreshCardsDone = () => {
   return { type: REFRESH_CARDS_DONE };
 };
@@ -403,12 +288,3 @@ export const initialiseFirebase = (db, auth) => {
   return { type: INITIALISE_FIREBASE, payload: payload };
 };
 
-// export const initialiseAuth = app => {
-//   const auth = app.auth();
-//   return { type: INITIALISE_AUTH, payload: auth };
-// };
-
-// export const initialiseDb = app => {
-//   const db = app.firestore();
-//   return { type: INITIALISE_DB, payload: db };
-// };

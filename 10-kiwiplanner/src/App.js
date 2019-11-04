@@ -23,7 +23,6 @@ import Update from "./components/U_update";
 import Delete from "./components/U_delete";
 import "./components/Flash.css";
 import "./App.css";
-// ACDEBUG- add db and auth into firestore
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -32,19 +31,13 @@ class App extends React.Component {
     this.auth = app.auth();
     console.log("APP INIT NOW");
     this.props.initialiseFirebase(this.db, this.auth);
-    // const App = app.initializeApp(DB_CONFIG);
-    // this.props.initialiseAuth(this.db);
-    // this.props.initialiseDb(this.auth);
     this.navBar = React.createRef();
     this.modalDelete = React.createRef();
     this.modalUpdate = React.createRef();
     this.travelCards = React.createRef();
-    //this.travelPlan = React.createRef();
   }
   state = {
     user: "",
-    //  ACDEBUG - islogged in - to move to redux
-    //isLoggedIn: false,
     auth: null,
     db: null,
     flashMessage: "Welcome to the Local Travel Guide - please log in to begin",
@@ -56,10 +49,6 @@ class App extends React.Component {
     minStartDate: "",
     cardsVisible: true
   };
-  // setCardsVisible = setting => {
-  //   //   this.setState({ cardsVisible: setting });
-  //   this.props.setCardsVisible(setting);
-  // };
 
   setTripDates = dates => {
     // Each date element is a pair of startdate and enddate objects
@@ -141,37 +130,6 @@ class App extends React.Component {
   setUser = user => {
     this.setState({ user: user });
   };
-  // setPlace = city => {
-  //   this.setState({ citySelected: city });
-  //   // Menu Click detected
-  //   // Get local info for this place
-  //   this.refs.travelPlan.setPlace(city, this.state.countrySelected);
-  // };
-
-  //  ACDEBUG - islogged in - to move to redux
-  // setIsLoggedIn = isLoggedIn => {
-  //   this.setState({ isLoggedIn: isLoggedIn });
-  // };
-
-  // setMenuOptions = (list, country, imageUrl) => {
-  //   // A list of locations to be added to the navbar and sidebar
-  //   this.setState({
-  //     menuOptions: list,
-  //     imageUrl: imageUrl,
-  //     citySelected: list[0],
-  //     countrySelected: country
-  //   });
-  //   // Card click detected
-  //   // Get local info for this place
-  //   //    this.props.loadDataExternal();
-
-  //   this.refs.travelPlan.setPlace(list[0], country);
-  // };
-
-  // setRefresh = () => {
-  //   this.travelCards.current.updateCards();
-  //   this.setState({ refresh: true });
-  // };
   setFlashMessage = message => {
     this.setState({ flashMessage: message });
   };
@@ -187,23 +145,6 @@ class App extends React.Component {
       console.log("Delete failed");
     }
   };
-
-  // updateCompleted = poiList => {
-  //   this.setState({ menuOptions: poiList });
-  // };
-
-  // This will trigger the delete process
-  // deleteTrip = tripRecord => {
-  //   alert("delete trip!");
-  //   // The ref must be called with the "current" attribute!!!
-  //   this.modalDelete.current.setPlaceDelete(tripRecord);
-  //   //this.setState({ deleteInProgress: true });
-  // };
-  // This will trigger the update process
-  // updateTrip = tripRecord => {
-  //   // The ref must be called with the "current" attribute!!!
-  //   this.modalUpdate.current.setPlaceUpdate(tripRecord);
-  // };
 
   componentDidMount() {
     this.props.placesInitialise();
@@ -229,8 +170,6 @@ class App extends React.Component {
           setState={this.updateAuthState}
           setFlashMessage={this.setFlashMessage}
           cardsVisible={this.state.cardsVisible}
-          //isLoggedIn={this.state.isLoggedIn}
-          //setIsLoggedIn={this.setIsLoggedIn}
           menuOptions={this.state.menuOptions}
           imageUrl={this.state.imageUrl}
           auth={this.auth}
@@ -264,9 +203,7 @@ class App extends React.Component {
             // setCountry={this.setCountry}
             setTripDates={this.setTripDates}
             user={this.state.user}
-            //isLoggedIn={this.state.isLoggedIn}
             db={this.db}
-            //performUpdate={this.updateTrip}
           />
           <TravelPlan
             className="travel-plan"

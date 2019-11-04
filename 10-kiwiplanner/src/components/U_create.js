@@ -204,21 +204,8 @@ class U_create extends Component {
         const docRef = this.props.firebase.db
           .collection("trips")
           .doc(result.id);
-        const placesList = [
-          this.state.city,
-          this.state.poi1,
-          this.state.poi2,
-          this.state.poi3,
-          this.state.poi4
-        ];
         // Select the new card
         this.props.setTripId(result.id);
-        // ACDEBUG - to use redux to update-coordinates - must provide doc-id!!!
-        // this.getCoordinates(this.state.city, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi1, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi2, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi3, this.state.country, docRef);
-        // this.getCoordinates(this.state.poi4, this.state.country, docRef);
 
         this.getImageUrl(this.state.city, docRef);
 
