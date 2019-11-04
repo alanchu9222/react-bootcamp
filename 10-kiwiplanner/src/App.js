@@ -37,7 +37,6 @@ class App extends React.Component {
     auth: null,
     db: null,
     flashMessage: "Welcome to the Local Travel Guide - please log in to begin",
-    menuOptions: [],
     tripDates: [],
     countrySelected: "",
     excludeDates: [],
@@ -153,16 +152,11 @@ class App extends React.Component {
           setState={this.updateAuthState}
           setFlashMessage={this.setFlashMessage}
           cardsVisible={this.state.cardsVisible}
-          menuOptions={this.state.menuOptions}
           imageUrl={this.state.imageUrl}
-          //auth={this.auth}
-          //db={this.db}
           excludeDates={this.state.excludeDates}
           minStartDate={this.state.minStartDate}
           tripDates={this.state.tripDates}
           setUser={this.setUser}
-          // setPlace={this.setPlace}
-          //refresh={this.setRefresh}
         />
         <Flash message={this.state.flashMessage} />
         <div className={this.props.firebase.isLoggedIn ? "hide" : "show"}>
